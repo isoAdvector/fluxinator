@@ -1,0 +1,15 @@
+Stream function wave case in a one wavelength domain with periodic boundaries.
+
+Required to generate stream function wave solution:
+
+https://github.com/InterFlowers/streamFunctionWave
+
+Required to run a scan with parmScanner:
+
+https://github.com/isoAdvector/cfdTools
+
+After sourcing cfdTools, run scan with
+
+parmScanner -file gravityModelScanParms.csv -exec Allrun -parallel
+
+Johan Roenby

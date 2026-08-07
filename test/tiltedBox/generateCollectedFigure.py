@@ -8,27 +8,27 @@ def generate_latex_figure(output_file="figure.tex"):
     # ---------------------------------------------------------
     # Specify the directories to include (in the order you want them)
     solver_dirs = [
-        "solverScan_deltaT",  # Will be first row
-        "solverScan_1s",      # Second row
-        "solverScan_10s",     # Third row
+        "gravityModelScan_1deltaT",  # Will be first row
+        "gravityModelScan_100deltaT",      # Second row
+        "gravityModelScan_1000deltaT",     # Third row
         # Add more as needed
     ]
     
     # Column headers (one for each column)
     column_headers = [
-        r"interFoam \\ (MULES)",
-        r"interIsoFoam \\ (isoAlpha)",
-        r"Hardcoded \\ height",
-        r"interIsoGoam \\ (isoAlpha)",
-        r"interIsoGoam \\ (plicRDF)",
+        r"interFoam \\ basic",
+        r"interIsoFoam \\ basic",
+        r"interIsoGoam \\ height",
+        r"interIsoGoam \\ (geometric)",
+        r"interIsoGoam \\ (gravityRecon)",
     ]
     
-    # Label for each row (extracted from directory name by default)
-    row_labels = {
-        "solverScan_deltaT": "T = 0.01s",
-        "solverScan_1s": "T = 1s",
-        "solverScan_10s": "T = 10s",
-    }
+    # Label for each row
+    row_labels = [
+        "T = 0.01s",
+        "T = 1s",
+        "T = 10s",
+    ]
     
     # Scaling factors (adjust these to control relative sizes)
     width_scaling = 0.15    # Horizontal scaling factor
@@ -97,7 +97,7 @@ def generate_latex_figure(output_file="figure.tex"):
         solver_path = Path(solver_dir)
         
         # Get row label (use directory name if not specified)
-        time_label = row_labels.get(solver_dir, solver_dir)
+        time_label = row_labels[row_idx]
         
         # Row label (rotated)
         row_label = r"\rotatebox[origin=c]{{90}}{{\textbf{{{}}}}}".format(time_label)
