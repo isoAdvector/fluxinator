@@ -107,10 +107,7 @@ int main(int argc, char *argv[])
         #include "setDeltaT.H"
 
         ++runTime;
-/*
-        volVectorField nCopy = advector.surf().normal();
-        volVectorField cCopy = advector.surf().centre();
-*/
+
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
         // --- Pressure-velocity PIMPLE corrector loop

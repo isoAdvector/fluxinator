@@ -19,8 +19,8 @@ def generate_latex_figure(output_file="figure.tex"):
         r"interFoam \\ basic",
         r"interIsoFoam \\ basic",
         r"interIsoGoam \\ height",
-        r"interIsoGoam \\ (geometric)",
-        r"interIsoGoam \\ (gravityRecon)",
+        r"interIsoGoam \\ geometric",
+        r"interIsoGoam \\ gravityRecon",
     ]
     
     # Label for each row

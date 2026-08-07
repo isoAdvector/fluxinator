@@ -99,6 +99,19 @@ Foam::gravityReconNoProjectionModel::gravityReconNoProjectionModel
         dimensionedScalar(dimLength, Zero)
     )
 {
+    // Option to specify number of initial reconstruct calls.
+    // Observed to be beneficial for plicRDF with high accuracy requirements.
+    const label nInitReconstructs =
+        dict.getOrDefault<label>("nInitReconstructs", 3);
+
+    reconstructionSchemes& surf =
+        mesh_.lookupObjectRef<reconstructionSchemes>("reconstructionScheme");
+
+    for (label i = 0; i < nInitReconstructs; ++i)
+    {
+        surf.reconstruct(true);
+    }
+
     calculateGhf();
 }
 
@@ -129,8 +142,7 @@ void Foam::gravityReconNoProjectionModel::calculateGhf()
     {
         reconstructionSchemes& surf = mesh.lookupObjectRef<reconstructionSchemes>("reconstructionScheme");
 
-        surf.reconstruct(true);
-
+        surf.reconstruct();
         const volVectorField& faceCentre = surf.centre();
         const volVectorField& faceNormal = surf.normal();
 
@@ -152,9 +164,7 @@ void Foam::gravityReconNoProjectionModel::calculateGhf()
         {
             if(mag(faceNormal[celli]) != 0)
             {
-                vector closeP = closestDist(mesh.C()[celli],-faceNormal[celli],faceCentre[celli]);
-                gh_[celli] = closeP & g.value();
-//                gh_[celli] = faceCentre[celli] & g.value();
+                gh_[celli] = (faceCentre[celli] & g.value()) - ghRef.value();
             }
             else if(nextToInterface[celli])
             {
@@ -173,7 +183,8 @@ void Foam::gravityReconNoProjectionModel::calculateGhf()
                         vector c =
                             exchangeFields.getValue(faceCentre,mapCentres,gblIdx);
                         vector distanceToIntSeg = (c - p);
-                        vector closeP = closestDist(p,n,c);
+//                        vector closeP = closestDist(p,n,c);
+                        vector closeP = c;
                         scalar weight = 0;
 
                         if (mag(distanceToIntSeg) != 0)
@@ -193,7 +204,7 @@ void Foam::gravityReconNoProjectionModel::calculateGhf()
                 if (avgWeight != 0)
                 {
                     averageSurfP /= avgWeight;
-                    gh_[celli] = averageSurfP & g.value();
+                    gh_[celli] = (averageSurfP & g.value()) - ghRef.value();
                 }
             }
             else

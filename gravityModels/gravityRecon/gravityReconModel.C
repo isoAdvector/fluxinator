@@ -99,6 +99,19 @@ Foam::gravityReconModel::gravityReconModel
         dimensionedScalar(dimLength, Zero)
     )
 {
+    // Option to specify number of initial reconstruct calls.
+    // Observed to be beneficial for plicRDF with high accuracy requirements.
+    const label nInitReconstructs =
+        dict.getOrDefault<label>("nInitReconstructs", 3);
+
+    reconstructionSchemes& surf =
+        mesh_.lookupObjectRef<reconstructionSchemes>("reconstructionScheme");
+
+    for (label i = 0; i < nInitReconstructs; ++i)
+    {
+        surf.reconstruct(true);
+    }
+
     calculateGhf();
 }
 
@@ -153,7 +166,7 @@ void Foam::gravityReconModel::calculateGhf()
             if(mag(faceNormal[celli]) != 0)
             {
                 vector closeP = closestDist(mesh.C()[celli],-faceNormal[celli],faceCentre[celli]);
-                gh_[celli] = closeP & g.value();
+                gh_[celli] = (closeP & g.value()) - ghRef.value();
             }
             else if(nextToInterface[celli])
             {
@@ -192,7 +205,7 @@ void Foam::gravityReconModel::calculateGhf()
                 if (avgWeight != 0)
                 {
                     averageSurfP /= avgWeight;
-                    gh_[celli] = averageSurfP & g.value();
+                    gh_[celli] = (averageSurfP & g.value()) - ghRef.value();
                 }
 
             }

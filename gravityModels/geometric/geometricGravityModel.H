@@ -5,7 +5,8 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2025 Johan Roenby
+    Copyright (C) 2025 Henning Scheufler
+    Copyright (C) 2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -43,8 +44,11 @@ SourceFiles
 #include "dimensionedScalar.H"
 #include "autoPtr.H"
 #include "uniformDimensionedFields.H"
-
 #include "gravityModel.H"
+
+#include "zoneDistribute.H"
+#include "markInterfaceRegion.H"
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
@@ -62,6 +66,9 @@ class geometricGravityModel
         // g*h at faces based on geometrically reconstructed interface height
         surfaceScalarField ghf_;
 
+        // g*h at cell centres based on geometrically reconstructed interface height
+        volScalarField gh_;
+
         //- Height reference field
         uniformDimensionedScalarField hRef_;
 
@@ -72,7 +79,6 @@ class geometricGravityModel
 
         //- Disallow default bitwise assignment
         void operator=(const geometricGravityModel&);
-
 
         protected:
 
@@ -100,8 +106,14 @@ public:
     virtual ~geometricGravityModel()
     {}
 
+    //- Calculate and return force on faces
     virtual tmp<surfaceScalarField> force();
 
+    //- Return ghf
+    tmp<surfaceScalarField> ghf() const;
+
+    //- Return gh
+    tmp<volScalarField> gh() const;
 
 };
 
