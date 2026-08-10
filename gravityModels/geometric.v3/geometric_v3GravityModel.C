@@ -25,7 +25,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "geometricGravityModel.H"
+#include "geometric_v3GravityModel.H"
 #include "gravityMeshObject.H"
 #include "addToRunTimeSelectionTable.H"
 #include "fvc.H"
@@ -38,14 +38,14 @@ License
 
 namespace Foam
 {
-    defineTypeNameAndDebug(geometricGravityModel, 0);
-    addToRunTimeSelectionTable(gravityModel, geometricGravityModel, components);
+    defineTypeNameAndDebug(geometric_v3GravityModel, 0);
+    addToRunTimeSelectionTable(gravityModel, geometric_v3GravityModel, components);
 }
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::geometricGravityModel::geometricGravityModel
+Foam::geometric_v3GravityModel::geometric_v3GravityModel
 (
     const dictionary& dict,
     const fvMesh& mesh
@@ -101,7 +101,7 @@ Foam::geometricGravityModel::geometricGravityModel
 // * * * * * * * * * * * * * * Public Access Member Functions  * * * * * * * //
 
 
-void Foam::geometricGravityModel::calculateGhf()
+void Foam::geometric_v3GravityModel::calculateGhf()
 {
     // Read only if mesh changed would be clever
     const uniformDimensionedVectorField& g =
@@ -535,7 +535,7 @@ void Foam::geometricGravityModel::calculateGhf()
 }
 
 
-Foam::tmp<Foam::surfaceScalarField> Foam::geometricGravityModel::force()
+Foam::tmp<Foam::surfaceScalarField> Foam::geometric_v3GravityModel::force()
 {
     calculateGhf();
     const volScalarField& rho = mesh_.lookupObject<volScalarField>("rho");

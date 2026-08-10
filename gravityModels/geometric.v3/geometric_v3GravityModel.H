@@ -24,19 +24,19 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::geometricGravityModel
+    Foam::geometric_v3GravityModel
 
 Description
     Gravity force calculated based on reconstructed interface centres
     interpolated to mesh faces.
 
 SourceFiles
-    geometricGravityModel.C
+    geometric_v3GravityModel.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef geometricGravityModel_H
-#define geometricGravityModel_H
+#ifndef geometric_v3GravityModel_H
+#define geometric_v3GravityModel_H
 
 #include "typeInfo.H"
 #include "volFields.H"
@@ -51,10 +51,10 @@ namespace Foam
 {
 
 /*---------------------------------------------------------------------------*\
-                Class geometricGravityModel Declaration
+                Class geometric_v3GravityModel Declaration
 \*---------------------------------------------------------------------------*/
 
-class geometricGravityModel
+class geometric_v3GravityModel
 :
     public gravityModel
 {
@@ -68,10 +68,10 @@ class geometricGravityModel
     // Private Member Functions
 
         //- Disallow copy construct
-        geometricGravityModel(const geometricGravityModel&);
+        geometric_v3GravityModel(const geometric_v3GravityModel&);
 
         //- Disallow default bitwise assignment
-        void operator=(const geometricGravityModel&);
+        void operator=(const geometric_v3GravityModel&);
 
 
         protected:
@@ -83,13 +83,13 @@ class geometricGravityModel
 public:
 
     //- Runtime type information
-    TypeName("geometric");
+    TypeName("geometric.v3");
 
 
     // Constructors
 
         //- Construct from components
-        geometricGravityModel
+        geometric_v3GravityModel
         (
             const dictionary& dict,
             const fvMesh& mesh
@@ -97,7 +97,7 @@ public:
 
 
     //- Destructor
-    virtual ~geometricGravityModel()
+    virtual ~geometric_v3GravityModel()
     {}
 
     virtual tmp<surfaceScalarField> force();

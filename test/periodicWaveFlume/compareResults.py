@@ -103,12 +103,14 @@ Umin = 1e6
 maxT = 0
 refTime = 1
 refSteps = 1
+tRight = 200
+tLeft = -1
 for count, caseName in enumerate(caseNames):
     caseDir=scanName+'/'+caseNames[count]
     print(caseDir)
     os.chdir(caseDir)
     t, WG1 = np.loadtxt('postProcessing/interfaceHeight1/0/height.dat', comments="#", unpack=True, usecols = (0, 2))
-    mask = (t <= 20) # & (t >= 15)
+    mask = (t <= tRight) & (t >= tLeft)
     WG1 = WG1[mask]
     t = t[mask]
     maxT = max(max(t), maxT)
@@ -134,6 +136,7 @@ for count, caseName in enumerate(caseNames):
     line, = ax[0].plot(t, WG1, '-', label=legend, zorder=zorders1[count])
 
     t, maxU = np.loadtxt('postProcessing/fieldMinMax1/0/fieldMinMax.dat', unpack=True, skiprows=2, usecols = (0, 2))
+    mask = (t <= tRight) & (t >= tLeft)
     maxU = maxU[mask]
     t = t[mask]
     Umax = max(Umax,max(maxU))
@@ -150,8 +153,8 @@ hmin = -0.043133032535866;
 ax[0].plot([0, maxT],[hmax, hmax],'k')
 ax[0].plot([0, maxT],[hmin, hmin],'k')
 ax[0].set_ylim(1.1*hmin,1.2*hmax)
-ax[0].set_title(f"Stream Function Wave (nz = {nz}, maxCo = {maxCo})")
-#ax[0].set_title(f"Stream Function Wave (nz = {nz}, deltaT = {deltaT})")
+#ax[0].set_title(f"Stream Function Wave (nz = {nz}, maxCo = {maxCo})")
+ax[0].set_title(f"Stream Function Wave (nz = {nz}, deltaT = {deltaT})")
 #plt.rcParams['text.usetex'] = False
 ax[0].legend(loc='center left',fontsize=20)
 #plt.rcParams['text.usetex'] = True

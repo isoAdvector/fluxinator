@@ -1,6 +1,6 @@
 #!/bin/sh
 
-scan=gravityModelScan
+scan=gravityModelScan_fixedDt
 
 mkdir $scan/figs
 rm $scan/figs/*.png
