@@ -136,7 +136,7 @@ void Foam::geometricGravityModel::calculateGhf()
         reconstructionSchemes& surf =
             mesh.lookupObjectRef<reconstructionSchemes>("reconstructionScheme");
 
-        surf.reconstruct();
+//        surf.reconstruct();
         const volVectorField& faceCentre = surf.centre();
         const volVectorField& faceNormal = surf.normal();
 
