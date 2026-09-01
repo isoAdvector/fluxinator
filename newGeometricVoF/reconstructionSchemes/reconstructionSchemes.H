@@ -96,6 +96,17 @@ protected:
         //  false on the very first call, enabling lazy initialisation.
         mutable Pair<label> timeIndexAndIter_;
 
+        //- Copies of interfaceCell and interfaceLabels captured by
+        //  storeOld(), used together with normal_.oldTime() and
+        //  centre_.oldTime() to cheaply reset the interface data via
+        //  resetToOld() on later outer (PIMPLE) iterations within the
+        //  same time step, without a full reconstruction. boolList and
+        //  DynamicField have no built-in old-time mechanism of their
+        //  own, unlike normal_ and centre_, so these must be stored
+        //  explicitly.
+        boolList interfaceCellOld_;
+        DynamicField<label> interfaceLabelsOld_;
+
 
     // Protected Member Functions
 
@@ -232,6 +243,17 @@ public:
 
         //- Reconstruct the interface
         virtual void reconstruct(bool forceUpdate = true) = 0;
+
+        //- Record the current interface data (normal, centre,
+        //  interfaceCell, interfaceLabels) as the old-time values for
+        //  cheap restoration via resetToOld() on later outer (PIMPLE)
+        //  iterations within this time step, avoiding the cost of a
+        //  full reconstruction.
+        void storeOld();
+
+        //- Reset the interface data to the values captured by the most
+        //  recent call to storeOld(), instead of reconstructing.
+        void resetToOld();
 
         //- const-Reference to interface normals (triggers lazy init)
         const volVectorField& normal() const

@@ -117,6 +117,7 @@ for count, caseName in enumerate(caseNames):
     with open("parmScannerParms", 'r') as file:
         parmScannerParms = file.read().strip()
     application = get_parameter_value(parmScannerParms, "application")
+#    application = "interIsoGoam"
     legend="Id: "+caseNames[count]
     legend+=", Solver: "+application.ljust(12)
     if count < len(caseNames)-1: #Skip last analytic case here
@@ -156,11 +157,11 @@ ax[0].set_ylim(1.1*hmin,1.2*hmax)
 #ax[0].set_title(f"Stream Function Wave (nz = {nz}, maxCo = {maxCo})")
 ax[0].set_title(f"Stream Function Wave (nz = {nz}, deltaT = {deltaT})")
 #plt.rcParams['text.usetex'] = False
-ax[0].legend(loc='center left',fontsize=20)
 #plt.rcParams['text.usetex'] = True
 ax[0].set(xlabel=r'$t$ [s]', ylabel=r'$\eta$ [m]')
 ax[1].plot([0, maxT],[u_crest, u_crest],'k')
 ax[1].set(xlabel=r'$t$ [s]', ylabel=r'max$|U|$ [m/s]')
+ax[1].legend(loc='center left',fontsize=12)
 ##ax[1].set_ylim(Umin, Umax)
 #ax[0].xlabel(r'$t$ [s]')
 #ax[0].ylabel(r'$\eta$ [m]')

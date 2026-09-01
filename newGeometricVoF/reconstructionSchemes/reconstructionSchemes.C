@@ -140,6 +140,32 @@ Foam::reconstructionSchemes::reconstructionSchemes
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
+void Foam::reconstructionSchemes::storeOld()
+{
+    // Touching oldTime() (re-)synchronises normal_'s and centre_'s
+    // old-time fields with their current values now, before this time
+    // step's first reconstruct() call overwrites them. On later calls
+    // within the same time step this is a no-op, since GeometricField
+    // only shifts values into the old-time field once per time step.
+    normal_.oldTime();
+    centre_.oldTime();
+
+    // boolList and DynamicField have no equivalent built-in mechanism,
+    // so interfaceCell and interfaceLabels are stored explicitly.
+    interfaceCellOld_ = interfaceCell_;
+    interfaceLabelsOld_ = interfaceLabels_;
+}
+
+
+void Foam::reconstructionSchemes::resetToOld()
+{
+    normal_ = normal_.oldTime();
+    centre_ = centre_.oldTime();
+    interfaceCell_ = interfaceCellOld_;
+    interfaceLabels_ = interfaceLabelsOld_;
+}
+
+
 Foam::reconstructionSchemes::interface Foam::reconstructionSchemes::surface()
 {
     reconstruct(false);
