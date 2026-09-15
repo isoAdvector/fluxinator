@@ -91,8 +91,18 @@ Foam::geometricGravityModel::geometricGravityModel
             IOobject::NO_WRITE
         ),
         dimensionedScalar(dimLength, Zero)
-    )
+    ),
+    nLayers_(dict.getOrDefault<label>("nLayers", 1))
 {
+    if (nLayers_ < 0)
+    {
+        FatalIOErrorInFunction(dict)
+            << "nLayers = " << nLayers_ << " must be zero or positive"
+            << exit(FatalIOError);
+    }
+
+    Info<< "geometric gravity model: nLayers = " << nLayers_ << endl;
+
     // Option to specify number of initial reconstruct calls.
     // Observed to be beneficial for plicRDF with high accuracy requirements.
     const label nInitReconstructs =
@@ -140,27 +150,72 @@ void Foam::geometricGravityModel::calculateGhf()
         const volVectorField& faceCentre = surf.centre();
         const volVectorField& faceNormal = surf.normal();
 
-        boolList nextToInterface(mesh.nCells(),false);
+        // Interface cells and nLayers rings of point neighbours, with the
+        // ring number of each cell (0 for interface cells, -1 outside)
+        boolList nearInterface(mesh.nCells(), false);
+        volScalarField cellDistLevel
+        (
+            IOobject
+            (
+                "cellDistLevel",
+                mesh.time().timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE,
+                IOobject::NO_REGISTER
+            ),
+            mesh,
+            dimensionedScalar(dimless, -1)
+        );
+
         markInterfaceRegion markIF(mesh);
+        markIF.markCellsNearSurf
+        (
+            surf.interfaceCell(),
+            nLayers_,
+            nearInterface,
+            cellDistLevel
+        );
 
-        markIF.markCellsNearSurf(surf.interfaceCell(),1,nextToInterface);
+        const auto inLayer = [&cellDistLevel](label celli, label layer)
+        {
+            return mag(cellDistLevel[celli] - layer) < 0.5;
+        };
 
-        exchangeFields.setUpCommforZone(nextToInterface,true);
+        exchangeFields.setUpCommforZone(nearInterface,true);
 
         Map<vector > mapCentres =
-            exchangeFields.getDatafromOtherProc(nextToInterface,faceCentre);
+            exchangeFields.getDatafromOtherProc(nearInterface,faceCentre);
         Map<vector > mapNormal =
-            exchangeFields.getDatafromOtherProc(nextToInterface,faceNormal);
+            exchangeFields.getDatafromOtherProc(nearInterface,faceNormal);
 
         const labelListList& stencil = exchangeFields.getStencil();
 
+        // 1 where gh_ holds an interface-based value
+        volScalarField assigned
+        (
+            IOobject
+            (
+                "ghAssigned",
+                mesh.time().timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE,
+                IOobject::NO_REGISTER
+            ),
+            mesh,
+            dimensionedScalar(dimless, Zero)
+        );
+
+        // Interface cells and the first ring
         forAll(surf.interfaceCell(),celli)
         {
             if(mag(faceNormal[celli]) != 0)
             {
                 gh_[celli] = (faceCentre[celli] & g.value()) - ghRef.value();
+                assigned[celli] = 1;
             }
-            else if(nextToInterface[celli])
+            else if(inLayer(celli, 1))
             {
                 // the to the interface
                 vector averageSurfP = vector::zero;
@@ -207,6 +262,7 @@ void Foam::geometricGravityModel::calculateGhf()
                 {
                     averageSurfP /= avgWeight;
                     gh_[celli] = (averageSurfP & g.value()) - ghRef.value();
+                    assigned[celli] = 1;
                 }
             }
             else
@@ -214,6 +270,62 @@ void Foam::geometricGravityModel::calculateGhf()
                 // do nothing
             }
 
+        }
+
+        // Further rings: average of the values already assigned to the
+        // neighbours. Each ring is one pass with its own parallel exchange,
+        // and the new values only take effect after the pass.
+        for (label layer = 2; layer <= nLayers_; ++layer)
+        {
+            Map<scalar> mapGh =
+                exchangeFields.getDatafromOtherProc(nearInterface, gh_);
+            Map<scalar> mapAssigned =
+                exchangeFields.getDatafromOtherProc(nearInterface, assigned);
+
+            scalarField ghNew(gh_.primitiveField());
+            boolList newlyAssigned(mesh.nCells(), false);
+
+            forAll(nearInterface, celli)
+            {
+                if (!inLayer(celli, layer))
+                {
+                    continue;
+                }
+
+                scalar ghSum = 0;
+                label nAssigned = 0;
+
+                forAll(stencil[celli], i)
+                {
+                    const label& gblIdx = stencil[celli][i];
+
+                    if
+                    (
+                        exchangeFields.getValue(assigned, mapAssigned, gblIdx)
+                      > 0.5
+                    )
+                    {
+                        ghSum += exchangeFields.getValue(gh_, mapGh, gblIdx);
+                        ++nAssigned;
+                    }
+                }
+
+                if (nAssigned > 0)
+                {
+                    ghNew[celli] = ghSum/nAssigned;
+                    newlyAssigned[celli] = true;
+                }
+            }
+
+            gh_.primitiveFieldRef() = ghNew;
+
+            forAll(newlyAssigned, celli)
+            {
+                if (newlyAssigned[celli])
+                {
+                    assigned[celli] = 1;
+                }
+            }
         }
 
         gh_.correctBoundaryConditions();

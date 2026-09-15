@@ -31,6 +31,24 @@ Description
     Gravity force calculated based on reconstructed interface centres
     interpolated to mesh faces.
 
+    g*h is set from the reconstructed interface in the interface cells and in
+    nLayers rings of point neighbours around them; elsewhere it is g*h at the
+    cell centre. The first ring uses a weighted average of the neighbouring
+    interface centres. Each further ring uses the average of the values
+    already assigned to its neighbours.
+
+    With uncorrected snGrad schemes one layer is sufficient. With corrected
+    (non-orthogonal) schemes, fvc::snGrad(rho) also reaches the faces between
+    the first and second ring, so two layers are needed for an exact
+    hydrostatic balance of a flat interface on non-orthogonal meshes.
+
+Usage
+    In constant/gravityProperties:
+    \verbatim
+    gravityModel    geometric;
+    nLayers         2;      // Optional, default 1
+    \endverbatim
+
 SourceFiles
     geometricGravityModel.C
 
@@ -71,6 +89,10 @@ class geometricGravityModel
 
         //- Height reference field
         uniformDimensionedScalarField hRef_;
+
+        //- Number of rings of cells around the interface cells that get the
+        //  interface-based g*h
+        label nLayers_;
 
     // Private Member Functions
 
