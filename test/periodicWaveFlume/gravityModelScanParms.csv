@@ -39,3 +39,15 @@ interFoam 380 80 0.05
 interIsoFoam 380 80 0.05
 interIsoGoam 380 80 0.05
 streamFunFoam 380 80 0.5
+interFoam 760 160 0.5
+interIsoFoam 760 160 0.5
+interIsoGoam 760 160 0.5
+interFoam 760 160 0.2
+interIsoFoam 760 160 0.2
+interIsoGoam 760 160 0.2
+interFoam 760 160 0.1
+interIsoFoam 760 160 0.1
+interIsoGoam 760 160 0.1
+interFoam 760 160 0.05
+interIsoFoam 760 160 0.05
+interIsoGoam 760 160 0.05
