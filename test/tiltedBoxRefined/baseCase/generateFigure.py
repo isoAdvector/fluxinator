@@ -40,33 +40,7 @@ SetViewProperties(
 )
 #----------------------------
 
-################Show interface cells#################
-
-# get active source.
-#openFOAMReader1 = GetActiveSource()
-
-# create a query selection
-QuerySelect(QueryString='((alphawater > 1e-9) & (alphawater < 0.999999999))', FieldType='CELL', InsideOut=0)
-
-# create a new 'Extract Selection'
-extractSelection1 = ExtractSelection(registrationName='ExtractSelection1', Input=dummyfoam)
-
-# show data in view
-extractSelection1Display = Show(extractSelection1, renderView1, 'UnstructuredGridRepresentation')
-
-extractSelection1Display.SetRepresentationType('Wireframe')
-
-# Properties modified on extractSelection1Display
-extractSelection1Display.LineWidth = 2.0
-
-# turn off scalar coloring
-ColorBy(extractSelection1Display, None)
-
-# change solid color
-extractSelection1Display.AmbientColor = [1.0, 1.0, 0.0]
-extractSelection1Display.DiffuseColor = [1.0, 1.0, 0.0]
-
-################Alpha ) 0.5 contour####################
+################Alpha = 0.5 contour####################
 
 # create a new 'Contour'
 contour1 = Contour(registrationName='Contour1', Input=dummyfoam)
@@ -82,7 +56,7 @@ contour1Display = Show(contour1, renderView1, 'GeometryRepresentation')
 ColorBy(contour1Display, None)
 
 # Properties modified on contour1Display
-contour1Display.LineWidth = 2.0
+contour1Display.LineWidth = 3.0
 
 
 # change solid color
@@ -410,7 +384,7 @@ uLUTColorBar.LabelFontSize = 30
 renderView1.CameraPosition = [.5, -2.5, 0.5]
 renderView1.CameraFocalPoint = [.5, 0.0, 0.5]
 renderView1.CameraViewUp = [0.0, 0.0, 1.0]
-renderView1.CameraParallelScale = .75
+renderView1.CameraParallelScale = .62
 
 ## Add free surface from isofaces ##
 

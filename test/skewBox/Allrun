@@ -39,4 +39,9 @@ do
 done
 python3 ../summariseScan.py skewBoxScan_z > summary_skewBoxScan_z.txt
 
+# Cells adjacent to faces with non-zero uncorrected and corrected snGrad(rho)
+postProcess -case skewBoxScan_z/0002 -time 0 -dict "$(pwd)/../snGradRhoReach" \
+    > log.snGradRhoReach 2>&1
+grep snGradReach log.snGradRhoReach | tee summary_snGradRhoReach.txt
+
 #------------------------------------------------------------------------------

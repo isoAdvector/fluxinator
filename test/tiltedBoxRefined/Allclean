@@ -8,7 +8,11 @@
 #------------------------------------------------------------------------------
 cd "${0%/*}" || exit 1
 
-rm -f summary_*.txt
+rm -f summary_*.txt log.snGradRhoReach log.renderSnGradReach log.plotNonOrthMaxU
+rm -rf paperFigures
+rm -f figure_tiltedBoxRefined.pdf figure_tiltedBoxRefined.aux figure_tiltedBoxRefined.log \
+    log.figure_tiltedBoxRefined
+rm -f ../nonOrthMaxU.pdf ../nonOrthMaxU.png
 
 if [ "$1" = "-scans" ]
 then

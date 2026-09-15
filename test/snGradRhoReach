@@ -1,0 +1,227 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | www.openfoam.com
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snGradRhoReach;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Diagnostic of which cells the face-normal density gradient reaches.
+//
+// For the initial alpha.water field, marks the interface cells
+// (1e-8 < alpha < 1 - 1e-8, the plicRDF surface cell tolerance) and the rings of
+// point neighbours around them (ringLevel = 0, 1, 2, ...). It then evaluates
+// snGrad(rho) with the uncorrected and the corrected scheme and marks the owner
+// and neighbour cells of all faces with |snGrad(rho)|/deltaCoeffs larger than
+// 1e-8 |rho1 - rho2|. These are the cells that must carry the interface height
+// for the gravity term to be a discrete gradient. The fields
+// snGradReachUncorrected and snGradReachCorrected hold the ring level of the
+// marked cells (-1 elsewhere), and the number of marked cells per ring level is
+// printed.
+//
+// Usage (from a case directory):
+//   postProcess -time 0 -dict <path to this file>
+
+functions
+{
+    snGradRhoReach
+    {
+        type            coded;
+        libs            (utilityFunctionObjects);
+        name            snGradRhoReach;
+
+        codeOptions
+        #{
+            -I$(LIB_SRC)/finiteVolume/lnInclude \
+            -I$(LIB_SRC)/meshTools/lnInclude
+        #};
+
+        codeLibs
+        #{
+            -lfiniteVolume \
+            -lmeshTools
+        #};
+
+        codeInclude
+        #{
+            #include "correctedSnGrad.H"
+            #include "uncorrectedSnGrad.H"
+        #};
+
+        codeWrite
+        #{
+            const fvMesh& mesh = refCast<const fvMesh>(obr_);
+            const word timeName = mesh.time().timeName();
+
+            volScalarField alpha
+            (
+                IOobject
+                (
+                    "alpha.water",
+                    timeName,
+                    mesh,
+                    IOobject::MUST_READ,
+                    IOobject::NO_WRITE,
+                    IOobject::NO_REGISTER
+                ),
+                mesh
+            );
+
+            IOdictionary transportProperties
+            (
+                IOobject
+                (
+                    "transportProperties",
+                    mesh.time().constant(),
+                    mesh,
+                    IOobject::MUST_READ,
+                    IOobject::NO_WRITE,
+                    IOobject::NO_REGISTER
+                )
+            );
+            const scalar rho1 =
+                transportProperties.subDict("water").get<scalar>("rho");
+            const scalar rho2 =
+                transportProperties.subDict("air").get<scalar>("rho");
+
+            volScalarField rho("rho", rho1*alpha + rho2*(1 - alpha));
+
+            // Interface cells and rings of point neighbours
+            const scalar tol = 1e-8;
+            const label maxLevel = 5;
+            labelList level(mesh.nCells(), -1);
+            DynamicList<label> front;
+
+            forAll(alpha, celli)
+            {
+                if (alpha[celli] > tol && alpha[celli] < 1 - tol)
+                {
+                    level[celli] = 0;
+                    front.append(celli);
+                }
+            }
+
+            for (label l = 1; l <= maxLevel; ++l)
+            {
+                DynamicList<label> next;
+                for (const label celli : front)
+                {
+                    for (const label pointi : mesh.cellPoints()[celli])
+                    {
+                        for (const label cellj : mesh.pointCells()[pointi])
+                        {
+                            if (level[cellj] < 0)
+                            {
+                                level[cellj] = l;
+                                next.append(cellj);
+                            }
+                        }
+                    }
+                }
+                front.transfer(next);
+            }
+
+            volScalarField ringLevel
+            (
+                IOobject
+                (
+                    "ringLevel",
+                    timeName,
+                    mesh,
+                    IOobject::NO_READ,
+                    IOobject::NO_WRITE,
+                    IOobject::NO_REGISTER
+                ),
+                mesh,
+                dimensionedScalar(dimless, -1)
+            );
+            forAll(level, celli)
+            {
+                ringLevel[celli] = level[celli];
+            }
+            ringLevel.write();
+
+            const scalar faceTol = tol*mag(rho1 - rho2);
+
+            auto markReach = [&](const surfaceScalarField& sn, const word& name)
+            {
+                volScalarField reach
+                (
+                    IOobject
+                    (
+                        name,
+                        timeName,
+                        mesh,
+                        IOobject::NO_READ,
+                        IOobject::NO_WRITE,
+                        IOobject::NO_REGISTER
+                    ),
+                    mesh,
+                    dimensionedScalar(dimless, -1)
+                );
+
+                label nFaces = 0;
+                boolList marked(mesh.nCells(), false);
+                forAll(mesh.neighbour(), facei)
+                {
+                    if (mag(sn[facei])/mesh.deltaCoeffs()[facei] > faceTol)
+                    {
+                        ++nFaces;
+                        marked[mesh.owner()[facei]] = true;
+                        marked[mesh.neighbour()[facei]] = true;
+                    }
+                }
+
+                // Marked cells per ring level 0..maxLevel, and marked cells
+                // beyond maxLevel (these keep reach = -1)
+                labelList count(maxLevel + 1, Zero);
+                label nOutside = 0;
+                forAll(marked, celli)
+                {
+                    if (!marked[celli])
+                    {
+                        continue;
+                    }
+                    if (level[celli] >= 0)
+                    {
+                        reach[celli] = level[celli];
+                        ++count[level[celli]];
+                    }
+                    else
+                    {
+                        ++nOutside;
+                    }
+                }
+
+                Info<< name << ": " << nFaces << " faces with non-zero snGrad(rho)"
+                    << ", marked cells per ring level 0.." << maxLevel
+                    << ": " << count
+                    << ", marked cells beyond ring " << maxLevel
+                    << ": " << nOutside << endl;
+
+                reach.write();
+            };
+
+            markReach
+            (
+                fv::uncorrectedSnGrad<scalar>(mesh).snGrad(rho)(),
+                "snGradReachUncorrected"
+            );
+            markReach
+            (
+                fv::correctedSnGrad<scalar>(mesh).snGrad(rho)(),
+                "snGradReachCorrected"
+            );
+        #};
+    }
+}
+
+// ************************************************************************* //

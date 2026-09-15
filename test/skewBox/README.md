@@ -19,7 +19,7 @@ set it.
 |---|---|
 | `skewBoxScan_z.csv` | paper figure: interFoam, interIsoFoam (interIsoGoam with basic) and interIsoGoam (geometric), with corrected and uncorrected laplacian and snGrad schemes |
 | `skewBoxScan.csv` | the same with the mesh rotated by 90 degrees (rows level) |
-| `nonOrthCorrScan.csv` | corrected schemes, nNonOrthogonalCorrectors 0, 1, 2, 5, 10 (geometric) and 0, 5 (basic) |
+| `nonOrthCorrScan.csv` | corrected schemes, nNonOrthogonalCorrectors 0, 1, 2, 5, 10 (geometric), 0, 5 (basic) and 0, 2 (constantHeight) |
 | `hydrostaticInitScan.csv` | hydrostatic initial p_rgh: geometric and constantHeight with 0 and 5 correctors, basic with 0 |
 | `nLayersZeroStartScan.csv` | geometric, nLayers 1 (2 correctors) and nLayers 2 (0 and 2 correctors) |
 | `nLayersHydrostaticScan.csv` | geometric, nLayers 1 and 2, hydrostatic start, 0 correctors |
@@ -37,7 +37,13 @@ set it.
 - The residual of the geometric model with corrected schemes is a start-up
   error: p_rgh starts at 0 and the explicit non-orthogonal correction lags. Two
   non-orthogonal correctors reduce it to 2e-8 m/s, and a hydrostatic initial
-  p_rgh removes it (7.7e-10 m/s) without correctors.
+  p_rgh removes it (7.7e-10 m/s) without correctors. constantHeight, with the
+  exact interface height, has the same start-up error (4.3e-2 m/s after the first
+  step, 2.1e-8 m/s with 2 correctors).
+- The diagnostic `../snGradRhoReach` shows why nLayers 1 suffices here: the
+  corrected snGrad(rho) is non-zero on 128 faces (76 uncorrected), but all their
+  cells lie in rings 0 and 1, because opposite cell faces are parallel and the
+  correction vector is orthogonal to the face normal.
 - nLayers 2 gives the same results as nLayers 1 on this mesh (3.5e-2 m/s from
   a zero start without correctors, 2.0e-8 m/s with 2 correctors, 7.7e-10 m/s from
   a hydrostatic start).

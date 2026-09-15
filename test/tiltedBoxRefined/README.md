@@ -15,7 +15,7 @@ set it. 10 time steps of 0.01 s, corrected schemes unless stated.
 
 | Parameter file | Content |
 |---|---|
-| `zeroStartScan.csv` | p_rgh = 0 initially: geometric with 0, 1, 2, 5 non-orthogonal correctors, constantHeight with 0, 5, basic with 0, geometric with uncorrected schemes |
+| `zeroStartScan.csv` | p_rgh = 0 initially: geometric with 0, 1, 2, 5 non-orthogonal correctors, constantHeight with 0, 5, basic with 0, geometric with uncorrected schemes, constantHeight with 2 |
 | `hydrostaticInitScan.csv` | hydrostatic start: geometric and constantHeight with 0, 5 correctors, basic with 0 |
 | `nLayersZeroStartScan.csv` | geometric, nLayers 1 (0 correctors) and nLayers 2 (2 and 0 correctors) |
 | `nLayersHydrostaticScan.csv` | geometric, nLayers 1, 2 and 3, hydrostatic start |
@@ -25,7 +25,7 @@ set it. 10 time steps of 0.01 s, corrected schemes unless stated.
 | | zero start, 0 correctors | zero start, 2 or 5 correctors | hydrostatic start |
 |---|---|---|---|
 | basic | 3.3 m/s | | 3.3 m/s |
-| constantHeight | 0.14 m/s | 1.1e-7 m/s (5) | 2.4e-9 m/s |
+| constantHeight | 0.14 m/s | 1.4e-7 m/s (2), 1.1e-7 m/s (5) | 2.4e-9 m/s |
 | geometric, nLayers 1 | 0.95 m/s | 0.95 m/s (2, 5) | 0.95 m/s |
 | geometric, nLayers 2 | 0.15 m/s | 5.8e-8 m/s (2) | 6.4e-9 m/s |
 
@@ -38,10 +38,23 @@ set it. 10 time steps of 0.01 s, corrected schemes unless stated.
   constantHeight it still needs a hydrostatic start or non-orthogonal correctors:
   from a zero start without correctors it reaches 0.15 m/s.
 - With uncorrected schemes nLayers 1 suffices (1.3e-9 m/s).
+- The diagnostic `../snGradRhoReach` (a coded function object for
+  `postProcess -time 0 -dict`) marks the cells adjacent to faces with a non-zero
+  snGrad(rho) and prints their ring levels. Uncorrected: 122 faces, all cells in
+  rings 0 and 1. Corrected: 130 faces, two cells in ring 2 where the interface
+  crosses the refinement boundary. The maximum velocity with nLayers 1 (0.95 m/s)
+  is in one of these two cells.
 
 ## Running
 
 ```sh
-./Allrun             # scans and summary_*.txt
+./Allrun             # scans, summary_*.txt and paper figures
 ./Allclean [-scans]  # remove generated files (and with -scans the scans)
 ```
+
+Allrun also renders `|U|` images of the hydrostatic start cases (basic,
+constantHeight, geometric with nLayers 1 and 2) with `generateFigure.py` and
+collects them in `figure_tiltedBoxRefined.pdf`
+(`figure_tiltedBoxRefined.tex`), and renders `paperFigures/reach_uncorrected.png` and `reach_corrected.png` with `renderSnGradReach.py` (pvbatch), and
+plots `../nonOrthMaxU.pdf` with `../plotNonOrthMaxU.py`, which also needs the scans
+in `../skewBox` (run `../skewBox/Allrun` first).

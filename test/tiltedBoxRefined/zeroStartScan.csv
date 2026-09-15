@@ -10,3 +10,4 @@ constantHeight                interIsoGoam          0.1                   10    
 constantHeight                interIsoGoam          0.1                   10                    5                                  "Gauss linear corrected"      corrected
 basic                         interIsoGoam          0.1                   10                    0                                  "Gauss linear corrected"      corrected
 geometric                     interIsoGoam          0.1                   10                    0                                  "Gauss linear uncorrected"    uncorrected
+constantHeight                interIsoGoam          0.1                   10                    2                                  "Gauss linear corrected"      corrected
