@@ -4,8 +4,6 @@ skewBoxScan_z/
 nonOrthCorrScan/
 hydrostaticInitScan/
 nLayersDefaultScan/
-twoRingZeroStartScan/
-twoRingHydrostaticScan/
 gravityModelScan_10deltaT_x/
 gravityModelScan_10deltaT_z/
 summary_*.txt

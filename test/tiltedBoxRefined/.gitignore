@@ -3,8 +3,6 @@ zeroStartScan/
 hydrostaticInitScan/
 nLayersZeroStartScan/
 nLayersHydrostaticScan/
-twoRingZeroStartScan/
-twoRingHydrostaticScan/
 summary_*.txt
 *.log
 log.*

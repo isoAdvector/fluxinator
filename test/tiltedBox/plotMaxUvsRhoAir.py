@@ -3,9 +3,8 @@
 # Plots the maximum velocity magnitude at the end of the runs against the air
 # density for interFoam, interIsoFoam (interIsoGoam with the basic gravity
 # model) and interIsoGoam with the geometric gravity model in the tilted box.
-# Default: the 1000 time step scan airDensityScan_1000deltaT (t = 10 s); the
-# 100 step scan is plotted with --scanDir airDensityScan --endTime 1. Runs that
-# stopped before the end time are drawn with a cross at their last value.
+# Default: the 1000 time step scan airDensityScan_1000deltaT (t = 10 s). Runs
+# that stopped before the end time are drawn with a cross at their last value.
 #
 # Usage:
 #   ./plotMaxUvsRhoAir.py [--scanDir airDensityScan_1000deltaT] [--endTime 10] [--out maxUvsRhoAir_tiltedBox]
