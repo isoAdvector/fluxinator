@@ -1,0 +1,11 @@
+scanName                      nonOrthCorrScan
+baseCase                      baseCase
+rotAngle                      gravityModel                  application           writeInterval         PIMPLE.nNonOrthogonalCorrectors
+rotAngleDict                  constant/gravityProperties    system/controlDict    system/controlDict    system/fvSolution
+0                             geometric                     interIsoGoam          10                    0
+0                             geometric                     interIsoGoam          10                    1
+0                             geometric                     interIsoGoam          10                    2
+0                             geometric                     interIsoGoam          10                    5
+0                             geometric                     interIsoGoam          10                    10
+0                             basic                         interIsoGoam          10                    0
+0                             basic                         interIsoGoam          10                    5

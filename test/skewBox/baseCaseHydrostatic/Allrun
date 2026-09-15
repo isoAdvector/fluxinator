@@ -1,0 +1,26 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+restore0Dir
+
+caseName=$(basename $(dirname $(readlink -f "$0")))
+touch ${caseName}.foam
+
+runApplication blockMesh
+
+runApplication transformPoints -centre '(.5 0 .5)' -rotate-y $(foamDictionary -entry rotAngle rotAngleDict -value)
+
+runApplication setAlphaField
+
+# Hydrostatic initial p_rgh consistent with the initial volume fraction
+python3 setHydrostaticPrgh.py > log.setHydrostaticPrgh 2>&1 || exit 1
+
+runApplication $(getApplication)
+
+#runApplication foamSequenceVTKFiles -vtp
+
+#pvpython generateFigure.py
+
+#------------------------------------------------------------------------------

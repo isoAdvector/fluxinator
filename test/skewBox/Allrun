@@ -1,0 +1,42 @@
+#!/bin/bash
+#------------------------------------------------------------------------------
+# Runs the skewed box scans, generates the paper figure and prints summaries of
+# the non-orthogonal correction tests.
+#
+# Requirements: OpenFOAM v2512 environment with interIsoGoam and libgravityModels
+# built (../../Allwmake), cfdTools, pvbatch (ParaView), pdflatex and python3.
+# Environment variables: CFDTOOLS (path to cfdTools/cfdTools), MAXJOBS (number
+# of simultaneous cases, default nproc), PVBATCH (default pvbatch).
+#------------------------------------------------------------------------------
+cd "${0%/*}" || exit 1
+
+cfdTools=${CFDTOOLS:-../../../cfdTools/cfdTools}
+[ -f "$cfdTools" ] || { echo "cfdTools not found at $cfdTools; set CFDTOOLS" >&2; exit 1; }
+[ -n "$WM_PROJECT_DIR" ] || { echo "Source the OpenFOAM environment first" >&2; exit 1; }
+source "$cfdTools"
+maxJobs=${MAXJOBS:-$(nproc)}
+pvbatch=${PVBATCH:-pvbatch}
+
+# Paper figure: corrected and uncorrected schemes, rows sheared relative to the interface
+parmScanner -file skewBoxScan_z.csv -exec Allrun -parallel -maxJobs "$maxJobs"
+
+if command -v "$pvbatch" > /dev/null
+then
+    for c in skewBoxScan_z/[0-9][0-9][0-9][0-9]
+    do
+        ( cd "$c" && "$pvbatch" --force-offscreen-rendering generateFigure.py > log.generateFigure 2>&1 )
+    done
+    pdflatex -interaction=nonstopmode figure_skewBox.tex > log.figure_skewBox 2>&1
+else
+    echo "pvbatch not found: figure_skewBox.pdf not generated" >&2
+fi
+
+# Tests: mesh rotated by 90 degrees, non-orthogonal correctors, hydrostatic start, nLayers default
+for scan in skewBoxScan nonOrthCorrScan hydrostaticInitScan nLayersDefaultScan
+do
+    parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
+    python3 ../summariseScan.py "$scan" | tee "summary_$scan.txt"
+done
+python3 ../summariseScan.py skewBoxScan_z > summary_skewBoxScan_z.txt
+
+#------------------------------------------------------------------------------
