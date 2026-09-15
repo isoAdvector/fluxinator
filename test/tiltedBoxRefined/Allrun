@@ -1,0 +1,26 @@
+#!/bin/bash
+#------------------------------------------------------------------------------
+# Runs the refined tilted box tests of corrected schemes, hydrostatic
+# initialisation and the nLayers option of the geometric gravity model, and
+# prints summaries.
+#
+# Requirements: OpenFOAM v2512 environment with interIsoGoam and libgravityModels
+# built (../../Allwmake), cfdTools, pvpython (ParaView) on PATH for the per-case
+# images (baseCase/Allrun calls it) and python3. Environment variables:
+# CFDTOOLS (path to cfdTools/cfdTools), MAXJOBS (default nproc).
+#------------------------------------------------------------------------------
+cd "${0%/*}" || exit 1
+
+cfdTools=${CFDTOOLS:-../../../cfdTools/cfdTools}
+[ -f "$cfdTools" ] || { echo "cfdTools not found at $cfdTools; set CFDTOOLS" >&2; exit 1; }
+[ -n "$WM_PROJECT_DIR" ] || { echo "Source the OpenFOAM environment first" >&2; exit 1; }
+source "$cfdTools"
+maxJobs=${MAXJOBS:-$(nproc)}
+
+for scan in zeroStartScan hydrostaticInitScan nLayersZeroStartScan nLayersHydrostaticScan
+do
+    parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
+    python3 ../summariseScan.py "$scan" | tee "summary_$scan.txt"
+done
+
+#------------------------------------------------------------------------------
