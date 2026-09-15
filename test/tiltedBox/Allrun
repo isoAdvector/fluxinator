@@ -22,10 +22,14 @@ for scan in \
     gravityModelScan_100deltaT \
     gravityModelScan_1000deltaT \
     deltaTScan \
-    airDensityScan_1000deltaT
+    airDensityScan_1000deltaT \
+    nLayersScan
 do
     parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
 done
+
+# Geometric gravity model with nLayers 0, 1 and 2
+python3 ../summariseScan.py nLayersScan | tee summary_nLayersScan.txt
 
 # Velocity fields after 1, 100 and 1000 time steps (gravityRecon column omitted)
 pdflatex -interaction=nonstopmode figure_paper.tex > log.figure_paper 2>&1

@@ -13,6 +13,10 @@ spurious current. Fixed time step 0.01 s, OpenFOAM v2512.
 | `gravityModelScan_1deltaT.csv`, `_100deltaT.csv`, `_1000deltaT.csv` | interFoam (basic), interIsoFoam (interIsoGoam with basic), interIsoGoam with constantHeight, geometric and gravityRecon, run for 1, 100 and 1000 time steps |
 | `deltaTScan.csv` | first time step only, dt = 1e-4 ... 1 s, interFoam and interIsoFoam |
 | `airDensityScan_1000deltaT.csv` | air density 1e-4 ... 1e3 kg/m3, 1000 time steps, interFoam, interIsoFoam and interIsoGoam (geometric) |
+| `nLayersScan.csv` | interIsoGoam, geometric with nLayers 0, 1 and 2, and constantHeight, 1000 time steps |
+
+The base case `constant/gravityProperties` contains `nLayers 1;` so that the
+scans can set it.
 
 ## Findings
 
@@ -24,6 +28,10 @@ spurious current. Fixed time step 0.01 s, OpenFOAM v2512.
 - With lighter air the geometric model's residual grows by about one order of
   magnitude per decade of density, to 5.6e-5 m/s at 1e-4 kg/m3, while staying
   8 to 11 orders of magnitude below interIsoFoam. interFoam diverges at 1e-4 kg/m3.
+- The first ring of cells around the interface must get interface heights:
+  with nLayers 0 (heights in interface cells only) the geometric model reaches
+  0.53 m/s after the first step and 5.2 m/s after 10 s, worse than the standard
+  gravity term. nLayers 1 and 2 stay below 2.5e-9 m/s, like constantHeight.
 
 ## Reproducing the figures
 

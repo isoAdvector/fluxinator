@@ -2,6 +2,8 @@
 gravityModelScan_*/
 deltaTScan/
 airDensityScan_1000deltaT/
+nLayersScan/
+summary_*.txt
 figures/
 *.pdf
 *.png

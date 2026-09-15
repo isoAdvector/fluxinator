@@ -1,5 +1,0 @@
-scanName                      nLayersDefaultScan
-baseCase                      baseCase
-rotAngle                      gravityModel                  application           writeInterval         PIMPLE.nNonOrthogonalCorrectors
-rotAngleDict                  constant/gravityProperties    system/controlDict    system/controlDict    system/fvSolution
-0                             geometric                     interIsoGoam          10                    2

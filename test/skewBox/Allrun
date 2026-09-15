@@ -31,8 +31,8 @@ else
     echo "pvbatch not found: figure_skewBox.pdf not generated" >&2
 fi
 
-# Tests: mesh rotated by 90 degrees, non-orthogonal correctors, hydrostatic start, nLayers default
-for scan in skewBoxScan nonOrthCorrScan hydrostaticInitScan nLayersDefaultScan
+# Tests: mesh rotated by 90 degrees, non-orthogonal correctors, hydrostatic start, nLayers
+for scan in skewBoxScan nonOrthCorrScan hydrostaticInitScan nLayersZeroStartScan nLayersHydrostaticScan
 do
     parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
     python3 ../summariseScan.py "$scan" | tee "summary_$scan.txt"

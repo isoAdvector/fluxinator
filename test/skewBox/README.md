@@ -9,7 +9,9 @@ inviscid, no surface tension, dt = 0.01 s, 10 time steps, plicRDF, no
 non-orthogonal corrector loops unless stated. Exact solution U = 0.
 
 `baseCaseHydrostatic` is identical except that `setHydrostaticPrgh.py` sets a
-hydrostatic initial p_rgh = -rho (g & x_I) after `setAlphaField`.
+hydrostatic initial p_rgh = -rho (g & x_I) after `setAlphaField`. Both base
+cases contain `nLayers 1;` in `constant/gravityProperties` so that the scans can
+set it.
 
 ## Scans
 
@@ -19,7 +21,8 @@ hydrostatic initial p_rgh = -rho (g & x_I) after `setAlphaField`.
 | `skewBoxScan.csv` | the same with the mesh rotated by 90 degrees (rows level) |
 | `nonOrthCorrScan.csv` | corrected schemes, nNonOrthogonalCorrectors 0, 1, 2, 5, 10 (geometric) and 0, 5 (basic) |
 | `hydrostaticInitScan.csv` | hydrostatic initial p_rgh: geometric and constantHeight with 0 and 5 correctors, basic with 0 |
-| `nLayersDefaultScan.csv` | geometric without an nLayers entry (default), 2 correctors |
+| `nLayersZeroStartScan.csv` | geometric, nLayers 1 (2 correctors) and nLayers 2 (0 and 2 correctors) |
+| `nLayersHydrostaticScan.csv` | geometric, nLayers 1 and 2, hydrostatic start, 0 correctors |
 
 ## Findings (max|U| after 10 steps)
 
@@ -35,6 +38,9 @@ hydrostatic initial p_rgh = -rho (g & x_I) after `setAlphaField`.
   error: p_rgh starts at 0 and the explicit non-orthogonal correction lags. Two
   non-orthogonal correctors reduce it to 2e-8 m/s, and a hydrostatic initial
   p_rgh removes it (7.7e-10 m/s) without correctors.
+- nLayers 2 gives the same results as nLayers 1 on this mesh (3.5e-2 m/s from
+  a zero start without correctors, 2.0e-8 m/s with 2 correctors, 7.7e-10 m/s from
+  a hydrostatic start).
 
 ## Running
 

@@ -13,11 +13,12 @@ rm -f maxU_tiltedBox.pdf maxU_tiltedBox.png
 rm -f firstStepMaxU_tiltedBox.pdf firstStepMaxU_tiltedBox.png
 rm -f maxUvsRhoAir_tiltedBox.pdf maxUvsRhoAir_tiltedBox.png
 rm -f log.figure_paper log.plotMaxU log.plotFirstStepMaxU log.plotMaxUvsRhoAir
+rm -f summary_*.txt
 
 if [ "$1" = "-scans" ]
 then
     rm -rf gravityModelScan_1deltaT gravityModelScan_100deltaT gravityModelScan_1000deltaT \
-        deltaTScan airDensityScan_1000deltaT
+        deltaTScan airDensityScan_1000deltaT nLayersScan
 else
     echo "Scan directories kept; use ./Allclean -scans to delete them as well"
 fi
