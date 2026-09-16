@@ -7,7 +7,7 @@ line. The mesh has 1132 cells, including 52 polyhedra at the refinement
 boundary, with non-orthogonality up to 18.4 degrees and skewness 0.33.
 
 `baseCaseHydrostatic` is identical except that the `setHydrostaticPressure`
-utility (`../../setHydrostaticPressure`) sets a hydrostatic initial
+utility (`../../applications/utilities/setHydrostaticPressure`) sets a hydrostatic initial
 p_rgh = -rho (g & x_I) after `setAlphaField`. Both base
 cases contain `nLayers 1;` in `constant/gravityProperties` so that the scans can
 set it. 10 time steps of 0.01 s, corrected schemes unless stated.

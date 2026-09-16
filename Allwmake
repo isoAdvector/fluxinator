@@ -3,5 +3,5 @@ cd ${0%/*} || exit 1
 
 wmake "$@" newGeometricVoF
 wmake "$@" gravityModels
-wmake "$@" interIsoGoam
-wmake "$@" setHydrostaticPressure
+wmake "$@" applications/interIsoGoam
+wmake "$@" applications/utilities/setHydrostaticPressure

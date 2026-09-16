@@ -9,7 +9,7 @@ inviscid, no surface tension, dt = 0.01 s, 10 time steps, plicRDF, no
 non-orthogonal corrector loops unless stated. Exact solution U = 0.
 
 `baseCaseHydrostatic` is identical except that the `setHydrostaticPressure`
-utility (`../../setHydrostaticPressure`) sets a hydrostatic initial
+utility (`../../applications/utilities/setHydrostaticPressure`) sets a hydrostatic initial
 p_rgh = -rho (g & x_I) after `setAlphaField`. Both base
 cases contain `nLayers 1;` in `constant/gravityProperties` so that the scans can
 set it.
