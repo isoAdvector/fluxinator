@@ -8,8 +8,9 @@ about the box centre by `rotAngle` in `rotAngleDict`: 90 degrees in `baseCase`
 inviscid, no surface tension, dt = 0.01 s, 10 time steps, plicRDF, no
 non-orthogonal corrector loops unless stated. Exact solution U = 0.
 
-`baseCaseHydrostatic` is identical except that `setHydrostaticPrgh.py` sets a
-hydrostatic initial p_rgh = -rho (g & x_I) after `setAlphaField`. Both base
+`baseCaseHydrostatic` is identical except that the `setHydrostaticPressure`
+utility (`../../setHydrostaticPressure`) sets a hydrostatic initial
+p_rgh = -rho (g & x_I) after `setAlphaField`. Both base
 cases contain `nLayers 1;` in `constant/gravityProperties` so that the scans can
 set it.
 

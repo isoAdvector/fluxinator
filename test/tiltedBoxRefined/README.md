@@ -6,8 +6,9 @@ square 0.25 < x, z < 0.75 refined once (2 x 2 in x and z, `topoSetDict1`,
 line. The mesh has 1132 cells, including 52 polyhedra at the refinement
 boundary, with non-orthogonality up to 18.4 degrees and skewness 0.33.
 
-`baseCaseHydrostatic` is identical except that `setHydrostaticPrgh.py` sets a
-hydrostatic initial p_rgh = -rho (g & x_I) after `setAlphaField`. Both base
+`baseCaseHydrostatic` is identical except that the `setHydrostaticPressure`
+utility (`../../setHydrostaticPressure`) sets a hydrostatic initial
+p_rgh = -rho (g & x_I) after `setAlphaField`. Both base
 cases contain `nLayers 1;` in `constant/gravityProperties` so that the scans can
 set it. 10 time steps of 0.01 s, corrected schemes unless stated.
 
