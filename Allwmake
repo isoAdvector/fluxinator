@@ -4,3 +4,4 @@ cd ${0%/*} || exit 1
 wmake "$@" newGeometricVoF
 wmake "$@" gravityModels
 wmake "$@" interIsoGoam
+wmake "$@" setHydrostaticPressure
