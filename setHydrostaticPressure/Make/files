@@ -1,3 +1,0 @@
-setHydrostaticPressure.C
-
-EXE = $(FOAM_USER_APPBIN)/setHydrostaticPressure

@@ -4,4 +4,3 @@ cd ${0%/*} || exit 1
 wclean newGeometricVoF
 wclean gravityModels
 wclean interIsoGoam
-wclean setHydrostaticPressure
