@@ -1,0 +1,12 @@
+scanName                  nLayersScan_fixedDt
+baseCase                  baseCase_fixedDt
+application               nx                      nz                      deltaT                  nLayers                     numberOfSubdomains         method
+system/controlDict.run    system/blockMeshDict    system/blockMeshDict    system/controlDict.run  constant/gravityProperties  system/decomposeParDict    system/decomposeParDict
+interIsoGoam              760                     160                     0.0003125               1                           4                          scotch
+interIsoGoam              760                     160                     0.0003125               2                           4                          scotch
+interIsoGoam              760                     160                     0.000625                1                           4                          scotch
+interIsoGoam              760                     160                     0.000625                2                           4                          scotch
+interIsoGoam              760                     160                     0.00125                 1                           4                          scotch
+interIsoGoam              760                     160                     0.00125                 2                           4                          scotch
+interIsoGoam              760                     160                     0.0025                  1                           4                          scotch
+interIsoGoam              760                     160                     0.0025                  2                           4                          scotch

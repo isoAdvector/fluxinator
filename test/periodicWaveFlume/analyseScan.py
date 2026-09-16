@@ -152,7 +152,8 @@ def main():
     parser = argparse.ArgumentParser(description='Accuracy and efficiency metrics for a scan.')
     parser.add_argument('--scanDir', required=True, help='Directory where cases are found')
     parser.add_argument('--refCase', default='0036',
-                        help='Reference (analytic) case. Default: 0036')
+                        help='Reference (analytic) case: a case in the scan, or the path to a '
+                             'case directory elsewhere. Default: 0036')
     parser.add_argument('--csv', default=None, help='Also write the table to this CSV file')
     args = parser.parse_args()
 
@@ -160,7 +161,12 @@ def main():
                    if re.fullmatch(r'\d{4}', c)
                    and os.path.isfile(os.path.join(args.scanDir, c, 'parmScannerParms')))
     data = {c: load(args.scanDir, c) for c in cases}
-    ref = data[args.refCase]
+    if args.refCase in data:
+        ref = data[args.refCase]
+    else:
+        # Reference case outside the scan, given as a path
+        refPath = os.path.normpath(args.refCase)
+        ref = load(os.path.dirname(refPath), os.path.basename(refPath))
     endTime = ref['t'][-1]
 
     refRow = metrics(ref, ref, endTime)
