@@ -1,0 +1,2 @@
+snGradReachUncorrected: 76 faces with non-zero snGrad(rho), marked cells per ring level 0..5: 6(25 50 0 0 0 0), marked cells beyond ring 5: 0
+snGradReachCorrected: 128 faces with non-zero snGrad(rho), marked cells per ring level 0..5: 6(25 54 0 0 0 0), marked cells beyond ring 5: 0

@@ -52,6 +52,6 @@ set it.
 ## Running
 
 ```sh
-./Allrun             # scans, figure_skewBox.pdf and summary_*.txt
+./Allrun             # scans, paperData/ (tracked in git) and figure_skewBox.pdf
 ./Allclean [-scans]  # remove generated files (and with -scans the scans)
 ```

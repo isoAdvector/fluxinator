@@ -1,0 +1,3 @@
+Cells in ring 2 of the corrected snGrad(rho) reach: [256, 1079]
+nLayers 1: max|U| = 9.5396e-01 m/s in cell 1079, ring level 2
+nLayers 2: max|U| = 6.4477e-09 m/s in cell 703, ring level 1

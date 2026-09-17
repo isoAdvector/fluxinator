@@ -28,8 +28,9 @@ do
     parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
 done
 
-# Geometric gravity model with nLayers 0, 1 and 2
-python3 ../summariseScan.py nLayersScan | tee summary_nLayersScan.txt
+# Numbers behind the paper (tracked in git): scan summaries, max|U| table,
+# first step against dt, interface band and numerical vapour
+python3 paperData.py > log.paperData 2>&1
 
 # Velocity fields after 1, 100 and 1000 time steps (gravityRecon column omitted)
 pdflatex -interaction=nonstopmode figure_paper.tex > log.figure_paper 2>&1
@@ -40,5 +41,6 @@ python3 plotFirstStepMaxU.py > log.plotFirstStepMaxU 2>&1
 python3 plotMaxUvsRhoAir.py > log.plotMaxUvsRhoAir 2>&1
 
 echo "Figures: figure_paper.pdf, maxU_tiltedBox.pdf, firstStepMaxU_tiltedBox.pdf, maxUvsRhoAir_tiltedBox.pdf"
+echo "Data: paperData/"
 
 #------------------------------------------------------------------------------

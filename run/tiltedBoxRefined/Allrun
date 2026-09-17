@@ -20,13 +20,26 @@ maxJobs=${MAXJOBS:-$(nproc)}
 for scan in zeroStartScan hydrostaticInitScan nLayersZeroStartScan nLayersHydrostaticScan
 do
     parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
-    python3 ../summariseScan.py "$scan" | tee "summary_$scan.txt"
+done
+
+# Numbers behind the paper (tracked in git): one summary per scan
+mkdir -p paperData
+for scan in zeroStartScan hydrostaticInitScan nLayersZeroStartScan nLayersHydrostaticScan
+do
+    python3 ../summariseScan.py "$scan" > "paperData/$scan.txt"
 done
 
 # Cells adjacent to faces with non-zero uncorrected and corrected snGrad(rho)
 postProcess -case zeroStartScan/0000 -time 0 -dict "$(pwd)/../snGradRhoReach" \
     > log.snGradRhoReach 2>&1
-grep snGradReach log.snGradRhoReach | tee summary_snGradRhoReach.txt
+grep snGradReach log.snGradRhoReach > paperData/snGradRhoReach.txt
+
+# Mesh quality
+checkMesh -case zeroStartScan/0000 -time 0 > log.checkMesh 2>&1
+sed -n '/Mesh stats/,/End/p' log.checkMesh > paperData/checkMesh.txt
+
+# Location of the maximum velocity with nLayers 1 from a hydrostatic start
+python3 maxUCellRing.py > paperData/maxUCellRing.txt
 
 # Paper figures: reach and velocity fields (pvbatch), and max|U| per time step
 # for this case and the skewed box (needs the scans in ../skewBox)

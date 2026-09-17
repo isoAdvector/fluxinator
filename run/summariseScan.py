@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 #
-# Prints a one-line summary per case of a parmScanner scan of the hydrostatic
-# box tests: the scanned parameters, the initial residual of the first p_rgh
-# solve, and max|U| after the first and the last time step.
+# Prints a summary per case of a parmScanner scan of the hydrostatic box
+# tests: the scanned parameters, the initial residual of the first p_rgh solve,
+# and max|U| after the first and the last time step and its peak over the run,
+# with 8 significant digits.
 #
 # Usage (from the test directory holding the scan):
 #   python3 ../summariseScan.py <scanDir>
@@ -53,7 +54,9 @@ def main():
         residual = first_prgh_residual(os.path.join(caseDir, 'log.' + application))
         rows = max_u(caseDir)
         if rows:
-            u = f'max|U| t={rows[0][0]}: {rows[0][1]:.3e}  t={rows[-1][0]}: {rows[-1][1]:.3e}'
+            peak = max(r[1] for r in rows)
+            u = (f'max|U| t={rows[0][0]}: {rows[0][1]:.7e}  t={rows[-1][0]}: {rows[-1][1]:.7e}'
+                 f'  peak: {peak:.7e}')
         else:
             u = 'no fieldMinMax output'
         print(f'{os.path.basename(caseDir)}  {parms}')

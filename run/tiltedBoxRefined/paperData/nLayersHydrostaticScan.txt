@@ -1,0 +1,7 @@
+Scan nLayersHydrostaticScan
+0000  gravityModel: geometric nLayers: 1 application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+      first p_rgh residual 1.5396929106819e-05  max|U| t=0.01: 2.7325833e-01  t=0.1: 9.5396416e-01  peak: 9.5396416e-01
+0001  gravityModel: geometric nLayers: 2 application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+      first p_rgh residual 3.0060659714154e-13  max|U| t=0.01: 4.4906966e-09  t=0.1: 6.4477255e-09  peak: 6.5988452e-09
+0002  gravityModel: geometric nLayers: 3 application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+      first p_rgh residual 3.0060659778873e-13  max|U| t=0.01: 4.4906966e-09  t=0.1: 6.4974083e-09  peak: 6.6639584e-09

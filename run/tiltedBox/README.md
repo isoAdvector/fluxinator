@@ -40,6 +40,10 @@ scans can set it.
 ./Allclean [-scans]  # remove generated files (and with -scans the scans)
 ```
 
+The numbers behind the paper are written to `paperData/` (tracked in git) by
+`paperData.py`: scan summaries, the max|U| table, the first step against dt and
+the interface band and numerical vapour statistics (`analyseInterfaceBand.py`).
+
 Figures: `figure_paper.pdf` (velocity fields, from `figure_paper.tex`),
 `maxU_tiltedBox.pdf` (`plotMaxU.py`), `firstStepMaxU_tiltedBox.pdf`
 (`plotFirstStepMaxU.py`) and `maxUvsRhoAir_tiltedBox.pdf` (`plotMaxUvsRhoAir.py`).

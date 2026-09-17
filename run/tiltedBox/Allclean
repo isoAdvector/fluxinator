@@ -13,7 +13,8 @@ rm -f maxU_tiltedBox.pdf maxU_tiltedBox.png
 rm -f firstStepMaxU_tiltedBox.pdf firstStepMaxU_tiltedBox.png
 rm -f maxUvsRhoAir_tiltedBox.pdf maxUvsRhoAir_tiltedBox.png
 rm -f log.figure_paper log.plotMaxU log.plotFirstStepMaxU log.plotMaxUvsRhoAir
-rm -f summary_*.txt
+rm -f summary_*.txt log.paperData
+# paperData/ is tracked in git and kept
 
 if [ "$1" = "-scans" ]
 then

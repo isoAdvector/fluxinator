@@ -1,0 +1,19 @@
+Scan zeroStartScan
+0000  gravityModel: geometric application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0 laplacianSchemes.default: Gauss linear corrected snGradSchemes.default: corrected
+      first p_rgh residual 1  max|U| t=0.01: 5.5169986e-01  t=0.1: 9.5313320e-01  peak: 9.5313320e-01
+0001  gravityModel: geometric application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 1 laplacianSchemes.default: Gauss linear corrected snGradSchemes.default: corrected
+      first p_rgh residual 1  max|U| t=0.01: 2.7328008e-01  t=0.1: 9.5399117e-01  peak: 9.5399117e-01
+0002  gravityModel: geometric application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 2 laplacianSchemes.default: Gauss linear corrected snGradSchemes.default: corrected
+      first p_rgh residual 1  max|U| t=0.01: 2.7327810e-01  t=0.1: 9.5398302e-01  peak: 9.5398302e-01
+0003  gravityModel: geometric application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 5 laplacianSchemes.default: Gauss linear corrected snGradSchemes.default: corrected
+      first p_rgh residual 1  max|U| t=0.01: 2.7327810e-01  t=0.1: 9.5398310e-01  peak: 9.5398310e-01
+0004  gravityModel: constantHeight application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0 laplacianSchemes.default: Gauss linear corrected snGradSchemes.default: corrected
+      first p_rgh residual 1  max|U| t=0.01: 5.5156794e-01  t=0.1: 1.4317351e-01  peak: 5.5156794e-01
+0005  gravityModel: constantHeight application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 5 laplacianSchemes.default: Gauss linear corrected snGradSchemes.default: corrected
+      first p_rgh residual 1  max|U| t=0.01: 7.4550161e-08  t=0.1: 1.0607576e-07  peak: 1.0607576e-07
+0006  gravityModel: basic application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0 laplacianSchemes.default: Gauss linear corrected snGradSchemes.default: corrected
+      first p_rgh residual 1  max|U| t=0.01: 4.0367748e+00  t=0.1: 3.2532250e+00  peak: 4.0367748e+00
+0007  gravityModel: geometric application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0 laplacianSchemes.default: Gauss linear uncorrected snGradSchemes.default: uncorrected
+      first p_rgh residual 1  max|U| t=0.01: 4.4389750e-10  t=0.1: 1.3400325e-09  peak: 5.0968521e-09
+0008  gravityModel: constantHeight application: interIsoGoam endTime: 0.1 writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 2 laplacianSchemes.default: Gauss linear corrected snGradSchemes.default: corrected
+      first p_rgh residual 1  max|U| t=0.01: 7.4884847e-08  t=0.1: 1.4399930e-07  peak: 1.4399930e-07

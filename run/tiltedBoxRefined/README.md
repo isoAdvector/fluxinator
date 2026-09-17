@@ -49,7 +49,7 @@ set it. 10 time steps of 0.01 s, corrected schemes unless stated.
 ## Running
 
 ```sh
-./Allrun             # scans, summary_*.txt and paper figures
+./Allrun             # scans, paperData/ (tracked in git) and paper figures
 ./Allclean [-scans]  # remove generated files (and with -scans the scans)
 ```
 

@@ -9,7 +9,8 @@
 cd "${0%/*}" || exit 1
 
 rm -f figure_skewBox.pdf figure_skewBox.aux figure_skewBox.log log.figure_skewBox
-rm -f summary_*.txt
+rm -f summary_*.txt log.*
+# paperData/ is tracked in git and kept
 
 if [ "$1" = "-scans" ]
 then

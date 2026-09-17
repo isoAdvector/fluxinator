@@ -39,6 +39,9 @@ python3 analyseScan.py --scanDir gravityModelScan_fixedDt --csv fixedDtMetrics.c
 # Paper figures
 python3 paperFigures.py > log.paperFigures 2>&1
 
+# Numbers and appendix tables behind the paper (tracked in git)
+python3 paperData.py > log.paperData 2>&1
+
 if command -v "$pvbatch" > /dev/null
 then
     "$pvbatch" --force-offscreen-rendering renderCaseIllustration.py \
@@ -47,6 +50,6 @@ else
     echo "pvbatch not found: case illustration not rendered" >&2
 fi
 
-echo "Metrics: maxCoMetrics.csv, fixedDtMetrics.csv. Figures: paperFigures/"
+echo "Metrics: maxCoMetrics.csv, fixedDtMetrics.csv. Figures: paperFigures/. Data: paperData/"
 
 #------------------------------------------------------------------------------
