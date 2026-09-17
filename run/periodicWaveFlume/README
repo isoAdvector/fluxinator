@@ -45,8 +45,8 @@ analyseScan.py            accuracy and efficiency metrics per run (CSV): wave he
                           scatter, shape and phase errors, spurious velocities, cost
 paperFigures.py           paper figures from the metrics and the case time series
 paperData.py              numbers behind the paper in paperData/ (tracked in git):
-                          copies of the metrics, the appendix tables of all runs
-                          and the derived statistics quoted in the text
+                          copies of the metrics and the derived statistics
+                          quoted in the text
 renderCaseIllustration.py mesh and wave illustration (pvbatch, caseIllustration.pvsm)
 plotCrestHeight.py        crest, trough and wave height against time for chosen cases;
                           shared functions for the other scripts
