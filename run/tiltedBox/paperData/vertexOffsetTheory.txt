@@ -1,0 +1,47 @@
+Closed-form identities of the universal loop imbalance
+  theta =   5.0 deg
+    peak             15.5883 Pa at xi/h = -0.00000; closed form   15.5883 Pa
+    support        |xi|/h < 1.08333   (cos+sin = 1.08335)
+    light-fluid window width tan(theta) = 0.08749; Gamma at its edge   -7.7942 Pa = -0.50000 x peak
+  theta =  12.0 deg
+    peak             32.0895 Pa at xi/h = -0.00000; closed form   32.0895 Pa
+    support        |xi|/h < 1.18605   (cos+sin = 1.18606)
+    light-fluid window width tan(theta) = 0.21256; Gamma at its edge  -16.0447 Pa = -0.50000 x peak
+
+Closed-form offset lattice against the mesh vertices of the same runs: max error 5.1e-15 m
+
+Prediction against 238 interFoam runs (tiltScan_1deltaT, waterLevelScan_1deltaT)
+  vertices in the light-fluid window: 0 to 9 per run (N tan(theta) = 0.9 to 9.1 over 2-20 deg)
+  the peak cell touches one of them in 94.5% of runs
+  the peak cell is one of the four cells of the highest-ranked vertex in 78.2% of runs;
+    the best of those four carries a mean 0.984 of the peak velocity (>= 0.90 in 93.7%, worst 0.699)
+  true max|U| / predicted: median 1.031, 5-95% [0.978, 1.464]
+
+    tilt     z_w     max|U|  predicted  peak cell  top vertex  #window  in window
+    2.00   0.500    0.01690    0.00415    (0, 13)     (1, 13)        0      False
+    2.90   0.500    0.17652    0.11540    (2, 12)    (22, 14)        2       True
+    3.80   0.500    0.40158    0.38535    (4, 12)     (5, 13)        2       True
+    4.70   0.500    0.20764    0.15407    (5, 12)     (6, 13)        2       True
+    5.60   0.500    0.24245    0.19152    (6, 12)     (7, 13)        2       True
+    6.50   0.500    0.53356    0.47952   (16, 13)     (8, 13)        2       True
+    7.40   0.500    0.57404    0.64211   (23, 14)     (1, 12)        3       True
+    8.30   0.500    0.70148    0.64222   (15, 13)     (9, 13)        4       True
+    9.20   0.500    0.48536    0.47030    (2, 11)     (3, 12)        4       True
+   10.10   0.500    0.76373    0.74037   (20, 14)     (4, 12)        4       True
+   11.00   0.500    0.82789    0.80129    (9, 12)    (15, 14)        4       True
+   11.90   0.500    0.76079    0.75066    (9, 12)    (10, 13)        5       True
+   12.80   0.500    0.83819    0.83570   (18, 14)    (19, 15)        6       True
+   13.70   0.500    0.60702    0.61901    (1, 10)     (2, 11)        6       True
+   14.60   0.500    0.91459    0.91927   (21, 15)    (22, 16)        6       True
+   15.50   0.500    0.96334    0.96611    (6, 11)     (7, 12)        6       True
+   16.40   0.500    1.19916    1.21462   (20, 15)    (21, 16)        7       True
+   17.30   0.500    1.01991    0.99264   (13, 13)    (14, 14)        8       True
+   18.20   0.500    1.30888    1.23402   (10, 12)    (11, 13)        8       True
+   19.10   0.500    1.18831    1.15429   (10, 12)    (11, 13)        8       True
+   20.00   0.500    1.02734    1.02917   (10, 12)    (22, 17)        9       True
+    5.00   0.495    0.32409    0.29366    (7, 12)     (8, 13)        2       True
+    5.00   0.540    0.35642    0.33074   (17, 14)    (18, 15)        2       True
+   10.00   0.490    0.70236    0.69537   (10, 12)    (11, 13)        4       True
+   10.00   0.535    0.86805    0.84428   (15, 14)    (16, 15)        4       True
+   15.00   0.485    0.96910    0.96522   (11, 12)    (12, 13)        6       True
+   15.00   0.530    1.10748    1.13802    (3, 11)     (4, 12)        6       True

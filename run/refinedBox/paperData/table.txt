@@ -1,0 +1,7 @@
+max|U| [m/s] at t = 0.1 s, max over levels cutting cells / levels on faces
+                                            zero, nc=0            zero, nc=2     hydrostatic, nc=0           uncorrected
+interFoam, basic                     1.7e+00 / 2.1e+00     1.7e+00 / 2.2e+00     1.7e+00 / 2.2e+00     7.7e-01 / 7.1e-01
+interIsoFoam, basic                  5.3e+00 / 2.4e+00     5.1e+00 / 2.4e+00     5.3e+00 / 2.4e+00     4.1e+00 / 8.6e-01
+interIsoGoam, constantHeight         1.4e-01 / 1.5e-01     2.6e-07 / 2.9e-07     3.6e-09 / 6.0e-09     2.1e-09 / 1.5e-09
+interIsoGoam, geometric, nL = 1      2.3e+00 / 2.1e+00     2.3e+00 / 2.1e+00     2.3e+00 / 2.1e+00     1.9e-09 / 1.3e-09
+interIsoGoam, geometric, nL = 2      1.4e-01 / 1.5e-01     7.9e-07 / 1.0e-04     4.9e-09 / 5.6e-09     2.1e-09 / 1.9e-09

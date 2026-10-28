@@ -1,0 +1,21 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{geometry}
+% Three 2400x1056 panels at 0.965 x 16 cm width are 6.79 cm tall each
+\geometry{papersize={16.0cm,20.8cm},total={16.0cm,20.8cm}}
+% Velocity snapshots of the standing wave at t = T, produced by figure.sh.
+\setlength{\parindent}{0pt}
+\newcommand{\panel}[2]{%
+\begin{minipage}[c]{0.035\linewidth}
+    \centering
+    \rotatebox[origin=c]{90}{\textbf{#1}}
+\end{minipage}%
+\begin{minipage}[c]{0.965\linewidth}
+    \includegraphics[width=\linewidth]{snapshots/#2.png}
+\end{minipage}}
+\pagestyle{empty}
+\begin{document}
+\panel{(a) interFoam}{interFoam}\par\vspace{2mm}
+\panel{(b) interIsoFoam}{interIsoFoam}\par\vspace{2mm}
+\panel{(c) interIsoGoam}{interIsoGoam}
+\end{document}

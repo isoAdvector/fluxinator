@@ -1,0 +1,4 @@
+Cells in ring 2 of the corrected snGrad(rho) reach: 281 (0.25, 0.45), 716 (0.25, 0.55), 871 (0.75, 0.45), 1066 (0.75, 0.55)
+interFoam, basic, uncorrected, t = 0.01: max|U| = 2.2289e+00 m/s in cell 1053 at (x, z) = (0.750, 0.510), alpha = 0, ring level 1
+geometric, nLayers 1, hydrostatic, t = 0.1: max|U| = 1.4831e+00 m/s in cell 1066 at (x, z) = (0.750, 0.550), alpha = 0, ring level 2
+geometric, nLayers 2, hydrostatic, t = 0.1: max|U| = 1.1718e-10 m/s in cell 715 at (x, z) = (0.730, 0.510), alpha = 0, ring level 1
