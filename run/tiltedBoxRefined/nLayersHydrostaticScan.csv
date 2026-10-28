@@ -1,7 +1,0 @@
-scanName                      nLayersHydrostaticScan
-baseCase                      baseCaseHydrostatic
-gravityModel                  nLayers                       application           endTime               writeInterval         PIMPLE.nNonOrthogonalCorrectors
-constant/gravityProperties    constant/gravityProperties    system/controlDict    system/controlDict    system/controlDict    system/fvSolution
-geometric                     1                             interIsoGoam          0.1                   10                    0
-geometric                     2                             interIsoGoam          0.1                   10                    0
-geometric                     3                             interIsoGoam          0.1                   10                    0

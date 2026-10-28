@@ -90,3 +90,9 @@ __pycache__/
 
 # Build logs
 log.wmake
+
+# Part II (convection) work in progress; to move to its own repository
+# interfaceConvection, which will use this repository as a dependency
+/interfaceRelativePressure/
+/run/periodicWaveFlume/finalSolver/
+/run/periodicWaveFlume/ddtCorrStudy/
