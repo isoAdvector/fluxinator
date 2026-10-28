@@ -1,0 +1,70 @@
+#!/bin/bash
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+# As Allrun, but the solver runs in parallel on numberOfSubdomains processes
+# (system/decomposeParDict).
+#
+# Several cases can run simultaneously on one machine: each case claims a free
+# NUMA node (a lock directory in ${NUMA_LOCK_DIR:-/tmp/numaSlots-$USER}), binds
+# its processes to one hardware thread per core of that node and allocates its
+# memory on that node only. If no node is free, the case waits. Without memory
+# binding, processes received memory on other NUMA nodes whenever the page
+# cache filled their own node, which made 8 simultaneous 4-process cases about
+# 6 times slower. A lock left behind by a killed case must be removed by hand.
+#------------------------------------------------------------------------------
+
+restore0Dir
+touch periodicWaveTank.foam
+cp system/controlDict.init system/controlDict
+
+runApplication blockMesh
+
+runApplication -s 0 streamFunFoam
+cp 0.orig/p_rgh 0/p_rgh
+cp system/controlDict.run system/controlDict
+
+runApplication decomposePar
+
+application=$(getApplication)
+nProcs=$(getNumberOfProcessors system/decomposeParDict)
+
+# Claim a free NUMA node
+lockDir=${NUMA_LOCK_DIR:-/tmp/numaSlots-$USER}
+mkdir -p "$lockDir"
+nodes=$(ls -d /sys/devices/system/node/node[0-9]* | sed 's/.*node//' | sort -n)
+node=
+while [ -z "$node" ]
+do
+    for n in $nodes
+    do
+        if mkdir "$lockDir/node$n" 2>/dev/null
+        then
+            node=$n
+            break
+        fi
+    done
+    [ -n "$node" ] || sleep 30
+done
+trap 'rmdir "$lockDir/node$node"' EXIT
+trap 'exit 1' INT TERM
+
+# One hardware thread per physical core of the node
+cpus=$(lscpu -p=CPU,CORE,NODE | awk -F, -v n="$node" \
+    '!/^#/ && $3 == n && !seen[$2]++ {printf "%s%s", sep, $1; sep = ","}')
+nCores=$(echo "$cpus" | tr ',' '\n' | wc -l)
+
+if [ "$nProcs" -le "$nCores" ]
+then
+    binding="--cpu-set $cpus --bind-to core --mca hwloc_base_mem_alloc_policy local_only"
+else
+    echo "Warning: $nProcs processes exceed the $nCores cores of NUMA node $node;" \
+        "running without binding" >&2
+    binding="--bind-to none"
+fi
+echo "$application on $nProcs processes, NUMA node $node, cpus $cpus" > log.numaNode
+
+mpirun $binding -np "$nProcs" "$application" -parallel \
+    < /dev/null > "log.$application" 2>&1
+
+#------------------------------------------------------------------------------

@@ -7,7 +7,7 @@ Writes paperData/crestKinematics.txt and paperFigures/crestProfiles.pdf.
 Per time window: dH = wave height change, r0 = u/u_exact in the top full water cell under the
 crest, emax = max | |U| - |U_exact| | over the wet cells of the crest column [% of the exact
 crest-surface speed]; means over the snapshots of the window. The analysis functions are
-those of interfaceRelativePressure/run/waveLab/hmatch.py and run/qwistWave/kinematics.py.
+those of run/qwistWave/hmatch.py and run/qwistWave/kinematics.py.
 Usage (in run/periodicWaveFlume): python3 crestKinematics.py"""
 import os
 import sys
@@ -18,7 +18,6 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "qwistWave"))
-sys.path.insert(0, os.path.join(HERE, "..", "..", "interfaceRelativePressure", "run", "waveLab"))
 import kinematics as K  # noqa: E402
 from hmatch import analyse_input  # noqa: E402
 

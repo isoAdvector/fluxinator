@@ -1,0 +1,23 @@
+Qwist & Christensen (2023) stream-function wave in a periodic domain
+====================================================================
+
+Qwist, J.R.K., Christensen, E.D., 2023. Development and implementation of a
+Direct Surface Description method for free surface flows in OpenFOAM. Coastal
+Eng. 179, 104227 (Zotero MSSQN5EV). Their wave: H = 0.3 m, T = 2 s, d = 1 m,
+zero Eulerian mean current (uType 1): L = 5.40857 m, k = 1.16171 1/m,
+c = 2.70429 m/s (constant/out, calcStreamFunctionWave). Their domain is 13 L
+with relaxation zones (waves2Foam); here one wavelength, periodic, 2 m high
+(1 m air), same boundary conditions as their Table 3, inviscid.
+
+Meshes as their Table 2 (aspect ratio 1, cells per wavelength 27..270):
+  m1 27x10 dt 0.02, m2 54x20 dt 0.01, m3 108x40 dt 0.005, m4 216x80 dt 0.0025,
+  m5 270x100 dt 0.002   (their "CFL 0.09"; OpenFOAM's max Courant at t = 0 is 0.056)
+Solver settings otherwise as the paper's fixed-dt flume (baseCase_fixedDt):
+limitedLinearV, no momentum predictor, nCorrectors 3, nOuterCorrectors 1.
+
+runCase.sh  <outdir> <nx> <nz> <dt> <endTime> [key=value ...]
+jobs2.txt   runs (cat jobs2.txt | xargs -P N -L 1 ./runCase.sh)
+Variants runs/<solver>_<ddt>_<ddtCorr>: iIF = interIsoGoam with gravityModel
+basic (= interIsoFoam bitwise), iIG = interIsoGoam geometric; E = Euler,
+B = backward; on/off = PIMPLE ddtCorr. Directories m<k>_dt<dt>.
+Runs (ddtCorr on): m2, m3 at their dt; m3 at 2x their dt (their "CFL 0.18" interIsoFoam crash).

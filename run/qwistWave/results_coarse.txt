@@ -1,0 +1,32 @@
+Jesper's wave (H 0.3, T 2, d 1, L 5.409, periodic 1 L, 40 s), jobs3.txt. Euler, ddtCorr no.
+iIG = interIsoGoam (implicit convection); LW = interIsoGoamExt explicitConvection + laxWendroff U phi limitedLinearV 1.
+hmatch.py (height-matched r0/emax), windows 8-10 s and 35-40 s (his: last 5 s of 40 s).
+
+mesh  H/dy dt      solver  dH 10s  dH 40s  r0hm 10s r0hm 40s emax 10s emax 40s  celerity vs init  exec
+m1    1.5  0.02    iIG     -18.2   -55.0   1.14     1.68     46 %     56 %      +0.13 %           23 s
+m1    1.5  0.02    LW      -13.5   -41.5   1.01     1.20     14 %     16 %      -1.10 %           24 s
+m2    3    0.01    iIG      -2.7   -15.0   1.22     1.63     36 %     66 %      +1.44 %           71 s
+m2    3    0.01    LW       +1.3    +4.2   1.02     1.04     11 %     15 %      +0.01 %           76 s
+m2    3    0.02    iIG      -2.1   -24.6   1.38     2.54     61 %    140 %      +2.83 %           37 s
+m2    3    0.02    LW       +7.9   +21.7   0.97     1.05     10 %      7 %      -0.18 %           39 s
+m3    6    0.005   iIG      -0.0    -3.1   1.26     1.66     28 %     68 %      +1.34 %          385 s
+m3    6    0.005   LW       +2.8   +13.2   1.01     0.99      3 %      6 %      -0.11 %          401 s
+m3    6    0.01    iIG      +2.2    +0.6   1.43     2.51     53 %    157 %      +3.10 %          198 s
+m3    6    0.01    LW       +9.3   +42.1   0.94     0.82      7 %     20 %      -0.45 %          215 s
+m4    12   0.0025  iIG      +0.0    -1.0   1.25     1.65     24 %     64 %      +0.86 %         3311 s
+m4    12   0.0025  LW       +1.4    +6.4   1.01     0.98      2 %      4 %      -0.11 %         3457 s
+
+IU = interIsoGoamExt explicitConvection + interfaceUpwind alpha.water 1e-6 limitedLinearV 1 (runs/IU, jobs4.txt)
+mesh  H/dy dt      solver  dH 10s  dH 40s  r0hm 10s r0hm 40s emax 10s emax 40s  celerity vs init  exec
+m1    1.5  0.02    IU      -19.9   -55.5   1.09     1.33     10 %     27 %      -1.20 %           22 s
+m2    3    0.01    IU       -3.7   -14.5   1.07     1.16      6 %     14 %      -0.19 %           69 s
+m2    3    0.02    IU       +0.8    +1.5   1.05     1.09      5 %      8 %      -0.33 %           37 s
+m3    6    0.005   IU       +0.2    +0.9   1.03     1.05      4 %      6 %      -0.11 %          387 s
+m3    6    0.01    IU       +2.7   +12.2   1.00     0.96      4 %      7 %      -0.27 %          205 s
+
+LWIU = explicitConvection + laxWendroff U phi interfaceUpwind alpha.water 1e-6 limitedLinearV 1 (runs/LWIU, jobs5.txt)
+mesh  H/dy dt      solver  dH 10s  dH 40s  r0hm 10s r0hm 40s emax 10s emax 40s  celerity vs init
+m2    3    0.01    LWIU     -4.0   -15.6   1.08     1.16      7 %     14 %      -0.19 %
+m2    3    0.02    LWIU     +0.1    -0.9   1.06     1.10      5 %      8 %      -0.37 %
+m3    6    0.005   LWIU     -0.0    -0.3   1.03     1.06      4 %      7 %      -0.09 %
+m3    6    0.01    LWIU     +2.2    +9.9   1.01     0.99      4 %      5 %      -0.24 %

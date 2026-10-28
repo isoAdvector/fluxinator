@@ -1,0 +1,12 @@
+runs/iIF_E_on/m3_dt0.005 108 40 0.005 40 gravityModel=basic ddt=Euler
+runs/iIF_B_on/m3_dt0.005 108 40 0.005 40 gravityModel=basic ddt=backward
+runs/iIG_E_on/m3_dt0.005 108 40 0.005 40 ddt=Euler
+runs/iIG_B_on/m3_dt0.005 108 40 0.005 40 ddt=backward
+runs/iIF_E_on/m3_dt0.01 108 40 0.01 40 gravityModel=basic ddt=Euler
+runs/iIF_B_on/m3_dt0.01 108 40 0.01 40 gravityModel=basic ddt=backward
+runs/iIG_E_on/m3_dt0.01 108 40 0.01 40 ddt=Euler
+runs/iIG_B_on/m3_dt0.01 108 40 0.01 40 ddt=backward
+runs/iIF_E_on/m2_dt0.01 54 20 0.01 40 gravityModel=basic ddt=Euler
+runs/iIF_B_on/m2_dt0.01 54 20 0.01 40 gravityModel=basic ddt=backward
+runs/iIG_E_on/m2_dt0.01 54 20 0.01 40 ddt=Euler
+runs/iIG_B_on/m2_dt0.01 54 20 0.01 40 ddt=backward
