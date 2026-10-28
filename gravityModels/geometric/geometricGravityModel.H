@@ -37,6 +37,12 @@ Description
     interface centres. Each further ring uses the average of the values
     already assigned to its neighbours.
 
+    An interface lying exactly on mesh faces (volume fractions of exactly 0
+    and 1, no interface cells) is handled by treating every face between two
+    non-interface cells with densities on either side of the mean as an
+    interface segment: both cells get the face centre and normal and count as
+    interface cells before the rings are formed.
+
     With uncorrected snGrad schemes one layer is sufficient. With corrected
     (non-orthogonal) schemes, fvc::snGrad(rho) also reaches the faces between
     the first and second ring, so two layers are needed for an exact
@@ -46,7 +52,7 @@ Usage
     In constant/gravityProperties:
     \verbatim
     gravityModel    geometric;
-    nLayers         2;      // Optional, default 1
+    nLayers         2;      // Optional, default 2
     \endverbatim
 
 SourceFiles
@@ -136,6 +142,16 @@ public:
 
     //- Return gh
     tmp<volScalarField> gh() const;
+
+    //- Number of rings around the interface cells with an interface-based gh
+    label nLayers() const
+    {
+        return nLayers_;
+    }
+
+    //- Set the number of rings, for solvers whose default differs from the
+    //  default of this model (2) when nLayers is not given
+    void setNLayers(const label n);
 
 };
 

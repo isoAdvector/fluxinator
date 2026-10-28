@@ -12,10 +12,18 @@
 #   H1err       error of the first wave height relative to the exact H [%]
 #   dH10, dH20  wave height error at t ~ 10 s and t ~ 20 s [%]
 #   dHend       error of the last wave height [%]
-#   dHfit       wave height error at the last wave from a quadratic fit through
-#               all per-wave errors [%]. Less sensitive to wave-to-wave scatter
-#               than dHend.
-#   Hscatter    rms deviation of the per-wave errors from that fit [%-points]
+#   dHfit       wave height error at the last wave, from a straight line fitted
+#               through the last NFIT per-wave errors [%]. Less sensitive to
+#               wave-to-wave scatter than dHend, and unlike a fit through all
+#               waves it assumes no particular shape for the decay: over the
+#               last few waves a linear trend is all that is resolved.
+#   Hscatter    rms deviation of those last NFIT errors from that line
+#               [%-points]; it measures wave-to-wave scatter, with the local
+#               trend removed
+#   dcMean      mean celerity over the run relative to the exact celerity [%].
+#               The domain is one wavelength with cyclic ends, so the wavelength
+#               is fixed and the mean celerity is lambda divided by the mean
+#               interval between crests at the gauge: dcMean = T/Tbar - 1.
 #   crestEnd    error of the last crest height [%]
 #   troughEnd   error of the last trough height [%] (+ means shallower trough)
 #   crestPeaks  mean number of peaks (prominence > 0.5 mm) within +-0.3 s of
@@ -82,6 +90,27 @@ def crest_peaks(t, h, crests, halfWidth=0.3, prominence=5e-4):
     return float(np.mean(counts)) if counts else None
 
 
+NFIT = 5                    # waves used for the local trend behind dHfit
+
+
+def local_trend(x, y, n=NFIT):
+    """Straight line through the last n points of (x, y): its value at the last
+    point, and the rms deviation of those n points from it."""
+    xs, ys = x[-n:], y[-n:]
+    p = np.polyfit(xs, ys, 1)
+    return float(np.polyval(p, x[-1])), float(np.sqrt(np.mean((ys - np.polyval(p, xs))**2)))
+
+
+def celerity_error(crestTimes):
+    """Mean celerity over the run relative to the exact celerity [%].  With the
+    wavelength fixed by the cyclic domain this is T/Tbar - 1, where Tbar is the
+    mean interval between crests at the gauge."""
+    if len(crestTimes) < 2:
+        return None
+    Tbar = (crestTimes[-1] - crestTimes[0])/(len(crestTimes) - 1)
+    return float((PERIOD/Tbar - 1)*100)
+
+
 def fit_scatter(x, y):
     # rms deviation of y from a quadratic fit in x
     return float(np.sqrt(np.mean((y - np.polyval(np.polyfit(x, y, 2), x))**2)))
@@ -121,13 +150,12 @@ def metrics(r, ref, endTime):
     def at(time):
         return Hrel[np.argmin(abs(H[:, 0] - time))]
 
-    fit = np.polyfit(H[:, 0], Hrel, 2)
+    dHfit, Hscatter = local_trend(H[:, 0], Hrel)
     n = min(len(r['crests']), len(ref['crests']))
     etaRef = np.interp(r['t'], ref['t'], ref['h'])
     late = r['tu'] > 2
     row.update(H1err=Hrel[0], dH10=at(10), dH20=at(20), dHend=Hrel[-1],
-               dHfit=np.polyval(fit, H[-1, 0]),
-               Hscatter=np.sqrt(np.mean((Hrel - np.polyval(fit, H[:, 0]))**2)),
+               dHfit=dHfit, Hscatter=Hscatter,
                crestEnd=(r['crests'][-1, 1] - crestExact)/crestExact*100,
                troughEnd=(r['troughs'][-1, 1] - troughExact)/abs(troughExact)*100,
                crestPeaks=crest_peaks(r['t'], r['h'], r['crests']),
@@ -135,6 +163,7 @@ def metrics(r, ref, endTime):
                                         (r['crests'][:, 1] - crestExact)/crestExact*100),
                shapeErr=100*shape_error(r['t'], r['h'], ref, endTime)/Hexact,
                phase=r['crests'][n-1, 0] - ref['crests'][n-1, 0],
+               dcMean=celerity_error(r['crests'][:, 0]),
                rmsEta=np.sqrt(np.mean((r['h'] - etaRef)**2))/Hexact,
                Umean=r['maxU'].mean()/U_CREST, Uend=r['maxU'][-1]/U_CREST,
                Umed=np.median(r['maxU'][late])/U_CREST,
@@ -187,7 +216,8 @@ def main():
         ('avgMaxCo', '8.3f'), ('end', '6.2f'), ('clockTime', '9.0f'), ('steps', '7d'),
         ('msPerStep', '9.2f'), ('H1err', '6.2f'), ('dH10', '7.2f'), ('dH20', '7.2f'),
         ('dHend', '7.2f'), ('dHfit', '7.2f'), ('Hscatter', '8.2f'), ('crestEnd', '8.2f'),
-        ('troughEnd', '9.2f'), ('crestPeaks', '10.2f'), ('crestScatter', '12.2f'),
+        ('troughEnd', '9.2f'), ('dcMean', '8.3f'), ('crestPeaks', '10.2f'),
+        ('crestScatter', '12.2f'),
         ('shapeErr', '8.2f'), ('phase', '7.3f'), ('rmsEta', '7.3f'), ('Umean', '6.2f'),
         ('Uend', '5.2f'), ('Umed', '5.2f'), ('U95', '5.2f')]
     widths = {name: max(len(name), len(format(0 if spec[-1] in 'fd' else '', spec)))

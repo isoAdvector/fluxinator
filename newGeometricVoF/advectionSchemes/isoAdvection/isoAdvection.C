@@ -366,6 +366,146 @@ void Foam::isoAdvection::timeIntegratedFlux()
     const surfaceScalarField::Boundary& magSfb = mesh_.magSf().boundaryField();
     surfaceScalarField::Boundary& dVfb = dVf_.boundaryFieldRef();
 
+    // Cells that become interface cells during the time step (alpha solver
+    // entry advectNewInterfaceCells, default false). A full or empty cell U
+    // next to a surface cell S (across a face), lying on the side of S's
+    // isoface that the isoface moves towards (the water side for a full U,
+    // the air side for an empty U), inherits S's isoface and its normal
+    // velocity: the fluxes of U's downwind faces are integrated in time with
+    // that moving plane instead of the upwind value. With several candidate
+    // surface cells, the isoface that reaches U first is used. If the
+    // extended isoface already cuts U at the start of the step, all arrival
+    // times are shifted so that it just touches U then, keeping U consistent
+    // with its initial volume fraction. Serial and cyclic patches only
+    // (processor neighbours are not visited).
+    if (dict_.getOrDefault("advectNewInterfaceCells", false))
+    {
+        const pointField& pts = mesh_.points();
+        const vectorField& Cc = mesh_.C();
+        const labelList& nei = mesh_.faceNeighbour();
+        const labelListList& cellPts = mesh_.cellPoints();
+
+        boolList isSurf(mesh_.nCells(), false);
+        for (const label celli : surfCells_)
+        {
+            isSurf[celli] = true;
+        }
+
+        Map<label> bestPlane;
+        Map<scalar> bestTime;
+
+        forAll(interfaceLabels, i)
+        {
+            const label celli = interfaceLabels[i];
+            if (mag(surf_->normal()[celli]) == 0 || mag(Un0[i]) < 1e-12)
+            {
+                continue;
+            }
+            const point x0(surf_->centre()[celli]);
+            const vector n0(normalised(-surf_->normal()[celli]));
+
+            // Water side of the isoface: the side towards which alpha grows
+            vector gradA(Zero);
+            for (const label facei : cellFaces[celli])
+            {
+                if (!mesh_.isInternalFace(facei)) continue;
+                const label nb = (own[facei] == celli ? nei[facei] : own[facei]);
+                gradA += (alpha1In_[nb] - alpha1In_[celli])*(Cc[nb] - Cc[celli]);
+            }
+            const scalar waterSide = sign(gradA & n0);
+
+            for (const label facei : cellFaces[celli])
+            {
+                if (!mesh_.isInternalFace(facei)) continue;
+                const label cellU = (own[facei] == celli ? nei[facei] : own[facei]);
+                if (isSurf[cellU]) continue;
+
+                const scalar a = alpha1In_[cellU];
+                const bool full = a >= 1 - surfCellTol_;
+                const bool empty = a <= surfCellTol_;
+                if (!full && !empty) continue;
+
+                const scalar dC = (Cc[cellU] - x0) & n0;
+                if (dC*Un0[i] <= 0) continue;               // not moving towards U
+                if (full && sign(dC) != waterSide) continue;
+                if (empty && sign(dC) == waterSide) continue;
+
+                scalar tMin = GREAT;
+                for (const label pi : cellPts[cellU])
+                {
+                    tMin = min(tMin, ((pts[pi] - x0) & n0)/Un0[i]);
+                }
+                if (tMin >= dt) continue;                   // not reached in dt
+
+                if (!bestTime.found(cellU) || tMin < bestTime[cellU])
+                {
+                    bestTime.set(cellU, tMin);
+                    bestPlane.set(cellU, i);
+                }
+            }
+        }
+
+        label nNewCells = 0;
+        forAllConstIters(bestPlane, iter)
+        {
+            const label cellU = iter.key();
+            const label i = iter.val();
+            const label celli = interfaceLabels[i];
+            const point x0(surf_->centre()[celli]);
+            const vector n0(normalised(-surf_->normal()[celli]));
+            const scalar shift = min(scalar(0), bestTime[cellU]);
+            ++nNewCells;
+
+            for (const label facei : cellFaces[cellU])
+            {
+                const face& f = mesh_.faces()[facei];
+                scalarField times(f.size());
+                forAll(f, pi)
+                {
+                    times[pi] = ((pts[f[pi]] - x0) & n0)/Un0[i] - shift;
+                }
+
+                if (mesh_.isInternalFace(facei))
+                {
+                    const bool downwind =
+                        (cellU == own[facei])
+                      ? phiIn[facei] >= 0
+                      : phiIn[facei] < 0;
+                    if (!downwind) continue;
+
+                    dVfIn[facei] = advectFace_.timeIntegratedFaceFlux
+                    (
+                        facei, times, Un0[i], dt, phiIn[facei], magSfIn[facei]
+                    );
+                }
+                else
+                {
+                    const label patchi = boundaryMesh.patchID(facei);
+                    const polyPatch& pp = boundaryMesh[patchi];
+                    const cyclicPolyPatch* cpp = isA<cyclicPolyPatch>(pp);
+                    if (!cpp || phib[patchi].empty()) continue;
+                    const label patchFacei = pp.whichFace(facei);
+                    const scalar phiP = phib[patchi][patchFacei];
+                    if (phiP < 0) continue;
+
+                    dVfb[patchi][patchFacei] = advectFace_.timeIntegratedFaceFlux
+                    (
+                        facei, times, Un0[i], dt, phiP,
+                        magSfb[patchi][patchFacei]
+                    );
+                    dVfb[cpp->neighbPolyPatchID()][patchFacei] =
+                        -dVfb[patchi][patchFacei];
+                }
+            }
+        }
+
+        if (debug || dict_.getOrDefault("diagnoseNewInterfaceCells", false))
+        {
+            Info<< "isoAdvection: cells advected with an inherited isoface = "
+                << returnReduce(nNewCells, sumOp<label>()) << endl;
+        }
+    }
+
     // Loop through boundary surface faces
     forAll(bsFaces_, i)
     {

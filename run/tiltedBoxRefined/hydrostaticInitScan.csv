@@ -7,3 +7,4 @@ geometric                     interIsoGoam          0.1                   10    
 constantHeight                interIsoGoam          0.1                   10                    0
 constantHeight                interIsoGoam          0.1                   10                    5
 basic                         interIsoGoam          0.1                   10                    0
+basic                         interFoam             0.1                   10                    0

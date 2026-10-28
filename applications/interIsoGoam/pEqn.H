@@ -10,12 +10,15 @@
 
     surfaceScalarField rAUf("rAUf", fvc::interpolate(rAU()));
     volVectorField HbyA(constrainHbyA(rAU()*UEqn.H(), U, p_rgh));
-    surfaceScalarField phiHbyA
-    (
-        "phiHbyA",
-        fvc::flux(HbyA)
-      + MRF.zeroFilter(fvc::interpolate(rho*rAU())*fvc::ddtCorr(U, phi, Uf))
-    );
+    surfaceScalarField phiHbyA("phiHbyA", fvc::flux(HbyA));
+
+    // Old-time flux correction (PIMPLE entry ddtCorr, default yes);
+    // with no, phiHbyA is the flux of HbyA alone
+    if (pimple.dict().getOrDefault<bool>("ddtCorr", true))
+    {
+        phiHbyA +=
+            MRF.zeroFilter(fvc::interpolate(rho*rAU())*fvc::ddtCorr(U, phi, Uf));
+    }
     MRF.makeRelative(phiHbyA);
 
     if (p_rgh.needReference())

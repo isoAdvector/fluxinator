@@ -2,6 +2,7 @@ gravityModel/gravityModel.C
 gravityModel/gravityModelNew.C
 basic/basicGravityModel.C
 geometric/geometricGravityModel.C
+densityWeighted/densityWeightedGravityModel.C
 geometric.v3/geometric_v3GravityModel.C
 gravityRecon/gravityReconModel.C
 include/markInterfaceRegion/markInterfaceRegion.C

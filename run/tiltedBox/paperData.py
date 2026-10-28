@@ -4,9 +4,13 @@
 # (tracked in git, unlike the scans themselves):
 #   maxU_gravityModelScan.txt  max|U| at t = 0.01, 0.1, 1, 10 s and its peak
 #                              (gravityModelScan_1000deltaT)
-#   deltaTScan.txt             max|U| after the first step and max|U|/dt
+#   meshDeltaTScan.txt         max|U| after the first step and max|U|/dt, for
+#                              four meshes, five time steps and both solvers
 #   <scan>.txt                 ../summariseScan.py output for each scan
 #   interfaceBand.txt          analyseInterfaceBand.py output
+#   vertexOffsetTheory.txt      closed-form prediction of which cells are hit,
+#                              checked against the interFoam runs of
+#                              tiltScan_1deltaT and waterLevelScan_1deltaT
 #
 # Usage (from this directory, after the scans have been run):
 #   python3 paperData.py
@@ -20,8 +24,9 @@ import numpy as np
 
 OUT = "paperData"
 SCANS = ["gravityModelScan_1deltaT", "gravityModelScan_100deltaT",
-         "gravityModelScan_1000deltaT", "deltaTScan", "airDensityScan_1000deltaT",
-         "nLayersScan"]
+         "gravityModelScan_1000deltaT", "meshDeltaTScan",
+         "airDensityScan_1000deltaT",
+         "nLayersScan", "tiltScan_1deltaT", "waterLevelScan_1deltaT"]
 
 
 def parms(scan):
@@ -50,6 +55,8 @@ def main():
     for scan in SCANS:
         run([sys.executable, "../summariseScan.py", scan], scan + ".txt")
     run([sys.executable, "analyseInterfaceBand.py"], "interfaceBand.txt")
+    run([sys.executable, "vertexOffsetTheory.py", "--validate",
+         "tiltScan_1deltaT", "waterLevelScan_1deltaT"], "vertexOffsetTheory.txt")
 
     scan = "gravityModelScan_1000deltaT"
     with open(os.path.join(OUT, "maxU_gravityModelScan.txt"), "w") as f:
@@ -62,13 +69,14 @@ def main():
             f.write(f"{case:5s} {p['gravityModel']:15s} {p['application']:13s}"
                     + "".join(f"{v:11.3e}" for v in vals) + f"{u.max():11.3e}\n")
 
-    scan = "deltaTScan"
-    with open(os.path.join(OUT, "deltaTScan.txt"), "a") as f:
+    scan = "meshDeltaTScan"
+    with open(os.path.join(OUT, "meshDeltaTScan.txt"), "a") as f:
         f.write("\nmax|U| after the first time step divided by the time step\n")
         for case, p in parms(scan).items():
             t, u = max_u(scan, case)
-            f.write(f"{case} {p['application']:13s} dt={float(p['deltaT']):8.1e}  "
-                    f"max|U|={u[0]:.8e} m/s  max|U|/dt={u[0]/float(p['deltaT']):.8e} 1/s\n")
+            f.write(f"{case} {p['application']:13s} {p['nx']:>4s}^2 cells  "
+                    f"dt={float(p['deltaT']):8.1e}  max|U|={u[0]:.8e} m/s  "
+                    f"max|U|/dt={u[0]/float(p['deltaT']):.8e} 1/s\n")
     print("Wrote", ", ".join(sorted(os.listdir(OUT))))
 
 

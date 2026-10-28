@@ -11,3 +11,5 @@ rotAngleDict                  constant/gravityProperties    system/controlDict  
 0                             basic                         interIsoGoam          10                    5
 0                             constantHeight                interIsoGoam          10                    0
 0                             constantHeight                interIsoGoam          10                    2
+0                             basic                         interFoam             10                    2
+0                             basic                         interIsoGoam          10                    2

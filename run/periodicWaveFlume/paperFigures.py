@@ -31,6 +31,9 @@ REF = "0036"
 
 H_EXACT = 0.124982           # m, from the streamFunFoam reference
 U_CREST = 0.44453480326804   # m/s
+WAVELENGTH = 3.7873860376294 # m, the domain length (one wavelength, cyclic)
+PERIOD = 2.0                 # s
+C_EXACT = WAVELENGTH/PERIOD  # m/s, the exact celerity
 SOLVERS = ["interFoam", "interIsoFoam", "interIsoGoam"]
 COLOUR = {"interFoam": "#2a78d6", "interIsoFoam": "#eb6834", "interIsoGoam": "#1baf7a"}
 MARKER = {"interFoam": "o", "interIsoFoam": "s", "interIsoGoam": "D"}
@@ -154,9 +157,8 @@ def fig_dH_vs_Co():
                 rr.sort(key=lambda r: r["avgMaxCo"])
                 x = [r["avgMaxCo"] for r in rr]
                 y = [r["dHfit"] for r in rr]
-                e = [r["Hscatter"] for r in rr]
-                ax.errorbar(x, y, yerr=e, ls=style, color=COLOUR[s], marker=MARKER[s],
-                            mfc=COLOUR[s] if fill else "white", capsize=0, elinewidth=0.8)
+                ax.plot(x, y, ls=style, color=COLOUR[s], marker=MARKER[s],
+                        mfc=COLOUR[s] if fill else "white")
         ax.axhline(0, color="k", lw=0.7)
         ax.set_xscale("log")
         ax.set_xlim(0.025, 0.8)
@@ -179,9 +181,8 @@ def fig_convergence():
         for rows, style, fill, dx in ((FIX, "-", True, -0.03), (MC, "--", False, 0.03)):
             rr = [runs(rows, s, nz)[-1] for nz in NZ]
             x = [nz*2**dx for nz in NZ]
-            ax.errorbar(x, [r["dHfit"] for r in rr], yerr=[r["Hscatter"] for r in rr], ls=style,
-                        color=COLOUR[s], marker=MARKER[s], mfc=COLOUR[s] if fill else "white",
-                        capsize=0, elinewidth=0.8)
+            ax.plot(x, [r["dHfit"] for r in rr], ls=style, color=COLOUR[s],
+                    marker=MARKER[s], mfc=COLOUR[s] if fill else "white")
     ax.axhline(0, color="k", lw=0.7)
     ax.set_xscale("log", base=2)
     ax.set_xticks(NZ)
@@ -225,9 +226,7 @@ def fig_crests():
 
 
 def fig_perwave():
-    """Per-wave height error with quadratic trend (nz 160, dt0/4), and crest timing (nz 80, dt0)."""
-    tr, hr = eta(FIXED_DIR, REF)
-    rcr = find_extrema(tr, hr, 1, 0.1*(hr.max()-hr.min()))[:, 0]
+    """Per-wave height error (nz 160, dt0/4) and per-wave celerity error (nz 80, dt0)."""
     fig, axes = plt.subplots(1, 2, figsize=(FULL, 2.5))
     for c in ["0043", "0044", "0045"]:
         s = app_of(FIXED_DIR, c)
@@ -235,31 +234,30 @@ def fig_perwave():
         thr = 0.1*(h.max()-h.min())
         H = wave_heights(find_extrema(t, h, 1, thr), find_extrema(t, h, -1, thr))
         rel = (H[:, 1] - H_EXACT)/H_EXACT*100
-        p = np.polyfit(H[:, 0], rel, 2)
-        tt = np.linspace(H[0, 0], H[-1, 0], 100)
         axes[0].plot(H[:, 0], rel, marker=MARKER[s], color=COLOUR[s], lw=0.7, label=s)
-        axes[0].plot(tt, np.polyval(p, tt), "--", color=COLOUR[s], lw=1.0)
     axes[0].axhline(0, color="k", lw=0.7)
     axes[0].set_xlabel(r"$t$ [s]")
     axes[0].set_ylabel(r"$(H_n - H)/H$ [%]")
-    axes[0].set_title(r"(a) $760\times160$, $\Delta t_0/4$: per wave and quadratic trend", fontsize=9, loc="left")
+    axes[0].set_title(r"(a) $760\times160$, $\Delta t_0/4$: wave height per wave",
+                      fontsize=9, loc="left")
     axes[0].legend(loc="lower left")
+    # (b) The domain is exactly one wavelength with cyclic ends, so the wavelength
+    # is locked to L and the celerity of wave n follows from the interval between
+    # successive crests at the gauge, c_n = L/(t_{n+1} - t_n).
     for c in ["0024", "0025", "0026"]:
         s = app_of(FIXED_DIR, c)
         t, h = eta(FIXED_DIR, c)
         cr = find_extrema(t, h, 1, 0.1*(h.max()-h.min()))[:, 0]
-        # Match each crest to the nearest exact crest, but only within half a
-        # period; the exact record may end before the last simulated crest
-        pairs = [(tc, tc - rcr[np.argmin(abs(rcr - tc))]) for tc in cr]
-        pairs = [(tc, e) for tc, e in pairs if abs(e) < 1.0]
-        axes[1].plot([p[0] for p in pairs], [p[1] for p in pairs], marker=MARKER[s],
+        cn = WAVELENGTH/np.diff(cr)
+        axes[1].plot(0.5*(cr[:-1] + cr[1:]), (cn/C_EXACT - 1)*100, marker=MARKER[s],
                      color=COLOUR[s], lw=0.7, label=s)
     axes[1].axhline(0, color="k", lw=0.7)
     axes[1].set_xlabel(r"$t$ [s]")
-    axes[1].set_ylabel(r"$t_{crest} - t_{crest,exact}$ [s]")
-    axes[1].set_title(r"(b) $380\times80$, $\Delta t_0$: crest arrival time", fontsize=9, loc="left")
+    axes[1].set_ylabel(r"$(c_n - c)/c$ [%]")
+    axes[1].set_title(r"(b) $380\times80$, $\Delta t_0$: celerity per wave",
+                      fontsize=9, loc="left")
     fig.tight_layout()
-    save(fig, "perwave_phase")
+    save(fig, "perwave")
 
 
 def binned_max(t, v, width=0.1, tEnd=30.0):
@@ -274,42 +272,32 @@ def binned_max(t, v, width=0.1, tEnd=30.0):
 
 
 def fig_umax():
-    """(a) max|U| over time, nz 160, dt0/8. (b) median max|U| against Courant number, all runs."""
-    fig, axes = plt.subplots(1, 2, figsize=(FULL, 2.7))
+    """max|U| over time, nz 80, dt0/8 (a mesh and time step with the typical ordering of the
+    solvers; on the 760x160 mesh at the smallest time steps interFoam is higher). The median
+    max|U| of all runs is shown in run/paper1/figWaveResults.py."""
+    fig, ax = plt.subplots(figsize=(0.65*FULL, 2.7))
     tr, ur = maxU(FIXED_DIR, REF)
     x, y = binned_max(tr, ur/U_CREST)
-    axes[0].plot(x, y, "k--", lw=1.0, label="exact")
-    for c in ["0046", "0047", "0048"]:
+    ax.plot(x, y, "k--", lw=1.0, label="exact")
+    for c in ["0033", "0034", "0035"]:
         s = app_of(FIXED_DIR, c)
         t, u = maxU(FIXED_DIR, c)
         x, y = binned_max(t, u/U_CREST)
-        axes[0].plot(x, y, color=COLOUR[s], lw=0.9, label=s)
-    axes[0].set_xlim(0, 30)
-    axes[0].set_ylim(0.9, 3.6)
-    axes[0].set_xlabel(r"$t$ [s]")
-    axes[0].set_ylabel(r"max$|\mathbf{U}|/u_{crest}$ (max per 0.1 s)")
-    axes[0].set_title(r"(a) $760\times160$, $\Delta t_0/8$", fontsize=9, loc="left")
-    axes[0].legend(loc="upper left", ncol=2)
-    for s in SOLVERS:
-        for rows, fill in ((FIX, True), (MC, False)):
-            rr = [r for r in rows if r["application"] == s and r["Umed"] is not None]
-            axes[1].plot([r["avgMaxCo"] for r in rr], [r["Umed"] for r in rr], ls="none",
-                         marker=MARKER[s], color=COLOUR[s], mfc=COLOUR[s] if fill else "white")
-    axes[1].axhline(1, color="k", lw=0.7)
-    axes[1].set_xscale("log")
-    axes[1].set_xlabel(r"avg. max $Co$")
-    axes[1].set_ylabel(r"median max$|\mathbf{U}|/u_{crest}$")
-    axes[1].set_title("(b) all runs, all meshes", fontsize=9, loc="left")
-    extra = [plt.Line2D([], [], color="k", ls="none", marker="o", label=r"fixed $\Delta t$"),
-             plt.Line2D([], [], color="k", ls="none", marker="o", mfc="white", label=r"fixed max$Co$")]
-    solver_legend(axes[1], extra, loc="upper left", fontsize=7)
+        ax.plot(x, y, color=COLOUR[s], lw=0.9, label=s)
+    ax.set_xlim(0, 30)
+    ax.set_ylim(0.9, 2.2)
+    ax.set_xlabel(r"$t$ [s]")
+    ax.set_ylabel(r"max$|\mathbf{U}|/u_{crest}$ (max per 0.1 s)")
+    ax.set_title(r"$380\times80$, $\Delta t_0/8$", fontsize=9, loc="left")
+    ax.legend(loc="upper left", ncol=2)
     fig.tight_layout()
     save(fig, "spurious_velocity")
 
 
 def fig_dt():
     """Adaptive time step over time, nz 160, maxCo 0.05."""
-    fig, ax = plt.subplots(figsize=(HALF, 2.4))
+    # Same size as fig_agreement, which stands beside it in the paper
+    fig, ax = plt.subplots(figsize=(HALF, 2.6))
     edges = np.arange(0, 30 + 1e-9, 0.1)
     for c in ["0046", "0047", "0048"]:
         s = app_of(MAXCO_DIR, c)
@@ -338,7 +326,8 @@ def interp_fixed(r):
 
 
 def fig_agreement():
-    fig, ax = plt.subplots(figsize=(HALF, 3.2))
+    # Same size as fig_dt, which stands beside it in the paper
+    fig, ax = plt.subplots(figsize=(HALF, 2.6))
     diffs = []
     for s in SOLVERS:
         for r in (q for q in MC if q["application"] == s):
@@ -346,12 +335,10 @@ def fig_agreement():
             if yi is None:
                 continue
             diffs.append(abs(r["dHfit"] - yi))
-            ax.errorbar(yi, r["dHfit"], yerr=r["Hscatter"], marker=MARKER[s], color=COLOUR[s],
-                        ls="none", elinewidth=0.8)
+            ax.plot(yi, r["dHfit"], marker=MARKER[s], color=COLOUR[s], ls="none")
     ax.plot([-60, 15], [-60, 15], "k-", lw=0.7)
     ax.set_xlim(-60, 15)
     ax.set_ylim(-60, 15)
-    ax.set_aspect("equal")
     ax.set_xlabel(r"$\Delta H$ trend, fixed $\Delta t$ interpolated [%]")
     ax.set_ylabel(r"$\Delta H$ trend, fixed max$Co$ [%]")
     solver_legend(ax, loc="upper left")

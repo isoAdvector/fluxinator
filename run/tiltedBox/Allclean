@@ -12,14 +12,18 @@ rm -f figure_paper.pdf figure_paper.aux figure_paper.log
 rm -f maxU_tiltedBox.pdf maxU_tiltedBox.png
 rm -f firstStepMaxU_tiltedBox.pdf firstStepMaxU_tiltedBox.png
 rm -f maxUvsRhoAir_tiltedBox.pdf maxUvsRhoAir_tiltedBox.png
+rm -f vertexOffset_tiltedBox.pdf vertexOffset_tiltedBox.png
+rm -f offsetGeometry_tiltedBox.pdf offsetGeometry_tiltedBox.png
 rm -f log.figure_paper log.plotMaxU log.plotFirstStepMaxU log.plotMaxUvsRhoAir
+rm -f log.plotVertexOffset log.plotOffsetGeometry
 rm -f summary_*.txt log.paperData
 # paperData/ is tracked in git and kept
 
 if [ "$1" = "-scans" ]
 then
     rm -rf gravityModelScan_1deltaT gravityModelScan_100deltaT gravityModelScan_1000deltaT \
-        deltaTScan airDensityScan_1000deltaT nLayersScan
+        meshDeltaTScan airDensityScan_1000deltaT nLayersScan \
+        tiltScan_1deltaT waterLevelScan_1deltaT
 else
     echo "Scan directories kept; use ./Allclean -scans to delete them as well"
 fi

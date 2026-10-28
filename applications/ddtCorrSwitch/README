@@ -1,0 +1,5 @@
+Stock v2512 interFoam and interIsoFoam with one change: PIMPLE switch ddtCorr
+(default yes, bitwise identical to the stock solvers). With no, the predicted
+face flux is phiHbyA = flux(HbyA), without interpolate(rho*rAU)*ddtCorr(U,phi,Uf),
+as in applications/interIsoGoam/pEqn.H. interIsoFoamDdtCorr takes its own
+pEqn.H (local directory first), other interFoam headers from FOAM_SOLVERS.

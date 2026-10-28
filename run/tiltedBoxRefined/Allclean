@@ -13,7 +13,8 @@ rm -f summary_*.txt log.snGradRhoReach log.renderSnGradReach log.plotNonOrthMaxU
 rm -rf paperFigures
 rm -f figure_tiltedBoxRefined.pdf figure_tiltedBoxRefined.aux figure_tiltedBoxRefined.log \
     log.figure_tiltedBoxRefined
-rm -f ../nonOrthMaxU.pdf ../nonOrthMaxU.png
+rm -f ../nonOrthMaxU_skewBox.pdf ../nonOrthMaxU_skewBox.png
+rm -f ../nonOrthMaxU_refined.pdf ../nonOrthMaxU_refined.png
 
 if [ "$1" = "-scans" ]
 then

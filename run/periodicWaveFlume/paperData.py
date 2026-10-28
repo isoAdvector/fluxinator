@@ -117,7 +117,7 @@ def main():
         cos = [c for c in cos if c is not None]
         p(f"  dt0/{2**i}: {min(cos):.3f} ... {max(cos):.3f}")
 
-    p("\nWave height error: quadratic trend at the last wave minus height of the last wave")
+    p("\nWave height error: local linear trend at the last wave minus height of the last wave")
     for name, R in campaigns:
         d = [abs(r["dHfit"] - r["dHend"]) for r in R if r["dHfit"] is not None]
         p(f"  {name}: median {statistics.median(d):.2f}, max {max(d):.2f} percentage points ({len(d)} runs)")
@@ -136,11 +136,24 @@ def main():
             f"{run_of(R, 'interIsoFoam', n, 3)['dHfit']/run_of(R, 'interIsoGoam', n, 3)['dHfit']:.2f}"
             for n in NZ))
 
-    p("\nPhase error at the smallest dt / maxCo, all solvers and meshes")
+    p("\nMean celerity error at the smallest dt / maxCo, all solvers and meshes")
+    for name, R in campaigns:
+        dc = [run_of(R, a, n, 3)["dcMean"] for a in SOLVERS for n in NZ]
+        dc = [v for v in dc if v is not None]
+        p(f"  {name}: {min(dc):+.3f} ... {max(dc):+.3f} % (max |dc/c| = {max(map(abs, dc)):.3f} %)")
+    p("Mean celerity error at the largest dt / maxCo, and the spread across solvers")
+    for name, R in campaigns:
+        for n in NZ:
+            v = [run_of(R, a, n, 0)["dcMean"] for a in SOLVERS]
+            got = [x for x in v if x is not None]
+            spread = f"{max(got)-min(got):.3f}" if len(got) == 3 else "--"
+            p(f"  {name} {NX[n]}x{n}: " + ", ".join(
+                f"{a} {fmt(x, '+.3f')}" for a, x in zip(SOLVERS, v)) + f"  spread {spread}")
+    p("Crest arrival-time (phase) error at the smallest dt / maxCo, all solvers and meshes")
     for name, R in campaigns:
         ph = [run_of(R, a, n, 3)["phase"] for a in SOLVERS for n in NZ]
-        p(f"  {name}: {min(ph):+.3f} ... {max(ph):+.3f} s (max |phase|/28 s = {100*max(map(abs, ph))/28:.3f} %)")
-    p("Phase error at the largest dt / maxCo")
+        p(f"  {name}: {min(ph):+.3f} ... {max(ph):+.3f} s")
+    p("Crest arrival-time (phase) error at the largest dt / maxCo")
     for name, R in campaigns:
         for n in NZ:
             p(f"  {name} {NX[n]}x{n}: " + ", ".join(

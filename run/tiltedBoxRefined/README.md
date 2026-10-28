@@ -56,6 +56,4 @@ set it. 10 time steps of 0.01 s, corrected schemes unless stated.
 Allrun also renders `|U|` images of the hydrostatic start cases (basic,
 constantHeight, geometric with nLayers 1 and 2) with `generateFigure.py` and
 collects them in `figure_tiltedBoxRefined.pdf`
-(`figure_tiltedBoxRefined.tex`), and renders `paperFigures/reach_uncorrected.png` and `reach_corrected.png` with `renderSnGradReach.py` (pvbatch), and
-plots `../nonOrthMaxU.pdf` with `../plotNonOrthMaxU.py`, which also needs the scans
-in `../skewBox` (run `../skewBox/Allrun` first).
+(`figure_tiltedBoxRefined.tex`), and renders `paperFigures/reach_uncorrected.png` and `reach_corrected.png` with `renderSnGradReach.py` (pvbatch).

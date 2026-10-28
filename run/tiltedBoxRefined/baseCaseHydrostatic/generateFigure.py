@@ -31,7 +31,8 @@ renderView1 = GetActiveViewOrCreate('RenderView')
 #----------------------------
 # uncomment following to set a specific view size
 #renderView1.ViewSize = [2016, 1068]
-renderView1.ViewSize = [600, 600]
+# A flat strip around the interface (0.36 < z < 0.64), 2x2 in the paper
+renderView1.ViewSize = [1300, 400]
 
 # Set background colour to white
 SetViewProperties(
@@ -56,7 +57,7 @@ contour1Display = Show(contour1, renderView1, 'GeometryRepresentation')
 ColorBy(contour1Display, None)
 
 # Properties modified on contour1Display
-contour1Display.LineWidth = 3.0
+contour1Display.LineWidth = 5.0
 
 
 # change solid color
@@ -347,7 +348,7 @@ uLUTColorBar.AutomaticAnnotations = 0
 uLUTColorBar.DrawNanAnnotation = 0
 uLUTColorBar.NanAnnotation = 'NaN'
 uLUTColorBar.TextPosition = 'Ticks left/bottom, annotations right/top'
-uLUTColorBar.ScalarBarThickness = 16
+uLUTColorBar.ScalarBarThickness = 24
 uLUTColorBar.ScalarBarLength = 0.33
 
 ##Setting lower limit of colormap to 0##
@@ -364,27 +365,28 @@ uLUT.RGBPoints = rgb_points
 
 # change scalar bar placement
 uLUTColorBar.WindowLocation = 'Any Location'
-uLUTColorBar.Position = [0.3, 0.4]
+uLUTColorBar.Position = [0.3, 0.36]
 uLUTColorBar.ScalarBarLength = 0.4
 
 
 # Properties modified on uLUTColorBar
 uLUTColorBar.AutoOrient = 0
-uLUTColorBar.Title = '|U| [m/s]'
+# ParaView's scalar-bar text renderer drops '|', so |U| cannot be written here.
+uLUTColorBar.Title = 'mag(U) [m/s]'
 uLUTColorBar.ComponentTitle = ''
 uLUTColorBar.TitleColor = [1, 1, 1]
 uLUTColorBar.TitleFontFamily = 'Times'
-uLUTColorBar.TitleFontSize = 30
+uLUTColorBar.TitleFontSize = 44
 uLUTColorBar.LabelColor = [1, 1, 1]
 uLUTColorBar.LabelFontFamily = 'Times'
-uLUTColorBar.LabelFontSize = 30
+uLUTColorBar.LabelFontSize = 44
 
 
 # current camera placement for renderView1
 renderView1.CameraPosition = [.5, -2.5, 0.5]
 renderView1.CameraFocalPoint = [.5, 0.0, 0.5]
 renderView1.CameraViewUp = [0.0, 0.0, 1.0]
-renderView1.CameraParallelScale = .62
+renderView1.CameraParallelScale = .14
 
 ## Add free surface from isofaces ##
 

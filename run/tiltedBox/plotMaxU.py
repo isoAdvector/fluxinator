@@ -14,11 +14,12 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Sized to sit beside firstStepMaxU_tiltedBox.pdf at half the paper's text width
 plt.rcParams.update({
     "font.family": "serif",
-    "font.size": 10,
-    "axes.linewidth": 0.8,
-    "lines.linewidth": 1.4,
+    "font.size": 8,
+    "axes.linewidth": 0.7,
+    "lines.linewidth": 1.2,
 })
 
 # (case, label, colour, line style) in the order of the paper figure
@@ -34,7 +35,7 @@ parser.add_argument("--scanDir", default="gravityModelScan_1000deltaT")
 parser.add_argument("--out", default="maxU_tiltedBox", help="Output file name without extension")
 args = parser.parse_args()
 
-fig, ax = plt.subplots(figsize=(5.0, 3.2))
+fig, ax = plt.subplots(figsize=(3.05, 2.4))
 for case, label, colour, style in CASES:
     f = os.path.join(args.scanDir, case, "postProcessing", "fieldMinMax1", "0", "fieldMinMax.dat")
     t, umax = np.loadtxt(f, comments="#", unpack=True, usecols=(0, 2), ndmin=2)
@@ -45,8 +46,9 @@ ax.set_xlabel(r"$t$ [s]")
 ax.set_ylabel(r"max$|\mathbf{U}|$ [m/s]")
 ax.set_xlim(0, t[-1])
 ax.grid(True, which="major", linewidth=0.4, alpha=0.6)
-ax.legend(loc="center right", fontsize=8, frameon=False)
-fig.tight_layout()
+ax.legend(loc="center right", fontsize=6.5, frameon=False, handlelength=1.6,
+          handletextpad=0.5, borderaxespad=0.3)
+fig.tight_layout(pad=0.3)
 fig.savefig(args.out + ".pdf")
 fig.savefig(args.out + ".png", dpi=200)
 print("Wrote", args.out + ".pdf and .png")

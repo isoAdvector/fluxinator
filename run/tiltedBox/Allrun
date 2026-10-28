@@ -21,9 +21,11 @@ for scan in \
     gravityModelScan_1deltaT \
     gravityModelScan_100deltaT \
     gravityModelScan_1000deltaT \
-    deltaTScan \
+    meshDeltaTScan \
     airDensityScan_1000deltaT \
-    nLayersScan
+    nLayersScan \
+    tiltScan_1deltaT \
+    waterLevelScan_1deltaT
 do
     parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
 done
@@ -40,7 +42,12 @@ python3 plotMaxU.py > log.plotMaxU 2>&1
 python3 plotFirstStepMaxU.py > log.plotFirstStepMaxU 2>&1
 python3 plotMaxUvsRhoAir.py > log.plotMaxUvsRhoAir 2>&1
 
-echo "Figures: figure_paper.pdf, maxU_tiltedBox.pdf, firstStepMaxU_tiltedBox.pdf, maxUvsRhoAir_tiltedBox.pdf"
+# Which cells the standard gravity term hits: closed-form theory against the
+# tilt scan (vertexOffsetTheory.py holds the theory, plotVertexOffset.py the figure)
+python3 plotOffsetGeometry.py > log.plotOffsetGeometry 2>&1
+python3 plotVertexOffset.py > log.plotVertexOffset 2>&1
+
+echo "Figures: figure_paper.pdf, maxU_tiltedBox.pdf, firstStepMaxU_tiltedBox.pdf, maxUvsRhoAir_tiltedBox.pdf, offsetGeometry_tiltedBox.pdf, vertexOffset_tiltedBox.pdf"
 echo "Data: paperData/"
 
 #------------------------------------------------------------------------------
