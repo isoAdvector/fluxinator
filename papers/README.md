@@ -20,3 +20,7 @@ routing of each output to its directory. `part2/data/` holds data that several
 figures share or that is cited in the text (`browser.json`: metrics of all
 final-solver and Part I wave runs, `python3 browserData.py`; `rig.txt`,
 `lag.txt`, `paperSelection.txt`, the crest-model files).
+
+`part2/fig_lagWave` is no longer in the Part II paper (the paragraph on the
+spurious water current at depth was removed on 2026-11-05). It is kept because
+`part2/lag.py` writes it together with `fig_lagTGV`.
