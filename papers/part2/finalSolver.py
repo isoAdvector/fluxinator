@@ -143,7 +143,7 @@ def table(rows):
 def fig_overview(rows):
     """Courant-limited scan: dH, celerity, Uair, emax, ulow against max Co, one column per mesh."""
     R = [r for r in rows if r["scan"] == "maxCo"]
-    spec = [("dH", "wave height error [%]", 1), ("dc", "celerity error [%]", 1),
+    spec = [("dH", "wave height\nerror [%]", 1), ("dc", "celerity error [%]", 1),
             ("Uair", "max $|\\mathbf{U}|$ in air\n/ $u_\\mathrm{crest}$", 1),
             ("emax", "crest-column\nspeed error [%]", 100),
             ("ulow", "mean velocity error\nat depth / $u_\\mathrm{crest}$", 1)]
@@ -160,7 +160,7 @@ def fig_overview(rows):
             ax.axhline(1 if k == "Uair" else 0, color="#6b6b6b", lw=0.6)
             ax.set_xscale("log")
             if j == 0:
-                ax.set_ylabel(lab)
+                ax.set_ylabel(f"({'abcde'[i]}) " + lab)
         axs[0, j].set_title(f"{nx}x{nx*4//19}")
         axs[-1, j].set_xlabel("max Courant number")
         axs[-1, j].set_xticks([0.05, 0.1, 0.2, 0.5])
@@ -168,8 +168,6 @@ def fig_overview(rows):
     axs[0, 0].set_yscale("symlog", linthresh=2)
     axs[0, 0].set_yticks([-30, -10, -2, 0, 2, 10, 30])
     axs[0, 0].set_yticklabels(["-30", "-10", "-2", "0", "2", "10", "30"])
-    for i in range(len(spec)):
-        axs[i, 0].text(0.03, 0.92, "abcde"[i], transform=axs[i, 0].transAxes, fontweight="bold", va="top")
     h = [plt.Line2D([], [], color=COLOUR[s], marker=MARKER[s], label=s + ("" if s == FINAL else ", ddtCorr off"))
          for s in SOLVERS]
     fig.legend(handles=h, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.0))
