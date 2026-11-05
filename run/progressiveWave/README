@@ -33,8 +33,13 @@ Part II:
                             the convection variants of Part II Section 6 at fixed dt,
                             from the Part I interIsoGoam case: implicit, crankNicolson,
                             explicit, explicitLW, explicitIU, explicitLWIU (the final
-                            solver); the implicit 190x40 runs at dt 0.005 and 0.0025
-                            write the momentum budget (PIMPLE momentumBudget)
+                            solver); the implicit, crankNicolson, explicit and
+                            explicitLW runs carry budget_* fields of the former
+                            PIMPLE switch momentumBudget (no longer used)
+  momentumFlux/<case>       the four 190x40 convection cases of Part II Figure
+                            fig:momFlux (implicit dt 0.005 and 0.0025, Crank-Nicolson
+                            and explicit dt 0.005), rerun with the function object
+                            convectiveMomentumFlux (system/controlDict)
 
 Scripts
 -------

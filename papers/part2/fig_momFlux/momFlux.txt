@@ -1,6 +1,6 @@
 Wave-averaged upward flux of x-momentum [N/m^2] below the trough (trough at -0.043 m), 190x40, 2-10 s.
 solver: rho_f phi_f U_f,x/A_f with the face velocity used; predicted: rho_w <w(t) u(t + theta dt)>.
-Sources: run/progressiveWave/convection/<case> (budget_* fields)
+Sources: run/progressiveWave/momentumFlux/<case> (convectiveMomentumFlux)
 
 implicit_190x40_dt0.005 (theta 1.0, dt 0.005):
    z -0.180  solver +0.2147  predicted +0.2132
@@ -23,14 +23,14 @@ crankNicolson_190x40_dt0.005 (theta 0.5, dt 0.005):
    z -0.160  solver +0.1247  predicted +0.1191
    z -0.140  solver +0.1408  predicted +0.1323
    z -0.120  solver +0.1558  predicted +0.1465
-   z -0.100  solver +0.1684  predicted +0.1617
-   z -0.080  solver +0.1709  predicted +0.1780
-   z -0.060  solver +0.1572  predicted +0.1956
+   z -0.100  solver +0.1683  predicted +0.1617
+   z -0.080  solver +0.1705  predicted +0.1780
+   z -0.060  solver +0.1566  predicted +0.1956
 explicit_190x40_dt0.005 (theta 0.0, dt 0.005):
    z -0.180  solver +0.0015  predicted -0.0000
-   z -0.160  solver +0.0029  predicted -0.0000
-   z -0.140  solver +0.0041  predicted +0.0000
-   z -0.120  solver +0.0057  predicted -0.0000
-   z -0.100  solver +0.0080  predicted +0.0000
-   z -0.080  solver +0.0139  predicted -0.0000
-   z -0.060  solver +0.0268  predicted -0.0000
+   z -0.160  solver +0.0030  predicted -0.0000
+   z -0.140  solver +0.0042  predicted +0.0000
+   z -0.120  solver +0.0058  predicted -0.0000
+   z -0.100  solver +0.0083  predicted +0.0000
+   z -0.080  solver +0.0142  predicted -0.0000
+   z -0.060  solver +0.0265  predicted -0.0000

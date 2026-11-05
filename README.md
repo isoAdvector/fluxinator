@@ -29,10 +29,11 @@ values at the start and the end of the step (PIMPLE `convectionTheta` and
 `gravityTheta`, default 0.5; use `momentumPredictor no`). Stock interIsoFoam
 centres only the interface advection, which damps waves. The header of
 `applications/solvers/interIsoGoam/interIsoGoam.C` and `timeWeights.H` list
-all switches; the diagnostic switch `momentumBudget` is off by default. Test
-forces are set per case with fvOptions, not in the solver (for example the
-uniform body acceleration of `run/periodicDisc`, a `vectorCodedSource` in
-`system/fvOptions`).
+all switches. Test forces and diagnostics are set per case, not in the solver:
+forces with fvOptions (for example the uniform body acceleration of
+`run/periodicDisc`, a `vectorCodedSource` in `system/fvOptions`), diagnostics
+with function objects (for example `convectiveMomentumFlux` in
+`run/progressiveWave/momentumFlux`).
 
 ## Contents
 
@@ -41,6 +42,7 @@ uniform body acceleration of `run/periodicDisc`, a `vectorCodedSource` in
 | `src/geometricVoF/` | isoAdvector and interface reconstruction used by interIsoGoam (library `newGeometricVoF`) |
 | `src/gravityModels/` | gravity models: `basic` (as in OpenFOAM), `geometric` (Part I) and `constantHeight` (the exact height of a flat interface) |
 | `src/interfaceSchemes/` | the interfaceUpwind and laxWendroff interpolation schemes (Part II); `libs (interfaceSchemes);` in controlDict |
+| `src/functionObjects/` | the function object `convectiveMomentumFlux`, the face momentum flux of the convection term (Part II); `libs (interfaceFunctionObjects);` |
 | `applications/solvers/interIsoGoam/` | the solver |
 | `applications/test/convectionTest/` | prescribed-flow test of the momentum convection (Part II) |
 | `applications/test/ddtCorrSwitch/` | stock interFoam and interIsoFoam with a PIMPLE `ddtCorr` switch (Part I, Appendix A) |
@@ -106,7 +108,11 @@ the old names in their logs and in some generated files:
   `convectionTheta 1` and `gravityTheta 1` unless `explicitConvection yes` was
   set. The PIMPLE entries `bodyAcceleration`, `bodyForceDensity` and
   `energyBudget` were removed (the disc cases now use `system/fvOptions`,
-  bitwise identical).
+  bitwise identical). The PIMPLE entry `momentumBudget` was removed on
+  2026-11-05 (the `budget_*` fields in `run/progressiveWave/convection` were
+  written by it; the function object `convectiveMomentumFlux` gives the face
+  momentum flux, which agrees with `budget_rhoPhi*budget_Uf` to the 12 digits
+  written).
 - Directories and studies were moved and renamed by purpose; `run/README.md`
   lists the old names.
 

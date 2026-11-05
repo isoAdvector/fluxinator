@@ -63,8 +63,7 @@ Description
     - PIMPLE ddtCorr (default yes, as in interIsoFoam).
 
     - PIMPLE convectionTheta and gravityTheta override the time weights
-      above. momentumBudget (default no) writes the terms of the momentum
-      change of the last step at write times (momentumBudget.H, diagnostic).
+      above.
 
     Reference:
     \verbatim
@@ -215,8 +214,6 @@ int main(int argc, char *argv[])
                 turbulence->correct();
             }
         }
-
-        #include "momentumBudget.H"
 
         runTime.write();
         runTime.printExecutionTime(Info);
