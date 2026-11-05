@@ -2,9 +2,10 @@
 
 Code and test cases for the paper series *Consistent interfacial flow numerics*:
 Part I, the gravity force term, and Part II, the momentum convection term. The
-Part I paper is the submodule `paper/`
-([isoAdvector/GravityFormulationPaper](https://github.com/isoAdvector/GravityFormulationPaper));
-the Part II paper is kept in its own repository.
+papers are the submodules `paper/` (Part I,
+[isoAdvector/GravityFormulationPaper](https://github.com/isoAdvector/GravityFormulationPaper))
+and `paper2/` (Part II,
+[isoAdvector/interfaceConvectionPaper](https://github.com/isoAdvector/interfaceConvectionPaper)).
 
 ## The solver
 
@@ -47,6 +48,7 @@ uniform body acceleration of `run/periodicDisc`, a `vectorCodedSource` in
 | `run/` | the test cases, one directory per case (`run/README.md`) |
 | `papers/part1/`, `papers/part2/` | one directory per figure and table of each paper (below) |
 | `paper/` | the Part I paper (submodule) |
+| `paper2/` | the Part II paper (submodule) |
 
 ## Test cases, figures and tables
 
