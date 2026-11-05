@@ -119,7 +119,7 @@ def table(rows):
          "Uair: median max|U| in the air (alpha < 0.01)/u_crest; emax: crest-column speed error / exact crest-surface",
          "speed, 28-30 s [%]; r0: u/u_exact, top full water cell under the crest, 28-30 s; ulow: mean (u - u_exact)/u_crest",
          "in the crest column below half the crest elevation, 28-30 s; steps: time steps.",
-         "final = explicit + LW + interfaceUpwind (Part 2), ddtCorr off. '-': run not finished; fields of the fixed-dt Part 1 runs were not written (no Uair, emax, r0)."]
+         "final = explicit + LW + interfaceUpwind (Part 2), ddtCorr off. '-': run diverged before 30 s; fields of the fixed-dt Part 1 runs were not written (no Uair, emax, r0)."]
     keys = [("dH", "{:+6.1f}"), ("dc", "{:+6.2f}"), ("Umax", "{:5.2f}"), ("Uair", "{:5.2f}"),
             ("emax", "{:5.1f}"), ("r0", "{:5.2f}"), ("ulow", "{:+6.3f}"), ("steps", "{:6d}")]
     idx = {(r["scan"], r["nx"], r["par"], r["solver"]): r for r in rows}

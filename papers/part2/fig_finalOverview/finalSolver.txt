@@ -3,7 +3,7 @@ dH: wave height error after 15 periods [%]; dc: mean celerity error [%]; Umax: m
 Uair: median max|U| in the air (alpha < 0.01)/u_crest; emax: crest-column speed error / exact crest-surface
 speed, 28-30 s [%]; r0: u/u_exact, top full water cell under the crest, 28-30 s; ulow: mean (u - u_exact)/u_crest
 in the crest column below half the crest elevation, 28-30 s; steps: time steps.
-final = explicit + LW + interfaceUpwind (Part 2), ddtCorr off. '-': run not finished; fields of the fixed-dt Part 1 runs were not written (no Uair, emax, r0).
+final = explicit + LW + interfaceUpwind (Part 2), ddtCorr off. '-': run diverged before 30 s; fields of the fixed-dt Part 1 runs were not written (no Uair, emax, r0).
 
 fixedDt (deltaT)
 mesh        deltaT solver            dH     dc   Umax   Uair   emax     r0   ulow  steps
