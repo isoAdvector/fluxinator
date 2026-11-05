@@ -88,7 +88,7 @@ def save(fig, name):
     capitalise_texts(fig)
     d, f = FIGDIR[name]
     os.makedirs(os.path.join(HERE, d), exist_ok=True)
-    fig.savefig(os.path.join(HERE, d, f + ".pdf"), bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(os.path.join(HERE, d, f + ".pdf"), dpi=800, bbox_inches="tight", pad_inches=0.02)
     fig.savefig(os.path.join(HERE, d, f + ".png"), dpi=150, bbox_inches="tight", pad_inches=0.02)
 
 

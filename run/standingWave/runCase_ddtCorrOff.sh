@@ -4,7 +4,7 @@
 # interIsoFoamDdtCorr (applications/ddtCorrSwitch). Base cases: baseUniformMesh, baseRefinedMesh.
 # Keys: model nLayers snGrad laplacian nOrthCorr nCorr amplitude endTime app alphaOrigin
 set +u
-source /home/roenby/OpenFOAM/OpenFOAM-v2512/etc/bashrc > /dev/null 2>&1
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
 BASE=${SWBASE:-$(cd "${0%/*}" && pwd)/baseRefinedMesh}
 out=$1; shift
 rm -rf "$out"; cp -r "$BASE" "$out"

@@ -2,7 +2,7 @@
 # runCT.sh <case> <mode reset|evolve> <disc origin "x 0 z"> <endTime> "<flow dictionary entries>"
 # REF=massCentroid sets the reference point (default cellCentre, see convectionTest.C)
 # e.g. runCT.sh rot reset "0.5 0 0.75" 1 "Omega 2; rotationCentre (0.5 0 0.5);"
-set +u; source /home/roenby/OpenFOAM/OpenFOAM-v2512/etc/bashrc > /dev/null 2>&1
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
 out=$1; mode=$2; origin=$3; tEnd=$4; flow=$5
 BASE=$(readlink -f "$(dirname "$0")/baseCase")
 rm -rf "$out"; mkdir -p "$out"; cp -r $BASE/* "$out"/; cd "$out" || exit 1

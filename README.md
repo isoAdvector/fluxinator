@@ -88,33 +88,29 @@ source <OpenFOAM-v2512>/etc/bashrc
 ./Allwmake
 ```
 
-`applications/test/ddtCorrSwitch` is built separately (`wmake` in each solver
-directory). The wave cases need `streamFunFoam` and `calcStreamFunctionWave`
+Clone with `git clone --recurse-submodules` to get `surfacePosition`. The wave
+cases need `streamFunFoam` and `calcStreamFunctionWave`
 from [InterFlowers/streamFunctionWave](https://github.com/InterFlowers/streamFunctionWave),
 and the scans use `parmScanner` from
 [isoAdvector/cfdTools](https://github.com/isoAdvector/cfdTools). The figure
 scripts need python3 with numpy, scipy and matplotlib, and ParaView (pvbatch)
 for the ParaView figures.
 
-## Names before 2026-11-04
+## Running
 
-The repository was reorganised on 2026-11-04. Runs made before that date keep
-the old names in their logs and in some generated files:
+`run/quickTest/Allrun` builds nothing and takes a few minutes: it runs the final
+solver on the accelerated disc and on one period of the wave, and prints the results
+next to the expected values. Each case in `run/` has an `Allrun` for its studies
+(`run/README.md`); `MAXJOBS` limits the number of simultaneous runs. All scripts use
+the OpenFOAM environment of the shell they are started from.
 
-- The Part II options lived in a separate solver, `interIsoGoamExt`
-  (`log.interIsoGoamExt`); it is merged into interIsoGoam, which gives bitwise
-  identical results with the same settings. Exception: cases with
-  `nOuterCorrectors` > 1 that relied on the default time weights ran with
-  `convectionTheta 1` and `gravityTheta 1` unless `explicitConvection yes` was
-  set. The PIMPLE entries `bodyAcceleration`, `bodyForceDensity` and
-  `energyBudget` were removed (the disc cases now use `system/fvOptions`,
-  bitwise identical). The PIMPLE entry `momentumBudget` was removed on
-  2026-11-05 (the `budget_*` fields in `run/progressiveWave/convection` were
-  written by it; the function object `convectiveMomentumFlux` gives the face
-  momentum flux, which agrees with `budget_rhoPhi*budget_Uf` to the 12 digits
-  written).
-- Directories and studies were moved and renamed by purpose; `run/README.md`
-  lists the old names.
+## Names in old logs
 
-The full map of every move, the superseded code and the runs no paper uses are
-outside this repository, in `../geometricGravity_archive` (`MOVES.txt`).
+Logs of some Part II runs name the solver `interIsoGoamExt`, an earlier version of
+interIsoGoam that gives bitwise identical results with the same settings. The
+`budget_*` fields in `run/progressiveWave/convection` were written by a diagnostic
+that is now the function object `convectiveMomentumFlux`.
+
+## Licence
+
+The code is released under the GNU General Public License v3 (`LICENSE`), as OpenFOAM.

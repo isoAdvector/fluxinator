@@ -60,15 +60,15 @@ for ax, (c, lab) in zip(axes, [("implicit_rhoNew", "(a) implicit convection"), (
     cax = ax.inset_axes([0.08, 0.15, 0.52, 0.045], zorder=4)
     cax.grid(False)
     cb = fig.colorbar(im, cax=cax, orientation="horizontal", ticks=[0, e.max()])
-    cb.ax.set_xticklabels(["0", f"{e.max():.1e}"], fontsize=7)
+    cb.ax.set_xticklabels(["0", f"{e.max():.1e}"], fontsize=8)
     cb.ax.tick_params(length=2, pad=1)
-    cax.set_title(r"$|\mathbf{U} - \mathbf{U}_0 - \mathbf{a}t|$ [m/s]", fontsize=7, pad=2)
+    cax.set_title(r"$|\mathbf{U} - \mathbf{U}_0 - \mathbf{a}t|$ [m/s]", fontsize=8, pad=2)
     # direction of the flow, U0 + a t at t = 1 s
     d = (U0 + acc)[[0, 2]]/np.linalg.norm((U0 + acc)[[0, 2]])
     ax.annotate("", xy=(0.08 + 0.3*d[0], 0.86 + 0.3*d[1]), xytext=(0.08, 0.86), xycoords="axes fraction",
                 arrowprops=dict(arrowstyle="-|>", color="k", lw=1.2, mutation_scale=10), zorder=5)
-    ax.text(0.08, 0.89, "flow", transform=ax.transAxes, fontsize=7.5, va="bottom", zorder=5)
-    ax.set_aspect("equal"); ax.set_title(lab, fontsize=8.5, loc="left")
+    ax.text(0.08, 0.89, "flow", transform=ax.transAxes, fontsize=8, va="bottom", zorder=5)
+    ax.set_aspect("equal"); ax.set_title(lab, fontsize=9, loc="left")
     ax.set_xticks([]); ax.set_yticks([])
 fig.tight_layout(w_pad=1.0)
 # white box fitted around each colour bar with its title and tick labels

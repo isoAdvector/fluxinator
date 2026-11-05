@@ -50,7 +50,3 @@ The paper figures and tables of this case are made in
 `papers/part1/fig_tiltedBoxFields`, `fig_tiltedBoxRhoAir`, `tab_tiltedBox` and
 `tab_firstStep`. `tiltedBoxCase.py` reads a case (fields, mesh vertices, tilt,
 water level).
-
-Analyses that no paper uses (the closed-form theory of which cells the standard
-gravity term hits, the tilt and water-level scans, the interface band
-statistics) are in `../../../geometricGravity_archive/reorg_20261104/run/tiltedBox`.

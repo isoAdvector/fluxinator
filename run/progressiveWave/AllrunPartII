@@ -1,0 +1,12 @@
+#!/bin/bash
+# Runs the Part II studies of the progressive wave. Allrun must have run first, since the
+# final-solver cases are built from the Part I cases. Needs streamFunFoam (README).
+# The full set takes several days; finished runs are skipped when it is started again.
+# Figures and tables: papers/part2.
+cd "${0%/*}" || exit 1
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+[ -d finalSolver_maxCo ] || ./finalSolver_buildMatrix.sh
+python3 finalSolver_runMatrix.py        # at most 16 cores, see the script
+../common/runCases.sh log.interIsoGoam convection/*/ momentumFlux/*/
+bash finalSolverNoLW/runAll.sh
+bash timing_maxCo0.1_noGauge/runAll.sh  # time per step; at most 8 runs at a time, nothing else running

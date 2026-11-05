@@ -8,3 +8,5 @@ wclean libso src/functionObjects/convectiveMomentumFlux
 wclean applications/solvers/interIsoGoam
 wclean applications/test/convectionTest
 wclean applications/utilities/setHydrostaticPressure
+wclean applications/test/ddtCorrSwitch/interFoamDdtCorr
+wclean applications/test/ddtCorrSwitch/interIsoFoamDdtCorr

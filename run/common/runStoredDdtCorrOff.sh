@@ -8,7 +8,7 @@
 # ddtCorr yes these reproduce the stored runs bitwise (reg/). Figure rendering
 # (pvpython) is skipped. With nProcs > 1 the wave case runs with AllrunParallel
 # on nProcs subdomains and is reconstructed afterwards.
-set +u; source /home/roenby/OpenFOAM/OpenFOAM-v2512/etc/bashrc > /dev/null 2>&1
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
 S=$(readlink -f "$1"); out=$2; np=${3:-1}
 rm -rf "$out"; mkdir -p "$out"
 for f in $S/*; do

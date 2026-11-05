@@ -44,8 +44,7 @@ set it.
   corrected snGrad(rho) is non-zero on 128 faces (76 uncorrected), but all their
   cells lie in rings 0 and 1, because opposite cell faces are parallel and the
   correction vector is orthogonal to the face normal.
-- nLayers 2 gives the same results as nLayers 1 on this mesh (scans in the
-  archive, `geometricGravity_archive/reorg_20261104/run/skewedBox`).
+- nLayers 2 gives the same results as nLayers 1 on this mesh.
 
 ## Running
 

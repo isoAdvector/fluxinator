@@ -12,7 +12,7 @@ import time
 
 MAXCORES = 16
 HERE = os.path.dirname(os.path.abspath(__file__))
-ENV = "source /home/roenby/OpenFOAM/OpenFOAM-v2512/etc/bashrc > /dev/null 2>&1; "
+ENV = ""
 
 
 def log(msg):

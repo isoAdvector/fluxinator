@@ -8,6 +8,8 @@ domain of one wavelength on four meshes (nx x nz = 95x20, 190x40, 380x80,
 exact solution, as the reference. Part I Section 6 and Appendix A; Part II
 Sections 1, 3, 6 and 7.
 
+Allrun runs the Part I studies, AllrunPartII the Part II studies.
+
 Studies
 -------
 
@@ -70,9 +72,4 @@ https://github.com/isoAdvector/cfdTools
 
 Post-processing: python3 with numpy, scipy and matplotlib.
 
-Old names (runs made before 2026-11-04): solvers_maxCo = gravityModelScan,
-solvers_fixedDt = gravityModelScan_fixedDt, nLayers_maxCo = nLayersScan,
-finalSolver_* = finalSolver/scan_*, finalSolverNoLW = finalSolver/IUonly; the
-convection variants were interfaceRelativePressure/run/waveLab/w*/... (map in
-../../../geometricGravity_archive/reorg_20261104/waveLab_map.tsv).
-Logs of the Part II runs name the solver interIsoGoamExt (now interIsoGoam).
+Logs of some Part II runs name the solver interIsoGoamExt, now interIsoGoam.

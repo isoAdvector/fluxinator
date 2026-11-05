@@ -1,0 +1,5 @@
+#!/bin/bash
+# Runs all disc cases with the full solver (Part II, Sections 4 and 5).
+# Results: papers/part2/fig_fullSolver/make.py and tab_fullSolver
+cd "${0%/*}" || exit 1
+../common/runCases.sh log.interIsoGoam $(ls -d */ | sed 's|/$||' | grep -v -e '^baseCase' -e '^__pycache__$')

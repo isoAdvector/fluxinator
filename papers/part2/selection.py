@@ -65,7 +65,7 @@ def fig_case():
     d.plot(ex[m], np.array(E["h"])[m], "--", color="0.45", lw=1.0)
     dz.plot(ex[m], np.array(E["h"])[m], "--", color="0.45", lw=1.0)
     dz.set(xlim=(-0.015, 0.015), ylim=(0.63, 0.665))
-    dz.tick_params(labelsize=6, length=2, pad=1, labelbottom=False)
+    dz.tick_params(labelsize=8, length=2, pad=1, labelbottom=False)
     d.indicate_inset_zoom(dz, edgecolor="0.4")
     a.axhline(0, color="0.45", lw=0.7, ls="--")
     b.axhline(1, color="0.45", lw=0.7, ls="--")

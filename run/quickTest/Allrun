@@ -1,0 +1,21 @@
+#!/bin/bash
+# Quick test of the final solver of Part II, a few minutes on one core. Copies two stored
+# cases to this directory, runs them and prints the results next to the expected values:
+#   disc: the accelerated disc of Part II, Section 4 (needs only ../../Allwmake)
+#   wave: one period of the progressive wave, 190x40, fixed dt 0.01 s (needs streamFunFoam)
+cd "${0%/*}" || exit 1
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+rm -rf disc wave
+cp -r ../periodicDisc/explicitLWIU_rhoNew disc
+rm -rf disc/[0-9]* disc/log.* disc/postProcessing disc/processor*
+disc/Allrun > disc/log.Allrun 2>&1
+if type streamFunFoam > /dev/null 2>&1
+then
+    cp -r ../progressiveWave/convection/explicitLWIU_190x40_dt0.01 wave
+    rm -rf wave/[0-9]* wave/log.* wave/postProcessing wave/processor*
+    sed -i 's/^endTime .*/endTime         2;/' wave/system/controlDict.run
+    wave/Allrun > wave/log.Allrun 2>&1
+else
+    echo "streamFunFoam not found: wave case skipped"
+fi
+python3 check.py

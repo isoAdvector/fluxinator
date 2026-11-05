@@ -1,0 +1,5 @@
+#!/bin/bash
+# Runs all prescribed-flow cases (Part II, Sections 4 and 5).
+# Results: ./summarise.sh <case>; tables and figures: papers/part2/tab_rig*, fig_rig*
+cd "${0%/*}" || exit 1
+../common/runCases.sh log.convectionTest $(ls -d */ | sed 's|/$||' | grep -v -e '^baseCase$' -e '^__pycache__$')

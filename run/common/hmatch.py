@@ -16,7 +16,7 @@ def wave_of_height(case, H):
     d = os.path.join(TMP, f'{abs(hash((case, round(H, 7))))}'); os.makedirs(d + '/constant', exist_ok=True)
     wp = re.sub(r'\n\s*H\s+[^;]*;', f'\n    H {H:.7f};', open(case + '/constant/waveProperties').read())
     open(d + '/constant/waveProperties', 'w').write(wp)
-    env = 'source /home/roenby/OpenFOAM/OpenFOAM-v2512/etc/bashrc > /dev/null 2>&1; '
+    env = ""
     subprocess.run(['bash', '-c', env + f'calcStreamFunctionWave {d}/constant/waveProperties {d}/constant/out'], capture_output=True)
     return K.Wave(d)
 

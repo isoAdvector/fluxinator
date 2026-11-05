@@ -14,7 +14,7 @@
 #
 # Writes <outdir>/scan.csv and <outdir>/history_<app>.csv
 set +u
-source ${FOAM_ETC:-/home/roenby/OpenFOAM/OpenFOAM-v2512/etc}/bashrc > /dev/null 2>&1
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
 HERE=$(cd "${0%/*}" && pwd)
 OUT=${1:-$HERE/solvers_ddtCorrOff}
 NOFF=${NOFF:-12}
