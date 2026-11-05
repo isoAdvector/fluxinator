@@ -6,6 +6,7 @@ wclean libso src/gravityModels
 wclean libso src/interfaceSchemes
 wclean libso src/functionObjects/convectiveMomentumFlux
 wclean applications/solvers/interIsoGoam
+wclean applications/solvers/fluxinator
 wclean applications/test/convectionTest
 wclean applications/utilities/setHydrostaticPressure
 wclean applications/test/ddtCorrSwitch/interFoamDdtCorr

@@ -9,9 +9,23 @@ and `paper2/` (Part II,
 
 ## The solver
 
-interIsoGoam is interIsoFoam (isoAdvector, OpenFOAM v2512) with run-time options
-for the gravity term (Part I) and the momentum convection term (Part II). It is
-meant as a drop-in replacement for interIsoFoam:
+**Use `fluxinator`.** It is the two-phase Volume-of-Fluid solver with geometric
+interface advection (isoAdvector) and a consistent gravity force and momentum
+convection. Its defaults are the geometric gravity model, explicit convection
+(PIMPLE `explicitConvection yes`) and the `ddtCorr` term off (PIMPLE `ddtCorr no`);
+an entry in the case overrides them. The convection scheme is set in `system/fvSchemes`,
+and explicit convection requires `interfaceUpwind` (the solver warns without it):
+
+```
+div(rhoPhi,U) Gauss laxWendroff U phi interfaceUpwind alpha.water 1e-6 limitedLinearV 1;
+```
+
+Keep the maximum Courant number at about 0.1 or less for accurate wave propagation.
+
+`interIsoGoam` is built from the same source (`applications/solvers/interIsoGoam`) with the
+defaults of interIsoFoam, and gives the same results as `fluxinator` with the same settings.
+It is the solver of Part I and is kept so that the stored cases, which rely on its defaults,
+reproduce the results of the papers. It has these run-time options:
 
 | Settings | Behaves as |
 |---|---|

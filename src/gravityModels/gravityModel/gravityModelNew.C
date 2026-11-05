@@ -33,7 +33,8 @@ License
 Foam::autoPtr<Foam::gravityModel>
 Foam::gravityModel::New
 (
-    const fvMesh& mesh
+    const fvMesh& mesh,
+    const word& defaultModel
 )
 {
     // Create an IOdictionary with default values
@@ -53,7 +54,7 @@ Foam::gravityModel::New
     // Add default value if the file wasn't found
     if (!gravityProperties.headerOk())
     {
-        gravityProperties.add("gravityModel", "basic");
+        gravityProperties.add("gravityModel", defaultModel);
         Info<< "No gravityProperties file found. Using default values." << endl;
     }
     else

@@ -41,7 +41,9 @@ Description
     adaptive re-meshing.
 
     With its default settings and one outer corrector the solver is
-    interIsoFoam. Additions, all selected at run time:
+    interIsoFoam. The same source also builds fluxinator, the solver to use,
+    which has other defaults (solverDefaults.H, ../fluxinator). Additions,
+    all selected at run time:
 
     - Gravity model (constant/gravityProperties, default basic, as in
       interIsoFoam). The geometric model evaluates the gravity term at the
@@ -95,6 +97,7 @@ Description
 #include "convectionScheme.H"
 #include "OFstream.H"
 #include "uniformDimensionedFields.H"
+#include "solverDefaults.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

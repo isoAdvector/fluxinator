@@ -5,7 +5,8 @@
 //   gravityTheta:    theta*F^{n+1} + (1 - theta)*F^n (see pEqn.H)
 //
 // An entry in the PIMPLE dictionary is always used. The defaults depend on
-// nOuterCorrectors and explicitConvection (default no):
+// nOuterCorrectors and explicitConvection (default no, in fluxinator yes,
+// see solverDefaults.H):
 //
 //   nOuter 1, explicitConvection no     convectionTheta 1,   gravityTheta 1
 //   nOuter 1, explicitConvection yes    convectionTheta 0,   gravityTheta 1
@@ -24,7 +25,11 @@
 // (1 for explicit convection, 0 for the centred scheme).
 
 const bool explicitConvection =
-    pimple.dict().getOrDefault<bool>("explicitConvection", false);
+    pimple.dict().getOrDefault<bool>
+    (
+        "explicitConvection",
+        defaultExplicitConvection
+    );
 
 const bool centredOuter = pimple.nCorrPIMPLE() > 1;
 
@@ -72,5 +77,29 @@ const scalar gravityTheta =
             << ", laxWendroffFactor " << 1 - 2*convTheta << nl << endl;
         convThetaPrinted = convTheta;
         gravityThetaPrinted = gravityTheta;
+    }
+
+    // Explicit convection amplifies velocity differences at the interface
+    // unless the convected face velocity there is taken from the upwind cell
+    static bool convectionSchemeChecked = false;
+    if (convTheta == 0 && !convectionSchemeChecked)
+    {
+        convectionSchemeChecked = true;
+        bool hasInterfaceUpwind = false;
+        for (const token& tok : mesh.divScheme("div(rhoPhi,U)"))
+        {
+            hasInterfaceUpwind =
+                hasInterfaceUpwind
+             || (tok.isWord() && tok.wordToken() == "interfaceUpwind");
+        }
+        if (!hasInterfaceUpwind)
+        {
+            WarningInFunction
+                << "Explicit convection without the interfaceUpwind scheme in"
+                << " div(rhoPhi,U): velocity differences are amplified in"
+                << " interface cells. Use, for example," << nl
+                << "    div(rhoPhi,U) Gauss laxWendroff U phi interfaceUpwind"
+                << " alpha.water 1e-6 limitedLinearV 1;" << nl << endl;
+        }
     }
 }

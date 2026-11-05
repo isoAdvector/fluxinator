@@ -1,0 +1,3 @@
+include ../interIsoGoam/Make/options
+
+EXE_LIBS += -linterfaceSchemes

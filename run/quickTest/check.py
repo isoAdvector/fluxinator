@@ -22,7 +22,7 @@ def internal(path, kind):
 
 
 def finished(case):
-    log = os.path.join(HERE, case, "log.interIsoGoam")
+    log = os.path.join(HERE, case, "log.fluxinator")
     return os.path.exists(log) and re.search(r"^End", open(log).read(), re.M) is not None
 
 

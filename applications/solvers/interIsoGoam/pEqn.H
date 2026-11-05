@@ -12,9 +12,10 @@
     volVectorField HbyA(constrainHbyA(rAU()*UEqn.H(), U, p_rgh));
     surfaceScalarField phiHbyA("phiHbyA", fvc::flux(HbyA));
 
-    // Old-time flux correction (PIMPLE entry ddtCorr, default yes);
-    // with no, phiHbyA is the flux of HbyA alone
-    if (pimple.dict().getOrDefault<bool>("ddtCorr", true))
+    // Old-time flux correction (PIMPLE entry ddtCorr, default yes, in
+    // fluxinator no, see solverDefaults.H); with no, phiHbyA is the flux of
+    // HbyA alone
+    if (pimple.dict().getOrDefault<bool>("ddtCorr", defaultDdtCorr))
     {
         phiHbyA +=
             MRF.zeroFilter(fvc::interpolate(rho*rAU())*fvc::ddtCorr(U, phi, Uf));

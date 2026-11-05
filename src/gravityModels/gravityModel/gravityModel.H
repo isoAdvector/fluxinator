@@ -102,10 +102,12 @@ public:
 
     // Selectors
 
-        //- Return a reference to the selected gravity model
+        //- Return a reference to the selected gravity model: the model of
+        //  constant/gravityProperties, or defaultModel without that file
         static autoPtr<gravityModel> New
         (
-            const fvMesh& mesh
+            const fvMesh& mesh,
+            const word& defaultModel = "basic"
         );
 
     // Constructors
