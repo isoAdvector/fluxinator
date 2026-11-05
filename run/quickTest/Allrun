@@ -5,14 +5,18 @@
 #   wave: one period of the progressive wave, 190x40, fixed dt 0.01 s (needs streamFunFoam)
 cd "${0%/*}" || exit 1
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+# Copies a case without results
+copyCase() {
+    mkdir "$2" && cp -r "$1"/{0.orig,constant,system,Allrun} "$2"/
+    rm -rf "$2"/constant/polyMesh
+}
+
 rm -rf disc wave
-cp -r ../periodicDisc/explicitLWIU_rhoNew disc
-rm -rf disc/[0-9]* disc/log.* disc/postProcessing disc/processor*
+copyCase ../periodicDisc/explicitLWIU_rhoNew disc
 disc/Allrun > disc/log.Allrun 2>&1
 if type streamFunFoam > /dev/null 2>&1
 then
-    cp -r ../progressiveWave/convection/explicitLWIU_190x40_dt0.01 wave
-    rm -rf wave/[0-9]* wave/log.* wave/postProcessing wave/processor*
+    copyCase ../progressiveWave/convection/explicitLWIU_190x40_dt0.01 wave
     sed -i 's/^endTime .*/endTime         2;/' wave/system/controlDict.run
     wave/Allrun > wave/log.Allrun 2>&1
 else

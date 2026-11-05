@@ -89,6 +89,7 @@ def render(field, outFile):
                         setattr(grid, prop, 0)
     display.SetRepresentationType("Surface With Edges")
     display.EdgeColor = [0.6, 0.6, 0.6]
+    display.LineWidth = 2
     # Flat lighting so that the colours appear as specified
     display.Ambient = 1.0
     display.Diffuse = 0.0
@@ -112,7 +113,7 @@ def render(field, outFile):
     ring2Display = Show(ring2, view)
     ring2Display.SetRepresentationType("Wireframe")
     solidColour(ring2Display, [0, 0, 0])
-    ring2Display.LineWidth = 5
+    ring2Display.LineWidth = 10
 
     # The contour of the one cell thick mesh is seen edge-on, so draw its edges
     contour = Contour(Input=reader)
@@ -121,7 +122,7 @@ def render(field, outFile):
     contourDisplay = Show(contour, view)
     contourDisplay.SetRepresentationType("Wireframe")
     solidColour(contourDisplay, [0, 0, 0])
-    contourDisplay.LineWidth = 3
+    contourDisplay.LineWidth = 6
 
     view.CameraPosition = [0.5, -3.0, 0.5]
     view.CameraFocalPoint = [0.5, 0.0, 0.5]
@@ -130,7 +131,7 @@ def render(field, outFile):
     view.CameraParallelScale = 0.23
 
     out = os.path.join(outDir, outFile)
-    SaveScreenshot(out, view, ImageResolution=SIZE, TransparentBackground=0)
+    SaveScreenshot(out, view, ImageResolution=[2*SIZE[0], 2*SIZE[1]], TransparentBackground=0)
     print("Wrote", out)
 
     for source in (contour, ring2, reader):

@@ -11,7 +11,8 @@ name=consistentInterfacialFlowNumerics_code
 work=$out/$name
 rm -rf "$work"; mkdir -p "$work/thirdParty"
 
-git -C "$root" archive HEAD | tar -x -C "$work" --exclude=paper --exclude=paper2 --exclude=.gitmodules --exclude=.github
+git -C "$root" archive HEAD | tar -x -C "$work" --exclude=paper --exclude=paper2 --exclude=.gitmodules --exclude=.github \
+    --exclude=papers/makeReviewSnapshot.sh
 git -C "$root/applications/utilities/surfacePosition" archive HEAD | \
     tar -x -C "$work/applications/utilities/surfacePosition" --exclude=test
 for d in streamFunctionWave cfdTools; do

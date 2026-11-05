@@ -56,7 +56,7 @@ contour1Display = Show(contour1, renderView1, 'GeometryRepresentation')
 ColorBy(contour1Display, None)
 
 # Properties modified on contour1Display
-contour1Display.LineWidth = 3.0
+contour1Display.LineWidth = 6.0
 
 
 # change solid color
@@ -111,8 +111,8 @@ dummyfoamDisplay.LookupTable = pLUT
 dummyfoamDisplay.MapScalars = 1
 dummyfoamDisplay.InterpolateScalarsBeforeMapping = 1
 dummyfoamDisplay.Opacity = 1.0
-dummyfoamDisplay.PointSize = 2.0
-dummyfoamDisplay.LineWidth = 1.0
+dummyfoamDisplay.PointSize = 4.0
+dummyfoamDisplay.LineWidth = 2.0
 dummyfoamDisplay.Interpolation = 'Gouraud'
 dummyfoamDisplay.Specular = 0.0
 dummyfoamDisplay.SpecularColor = [1.0, 1.0, 1.0]
@@ -442,8 +442,8 @@ current_folder_name = os.path.basename(current_directory)
 
 # save screenshot
 ##SaveScreenshot('image.png', renderView1,
-SaveScreenshot(current_folder_name+'.png', renderView1,
-    FontScaling='Do not scale fonts',
+SaveScreenshot(current_folder_name+'.png', renderView1, ImageResolution=[1200, 1200],
+    FontScaling='Scale fonts proportionally',
     OverrideColorPalette='',
     StereoMode='No change',
     TransparentBackground=0)#,

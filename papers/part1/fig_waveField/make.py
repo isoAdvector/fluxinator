@@ -35,4 +35,4 @@ for ax, (case, name) in zip(axes, RUNS):
     ax.set_title(name, fontsize=8.5, loc="left")
 axes[-1].set_xlabel("x [m]")
 fig.colorbar(im, ax=axes, label=r"$u - u_{\mathrm{exact}}$ [m/s]", shrink=0.8, pad=0.02)
-fig.savefig(os.path.join(HERE, "waveField.pdf"), bbox_inches="tight"); fig.savefig(os.path.join(HERE, "waveField.png"), dpi=150, bbox_inches="tight")
+fig.savefig(os.path.join(HERE, "waveField.pdf"), dpi=800, bbox_inches="tight"); fig.savefig(os.path.join(HERE, "waveField.png"), dpi=150, bbox_inches="tight")

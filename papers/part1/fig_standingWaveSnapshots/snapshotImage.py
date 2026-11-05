@@ -65,6 +65,7 @@ ColorBy(meshDisplay, ("CELLS", "alpha.water"))
 meshDisplay.LookupTable = alphaLUT
 meshDisplay.EdgeColor = [1.0, 1.0, 1.0]
 meshDisplay.EdgeOpacity = 0.4
+meshDisplay.LineWidth = 1.5
 meshDisplay.SetScalarBarVisibility(view, False)
 
 # Interface: alpha = 0.5 contour as a white line
@@ -76,7 +77,7 @@ contourDisplay.ColorArrayName = ["POINTS", ""]
 contourDisplay.SetRepresentationType("Wireframe")
 contourDisplay.AmbientColor = [1.0, 1.0, 1.0]
 contourDisplay.DiffuseColor = [1.0, 1.0, 1.0]
-contourDisplay.LineWidth = 3.0
+contourDisplay.LineWidth = 4.5
 
 # Velocity arrows (state.pvsm glyph settings, common scale factor)
 glyph = Glyph(Input=reader, GlyphType="Arrow")
@@ -142,5 +143,5 @@ view.CameraViewUp = [0.0, 0.0, 1.0]
 view.CameraParallelScale = 0.5*(args.zmax - args.zmin)
 
 Render(view)
-SaveScreenshot(args.out, view, ImageResolution=[args.width, height])
+SaveScreenshot(args.out, view, ImageResolution=[3*args.width//2, 3*height//2])
 print("wrote", args.out)

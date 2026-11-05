@@ -18,7 +18,7 @@ import argparse
 import os
 
 from paraview.simple import (GetActiveViewOrCreate, GetAnimationScene, GetSources, Hide,
-                             LoadState, SaveScreenshot)
+                             LoadState, SaveScreenshot, GetDisplayProperties)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 READER_IDS = ['10087', '10485', '10755']  # Reader proxy ids in caseIllustration.pvsm, left to right
@@ -48,7 +48,13 @@ for (name, _), source in GetSources().items():
     if name == 'AnnotateTime1':
         Hide(source, view)
 
-SaveScreenshot(args.out, view, ImageResolution=[2100, 1149],
+# Twice the view size, so twice the line widths
+for source in GetSources().values():
+    display = GetDisplayProperties(source, view)
+    if hasattr(display, 'LineWidth'):
+        display.LineWidth = 2*display.LineWidth
+
+SaveScreenshot(args.out, view, ImageResolution=[4200, 2298],
                TransparentBackground=0 if args.opaque else 1)
 
 # Crop the empty margins if Pillow is available
