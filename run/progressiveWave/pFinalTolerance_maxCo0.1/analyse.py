@@ -19,7 +19,7 @@ def height(base, c):
 
 
 t0, h0 = height(P, "final_190x40_B0")
-L = ["Final solver, 190x40, max Co 0.1, 30 s; surfCellTol 1e-10. dH, dc, emax [%], r0 as finalSolver.py;",
+L = ["fluxinator, 190x40, max Co 0.1, 30 s; surfCellTol 1e-10. dH, dc, emax [%], r0 as finalSolver.py;",
      "maxDh: max |h - h(1e-12)| at the wave gauge [m]; contErr: mean of 'sum local' at the final corrector;",
      "dV: change of the water volume fraction from first to last step; warn: cutFaceAdvect warnings.", "",
      f"{'p_rghFinal':24s}{'steps':>7s}{'dH':>8s}{'dc':>8s}{'emax':>7s}{'r0':>7s}{'maxDh':>10s}{'contErr':>10s}{'dV':>10s}{'warn':>7s}"]

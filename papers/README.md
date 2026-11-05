@@ -18,7 +18,7 @@ the directories (for example `part2/wave.py`, which makes `tab_wave` and
 `part2/common.py` hold the paths, the plotting style and, for Part II, the
 routing of each output to its directory. `part2/data/` holds data that several
 figures share or that is cited in the text (`browser.json`: metrics of all
-final-solver and Part I wave runs, `python3 browserData.py`; `rig.txt`,
+fluxinator and Part I wave runs, `python3 browserData.py`; `rig.txt`,
 `lag.txt`, `paperSelection.txt`, the crest-model files).
 
 `part2/fig_lagWave` is no longer in the Part II paper (the paragraph on the

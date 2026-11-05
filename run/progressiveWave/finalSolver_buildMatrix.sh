@@ -1,5 +1,5 @@
 #!/bin/bash
-# Builds the Part 2 final-solver test matrix from the Part 1 interIsoGoam cases
+# Builds the Part 2 fluxinator test matrix from the Part 1 interIsoGoam cases
 # (solvers_fixedDt and solvers_maxCo), keeping the case numbers.
 # Changes relative to the Part 1 case: explicit convection,
 # div(rhoPhi,U) Gauss laxWendroff U phi interfaceUpwind alpha.water 1e-6 limitedLinearV 1,

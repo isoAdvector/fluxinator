@@ -1,5 +1,5 @@
 """Data of the selection figures (selection.py) and the results browser: the Part 1 solvers rerun
-with ddtCorr off and the final solver (run/progressiveWave/finalSolver_*), progressive wave of
+with ddtCorr off and fluxinator (run/progressiveWave/finalSolver_*), progressive wave of
 Part 1, 30 s.
 Same case numbers in all sets; only finished runs (height.dat reaches 30 s).
 
@@ -125,7 +125,7 @@ def analyse(c):
 
 
 def exact():
-    """Exact surface and crest profile, from any final-solver case (same wave everywhere)."""
+    """Exact surface and crest profile, from any fluxinator case (same wave everywhere)."""
     d = os.path.join(WAVE, "finalSolver_maxCo", "0017")
     W = K.Wave(d)
     th = np.linspace(-np.pi, np.pi, 401)

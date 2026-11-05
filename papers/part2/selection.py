@@ -19,7 +19,7 @@ plt.rcdefaults()
 plt.rcParams.update(STYLE)
 SOLVERS = ["interFoam", "interIsoFoam", "interIsoGoam", "explicit + LW + interfaceUpwind"]
 LABEL = {"interFoam": "interFoam", "interIsoFoam": "interIsoFoam", "interIsoGoam": "interIsoGoam",
-         "explicit + LW + interfaceUpwind": "final"}
+         "explicit + LW + interfaceUpwind": "fluxinator"}
 COLOUR = {"interFoam": "#2a78d6", "interIsoFoam": "#eb6834", "interIsoGoam": "#1baf7a",
           "explicit + LW + interfaceUpwind": "#1f1f1e"}
 LW = {s: (1.8 if s.startswith("explicit") else 1.1) for s in SOLVERS}

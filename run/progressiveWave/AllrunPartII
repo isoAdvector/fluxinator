@@ -1,6 +1,6 @@
 #!/bin/bash
 # Runs the Part II studies of the progressive wave. Allrun must have run first, since the
-# final-solver cases are built from the Part I cases. Needs streamFunFoam (README).
+# fluxinator cases are built from the Part I cases. Needs streamFunFoam (README).
 # The full set takes several days; finished runs are skipped when it is started again.
 # Figures and tables: papers/part2.
 cd "${0%/*}" || exit 1

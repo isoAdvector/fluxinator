@@ -1,4 +1,4 @@
-"""Final Part 2 solver (interIsoGoam, explicit convection, Gauss laxWendroff ... interfaceUpwind,
+"""fluxinator (interIsoGoam, explicit convection, Gauss laxWendroff ... interfaceUpwind,
 ddtCorr no; run/progressiveWave/finalSolver_*) against the Part 1 solvers rerun with ddtCorr off
 (run/progressiveWave/solvers_*_ddtCorrOff), on the progressive wave of Part 1 (H 0.125 m, T 2 s,
 d 0.4 m, one wavelength, periodic, 30 s = 15 periods). Same case numbers in both sets.
@@ -114,12 +114,12 @@ def analyse(c):
 
 
 def table(rows):
-    L = ["Final solver (Part 2) vs Part 1 solvers with ddtCorr off; progressive wave, 30 s. Script: finalSolver.py",
+    L = ["fluxinator (Part 2) vs Part 1 solvers with ddtCorr off; progressive wave, 30 s. Script: finalSolver.py",
          "dH: wave height error after 15 periods [%]; dc: mean celerity error [%]; Umax: median domain max|U|/u_crest;",
          "Uair: median max|U| in the air (alpha < 0.01)/u_crest; emax: crest-column speed error / exact crest-surface",
          "speed, 28-30 s [%]; r0: u/u_exact, top full water cell under the crest, 28-30 s; ulow: mean (u - u_exact)/u_crest",
          "in the crest column below half the crest elevation, 28-30 s; steps: time steps.",
-         "final = explicit + LW + interfaceUpwind (Part 2), ddtCorr off. '-': run diverged before 30 s; fields of the fixed-dt Part 1 runs were not written (no Uair, emax, r0)."]
+         "fluxinator = explicit + LW + interfaceUpwind (Part 2), ddtCorr off. '-': run diverged before 30 s; fields of the fixed-dt Part 1 runs were not written (no Uair, emax, r0)."]
     keys = [("dH", "{:+6.1f}"), ("dc", "{:+6.2f}"), ("Umax", "{:5.2f}"), ("Uair", "{:5.2f}"),
             ("emax", "{:5.1f}"), ("r0", "{:5.2f}"), ("ulow", "{:+6.3f}"), ("steps", "{:6d}")]
     idx = {(r["scan"], r["nx"], r["par"], r["solver"]): r for r in rows}
@@ -136,7 +136,7 @@ def table(rows):
                         if v is not None and k == "emax":
                             v = 100*v
                         cells.append(f"{'-':>6s}" if v is None else fmt.format(v).rjust(6))
-                    L.append(f"{nx:4d}x{nx*4//19:<3d} {p:9g} {('final' if s == FINAL else s):13s} " + " ".join(cells))
+                    L.append(f"{nx:4d}x{nx*4//19:<3d} {p:9g} {('fluxinator' if s == FINAL else s):13s} " + " ".join(cells))
     return L
 
 
@@ -168,7 +168,7 @@ def fig_overview(rows):
     axs[0, 0].set_yscale("symlog", linthresh=2)
     axs[0, 0].set_yticks([-30, -10, -2, 0, 2, 10, 30])
     axs[0, 0].set_yticklabels(["-30", "-10", "-2", "0", "2", "10", "30"])
-    h = [plt.Line2D([], [], color=COLOUR[s], marker=MARKER[s], label=s + ("" if s == FINAL else ", ddtCorr off"))
+    h = [plt.Line2D([], [], color=COLOUR[s], marker=MARKER[s], label="fluxinator" if s == FINAL else s + ", ddtCorr off")
          for s in SOLVERS]
     fig.legend(handles=h, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.0))
     fig.tight_layout(rect=(0, 0, 1, 0.955))

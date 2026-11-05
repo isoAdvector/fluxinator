@@ -15,14 +15,14 @@ import sys
 
 WORDS = ("interFoam interIsoFoam interIsoGoam ddtCorr interfaceUpwind limitedLinearV "
          "limitedLinear laxWendroff plicRDF isoAlpha setAlphaField nLayers surfCellTol "
-         "constantHeight").split()
+         "constantHeight fluxinator").split()
 # A bare equation number directly after one of these needs no parentheses.
 LINKING = ("of in by from with to and or is if so that exactly see on into using through than "
            "as between for reproduces satisfies").split()
 # Their arguments are not running text.
 SKIPCMD = ("cite ref eqref label texttt datasource datanote datafn figdir nolinkurl url "
            "input includegraphics begin end bibliography bibliographystyle").split()
-MATHENV = "equation align gather multline tabular".split()
+MATHENV = "equation align gather multline tabular verbatim lstlisting".split()
 
 
 def sentence_start(before):

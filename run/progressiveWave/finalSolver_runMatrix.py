@@ -1,4 +1,4 @@
-"""Runs the final-solver matrix (finalSolver_fixedDt, finalSolver_maxCo) on at most MAXCORES cores, cheapest
+"""Runs the fluxinator matrix (finalSolver_fixedDt, finalSolver_maxCo) on at most MAXCORES cores, cheapest
 cases first. Cost estimate: clock time of the Part 1 interIsoGoam run with the same case number
 (data/solvers_*.csv). 760x160 cases run with AllrunParallel on 4 cores (one NUMA node) and
 are reconstructed afterwards; all others serially with Allrun. A case counts as finished when its

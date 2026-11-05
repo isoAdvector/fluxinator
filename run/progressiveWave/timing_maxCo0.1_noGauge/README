@@ -1,9 +1,9 @@
-Timing of interFoam, interIsoFoam, interIsoGoam (ddtCorr off) and the final solver at max Co 0.1
+Timing of interFoam, interIsoFoam, interIsoGoam (ddtCorr off) and fluxinator at max Co 0.1
 on 95x20, 190x40 and 380x80, three repeats, to t = 6 s, without the interfaceHeight function
 object (it rebuilds a mesh search tree every step, about half of the step time).
 Set-ups: solvers_maxCo_ddtCorrOff 0006-0008 (95x20), 0018-0020 (190x40), 0030-0032 (380x80) and
 finalSolver_maxCo 0008, 0020, 0032, with endTime 6 and functions.interfaceHeight1.enabled false in
-system/controlDict.run; the final solver with the code of 56082eb (bitwise identical results).
+system/controlDict.run; fluxinator with the code of 56082eb (bitwise identical results).
 ./runAll.sh: at most 8 concurrent unpinned runs, nothing else on the machine.
 python3 analyse.py writes ../data/timing_maxCo0.1.csv (time per step over 2 <= t <= 6 s).
 Part II Figure fig:selCost combines it with the step counts of the full 30 s runs.

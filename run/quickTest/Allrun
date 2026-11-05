@@ -1,5 +1,5 @@
 #!/bin/bash
-# Quick test of the final solver of Part II, a few minutes on one core. Copies two stored
+# Quick test of fluxinator of Part II, a few minutes on one core. Copies two stored
 # cases to this directory, runs them and prints the results next to the expected values:
 #   disc: the accelerated disc of Part II, Section 4 (needs only ../../Allwmake)
 #   wave: one period of the progressive wave, 190x40, fixed dt 0.01 s (needs streamFunFoam)

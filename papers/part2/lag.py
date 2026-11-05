@@ -133,7 +133,7 @@ def wave(b, rows):
         x = [-th*(30.0/r["steps"])*29.0*0.5*A**2*w*k*cm/U_CREST for r in R if r["solver"] == s]
         y = [r["ulow"] for r in R if r["solver"] == s]
         b.plot(x, y, mk, color=col, ms=4.5, mfc="white" if s != "final" else col,
-               label=s)
+               label="fluxinator" if s == "final" else s)
         if s != "final":
             P += x; M += y
     lim = [-0.24, 0.04]

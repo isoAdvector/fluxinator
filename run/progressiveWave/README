@@ -23,7 +23,7 @@ Part I (parmScanner, parameter file <study>.csv):
                             stock solvers as interFoamDdtCorr, interIsoFoamDdtCorr;
                             run/common/runStoredDdtCorrOff.sh)
 Part II:
-  finalSolver_maxCo,        the final solver of Part II (interIsoGoam, explicit
+  finalSolver_maxCo,        fluxinator of Part II (interIsoGoam, explicit
   finalSolver_fixedDt       convection, laxWendroff + interfaceUpwind, ddtCorr no) on
                             the interIsoGoam cases of solvers_* (same case numbers;
                             finalSolver_buildMatrix.sh, finalSolver_runMatrix.py,
@@ -46,7 +46,7 @@ Part II:
                             Figure fig:selCost; data/timing_maxCo0.1.csv); see its README
   pressureSolver_maxCo0.1/  nNonOrthogonalCorrectors, GAMG and p_rghFinal variants (not in the
                             papers; the 380x80 runs stopped at t about 5 s)
-  pFinalTolerance_maxCo0.1/ p_rghFinal tolerance 1e-10 to 1e-13, final solver (not in the papers)
+  pFinalTolerance_maxCo0.1/ p_rghFinal tolerance 1e-10 to 1e-13, fluxinator (not in the papers)
 
 Scripts
 -------

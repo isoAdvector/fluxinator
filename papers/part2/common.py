@@ -62,7 +62,7 @@ COL = {"implicit": "#eb6834", "Crank-Nicolson": "#a35c9e", "explicit": "#2a78d6"
        "explicit + LW + interfaceUpwind": "#0f6e4a", "exact": "#1f1f1e"}
 
 
-LOWER = ("inter", "limitedLinear", "linear", "nOuter", "ddtCorr", "a1", "a2", "a3", "b2", "b3", "c2", "c3", "c5", "e3")
+LOWER = ("inter", "fluxinator", "limitedLinear", "linear", "nOuter", "ddtCorr", "a1", "a2", "a3", "b2", "b3", "c2", "c3", "c5", "e3")
 
 
 def capitalise(s):

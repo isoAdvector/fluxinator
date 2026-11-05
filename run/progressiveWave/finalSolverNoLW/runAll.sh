@@ -1,6 +1,6 @@
 #!/bin/bash
 # LW check: explicit + interfaceUpwind WITHOUT the Lax-Wendroff correction, otherwise identical
-# to the final-solver cases finalSolver_maxCo/{0014,0017,0020,0026,0029,0032} (190x40, 380x80 at
+# to the fluxinator cases finalSolver_maxCo/{0014,0017,0020,0026,0029,0032} (190x40, 380x80 at
 # maxCo 0.5/0.2/0.1, 30 s) and convection/explicitLWIU_190x40_dt0.02 (fixed dt 0.02, diverged with LW).
 # Usage: bash runAll.sh   (7 serial runs in parallel)
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }

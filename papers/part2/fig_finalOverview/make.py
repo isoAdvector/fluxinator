@@ -1,4 +1,4 @@
-"""Part II, Figure fig:finalOverview: final solver against the Part I solvers rerun with ddtCorr
+"""Part II, Figure fig:finalOverview: fluxinator against the Part I solvers rerun with ddtCorr
 off (finalOverview.pdf), with the numbers in finalSolver.txt and finalSolver.csv.
 Made by ../finalSolver.py (main). Inputs: run/progressiveWave/{finalSolver,solvers}_{maxCo,fixedDt}*.
 Usage: python3 make.py [-j N]"""

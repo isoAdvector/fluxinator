@@ -1,4 +1,4 @@
-"""Is the Lax-Wendroff correction worth keeping? Final solver (explicit + LW + interfaceUpwind,
+"""Is the Lax-Wendroff correction worth keeping? fluxinator (explicit + LW + interfaceUpwind,
 run/progressiveWave/finalSolver_maxCo) against the same cases without LW (explicit +
 interfaceUpwind, run/progressiveWave/finalSolverNoLW), 190x40 and 380x80 at maximum Courant
 numbers 0.5, 0.2 and 0.1, 30 s, with the metrics of finalSolver.py; and the fixed time step 0.02 s
