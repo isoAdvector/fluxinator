@@ -64,8 +64,8 @@ for case, theta, lab, c, ls in RUNS:
     lines.append(f"{case} (theta {theta}, dt {dt}):")
     lines += [f"   z {zz:+.3f}  solver {s:+.4f}  predicted {p:+.4f}" for zz, s, p in zip(z[sel], S[sel], P)]
 ax.axvline(0, color="#1f1f1e", lw=0.6)
-ax.plot([], [], "-", color="#888888", lw=0.7, label="thin lines: predicted")
-ax.set_xlabel(r"$\langle \rho\, w\, u\rangle$ [N/m$^2$]"); ax.set_ylabel("z above still water level [m]")
+ax.plot([], [], "-", color="#888888", lw=0.7, label="thin lines: predicted error")
+ax.set_xlabel(r"Momentum flux $\rho \langle w(t)\, u(t+\theta\Delta t)\rangle$ [N/m$^2$]"); ax.set_ylabel("z above still water level [m]")
 h, l = ax.get_legend_handles_labels()
 ax.legend(h, l, loc="upper left", bbox_to_anchor=(1.03, 1.0), ncol=1, fontsize=8, borderaxespad=0)
 fig.tight_layout()
