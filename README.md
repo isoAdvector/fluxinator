@@ -88,8 +88,9 @@ source <OpenFOAM-v2512>/etc/bashrc
 ./Allwmake
 ```
 
-Clone with `git clone --recurse-submodules` to get `surfacePosition`. The wave
-cases need `streamFunFoam` and `calcStreamFunctionWave`
+After cloning, get `surfacePosition` with
+`git submodule update --init applications/utilities/surfacePosition`; the papers are
+not needed to build or run. The wave cases need `streamFunFoam` and `calcStreamFunctionWave`
 from [InterFlowers/streamFunctionWave](https://github.com/InterFlowers/streamFunctionWave),
 and the scans use `parmScanner` from
 [isoAdvector/cfdTools](https://github.com/isoAdvector/cfdTools). The figure
