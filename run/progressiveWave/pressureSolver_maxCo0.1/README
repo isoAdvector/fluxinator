@@ -1,0 +1,6 @@
+Pressure-solver settings: cost and accuracy of the progressive wave at max Co 0.1 (30 s)
+for interFoam, interIsoGoam and the final solver on 190x40 and 380x80.
+B0 is the papers' setting; B1-B3 change only system/fvSolution (makeCases.sh).
+./makeCases.sh; ./runAll.sh (24 concurrent single-core runs); python3 analyse.py -> summary.txt.
+The final solver runs with the code of 56082eb (explicit convection without the zero implicit
+operator; bitwise identical results).

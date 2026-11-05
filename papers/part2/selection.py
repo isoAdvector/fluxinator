@@ -1,17 +1,19 @@
 """Selected Courant-limited results for the paper, from data/browser.json (browserData.py).
-Selection rule, fixed before looking at the figures: the 380x80 mesh (12 cells per wave height,
-the finest mesh with all solvers finished at all Courant numbers) at max Co 0.1; the wave height
-for all four Courant numbers of the same mesh; the cost on all meshes at max Co 0.1.
+Selection rule, fixed before looking at the figures: the 380x80 mesh (12 cells per wave height)
+at max Co 0.1; the wave height for all four Courant numbers of the same mesh; the cost at max Co 0.1.
   selCase:   380x80, max Co 0.1: (a) wave height per wave, (b) largest speed in the air,
              (c) crest-column velocity profile at 30 s, (d) surface near the crest at 30 s
   selHeight: 380x80, wave height per wave at max Co 0.5, 0.2, 0.1, 0.05
-  selCost:   max Co 0.1, all meshes: clock time, time steps and clock time per step relative
-             to interIsoGoam (ddtCorr off); 760x160 on 4 cores, all others on 1
+  selCost:   max Co 0.1, 95x20 to 380x80: clock time, time steps and time per step relative to
+             interFoam (ddtCorr off). Time steps of the full 30 s runs; time per step from
+             run/progressiveWave/data/timing_maxCo0.1.csv (three repeats, no wave gauge); clock
+             time = time steps x time per step; whiskers: range of the repeats
 Writes fig_sel{Case,Height,Cost}/*.pdf and data/paperSelection.txt (run by their make.py)."""
+import csv
 import json
 import os
 import numpy as np
-from common import plt, STYLE, DATA, FULL, save, write
+from common import plt, STYLE, DATA, FULL, WAVE, save, write
 
 plt.rcdefaults()
 plt.rcParams.update(STYLE)
@@ -95,30 +97,34 @@ def fig_height():
     save(fig, "selHeight")
 
 
-def fig_cost(co=CO, ref="interIsoGoam"):
-    meshes = [95, 190, 380, 760]
-    sol = [s for s in SOLVERS if any(get(nx, co, s) for nx in meshes)]
-    rows = [f"Relative cost at max Co {co}, normalised by {ref} (clock time, steps, clock per step)"]
+def fig_cost(co=CO, ref="interFoam"):
+    meshes = [95, 190, 380]
+    sol = SOLVERS
+    T = {}
+    for r in csv.DictReader(open(os.path.join(WAVE, "data", "timing_maxCo0.1.csv"))):
+        s = SOLVERS[3] if r["solver"] == "final" else r["solver"]
+        T.setdefault((int(r["nx"]), s), []).append(float(r["msPerStep"]))
+    rows = [f"Relative cost at max Co {co}, normalised by {ref} (clock time, steps, time per step)"]
     fig, axs = plt.subplots(1, 3, figsize=(FULL, 2.5))
     w = 0.8/len(sol)
     for k, (ax, q, lab) in enumerate(zip(axs, ("clock", "steps", "perStep"),
                                          ("clock time", "time steps", "time per step"))):
         for i, s in enumerate(sol):
-            vals = []
+            vals, lo, hi = [], [], []
             for nx in meshes:
-                r, r0 = get(nx, co, s), get(nx, co, ref)
-                if r is None or r0 is None or r["clock"] is None or r0["clock"] is None:
-                    vals.append(np.nan); continue
-                v = dict(clock=r["clock"]/r0["clock"], steps=r["steps"]/r0["steps"],
-                         perStep=(r["clock"]/r["steps"])/(r0["clock"]/r0["steps"]))[q]
-                vals.append(v)
+                ms, ms0 = np.array(T[nx, s]), np.mean(T[nx, ref])
+                steps = get(nx, co, s)["steps"]/get(nx, co, ref)["steps"]
+                x = dict(clock=steps*ms/ms0, steps=np.array([steps]), perStep=ms/ms0)[q]
+                vals.append(x.mean())
+                lo.append(x.mean() - x.min())
+                hi.append(x.max() - x.mean())
                 if k == 0:
-                    rows.append(f"{nx:4d} {LABEL[s]:18s} clock {r['clock']/r0['clock']:5.2f} "
-                                f"steps {r['steps']/r0['steps']:5.2f} "
-                                f"perStep {(r['clock']/r['steps'])/(r0['clock']/r0['steps']):5.2f}")
+                    rows.append(f"{nx:4d} {LABEL[s]:18s} clock {x.mean():5.2f} steps {steps:5.2f} "
+                                f"perStep {ms.mean()/ms0:5.2f}")
             ax.bar(np.arange(len(meshes)) + (i - (len(sol) - 1)/2)*w, vals, w*0.9,
-                   color=COLOUR[s], hatch="//" if s.startswith("centred") else None,
-                   edgecolor="white" if not s.startswith("centred") else COLOUR[s], lw=0.5)
+                   color=COLOUR[s], edgecolor="white", lw=0.5,
+                   yerr=None if q == "steps" else [lo, hi],
+                   error_kw=dict(lw=0.7, capsize=1.5, ecolor="0.2"))
         ax.axhline(1, color="0.3", lw=0.7)
         ax.set_xticks(range(len(meshes)))
         ax.set_xticklabels([f"{nx}x{nx*4//19}" for nx in meshes], fontsize=8, rotation=20)
