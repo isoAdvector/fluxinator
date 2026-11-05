@@ -14,7 +14,7 @@ from common import RIG, plt, save, FULL, COL
 VAR = [("implEuler_new", "implicit", COL["implicit"], "-"),
        ("explEuler_new", "explicit", COL["explicit"], "-"),
        ("explIU_new", "explicit + interfaceUpwind", COL["explicit + interfaceUpwind"], "-")]
-fig, axes = plt.subplots(1, 2, figsize=(FULL, 3.1))
+fig, axes = plt.subplots(1, 2, figsize=(FULL, 2.7))
 for ax, (case, title) in zip(axes, [("shear", "(a) shear with cross-flow, one step"),
                                      ("rotationCarried", "(b) solid-body rotation, carried")]):
     for v, lab, c, ls in VAR:
@@ -22,7 +22,6 @@ for ax, (case, title) in zip(axes, [("shear", "(a) shear with cross-flow, one st
         ax.semilogy(d[:, 0], d[:, 1], ls, color=c, lw=1.0, label=lab)
     ax.set_title(title, fontsize=9, loc="left"); ax.set_xlabel("t [s]")
 axes[0].set_ylabel("max |U - u| [m/s]")
-h, l = axes[0].get_legend_handles_labels()
-fig.legend(h, l, loc="upper center", ncol=3, fontsize=8, bbox_to_anchor=(0.5, 1.0))
-fig.tight_layout(rect=(0, 0, 1, 0.86))
+axes[1].legend(loc="center right", fontsize=8, framealpha=0.9)
+fig.tight_layout()
 save(fig, "rigErrors")
