@@ -1,0 +1,11 @@
+"""Part II, Table tab:wave: progressive wave, 8-10 s, convection variants (wave.txt).
+Made by the shared script ../wave.py, which also writes fig_waveCrest/waveCrest.pdf.
+Inputs: run/progressiveWave/convection/<case>.
+Usage: python3 make.py"""
+import os
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+from common import run_script  # noqa: E402
+
+run_script("wave.py")

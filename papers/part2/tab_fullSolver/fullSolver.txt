@@ -1,0 +1,29 @@
+Full solver, uniform acceleration a = (0.5 0 0) m/s^2, body force rho^{n+1} a (new) or rho^n a (old), system/fvOptions.
+max over t <= 1 s of |U - U0 - a t| [m/s] in water (alpha > 0.99), interface, air; p_rgh range [Pa].
+Sources: run/periodicDisc/<case> (runCase.sh, baseCase)
+
+case                 variant                                        water   interf.       air     p_rgh
+implicit_rhoNew      implicit, limitedLinearV, rho^{n+1}          2.4e-02   4.0e-02   4.9e-02   1.7e+00
+implicit_rhoOld      implicit, limitedLinearV, rho^n              9.4e-05   1.0e-04   3.3e-04   1.2e-02
+implicitIU_rhoNew    implicit, interfaceUpwind, rho^{n+1}         1.7e-02   2.4e-02   2.9e-02   1.2e+00
+explicit_rhoNew      explicit, limitedLinearV, rho^{n+1}          6.2e-12   4.6e-11   3.5e-10   1.8e-09
+explicit_rhoOld      explicit, limitedLinearV, rho^n              2.2e-02   1.2e-01   1.4e-01   3.4e+00
+explicitIU_rhoNew    explicit, interfaceUpwind, rho^{n+1}         5.2e-12   1.0e-11   3.5e-10   1.8e-09
+explicitLW_rhoNew    explicit, LW, rho^{n+1}                      6.1e-12   3.9e-11   3.5e-10   1.8e-09
+explicitLWIU_rhoNew  explicit, LW + interfaceUpwind, rho^{n+1}    5.2e-12   1.0e-11   3.5e-10   1.8e-09
+
+Uniform flow without force (Liu et al. 2024, Fig. 10): density ratio 1e3 (noForce_*, 1 s) and 1e4 (noForceRatio1e4_*, 3 s)
+case                                 water   interf.       air     p_rgh
+noForce_implicitUpwind             0.0e+00   0.0e+00   0.0e+00   3.3e-13
+noForce_implicit                   0.0e+00   0.0e+00   0.0e+00   3.7e-13
+noForce_implicitLinear             0.0e+00   0.0e+00   0.0e+00   3.1e-13
+noForce_implicit_ddtCorrOn         0.0e+00   0.0e+00   0.0e+00   3.3e-13
+noForce_explicit                   0.0e+00   0.0e+00   0.0e+00   2.4e-13
+noForce_explicitIU                 0.0e+00   0.0e+00   0.0e+00   2.6e-13
+noForce_explicitLinear             0.0e+00   0.0e+00   0.0e+00   3.0e-13
+noForceRatio1e4_implicitUpwind     9.3e-16   7.7e-16   1.4e-15   3.3e-13
+noForceRatio1e4_implicit           1.8e-15   1.2e-15   1.3e-15   3.3e-13
+noForceRatio1e4_implicitLinear     2.1e-15   5.3e-15   3.8e-14   3.0e-13
+noForceRatio1e4_implicitQUICK      1.8e-15   1.4e-15   1.5e-15   3.6e-13
+noForceRatio1e4_implicitCubic      5.7e-13   1.2e-11   4.5e-11   3.7e-10
+noForceRatio1e4_explicitIU         4.3e-16   3.6e-16   1.9e-15   3.3e-13

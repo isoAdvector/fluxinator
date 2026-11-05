@@ -1,0 +1,1 @@
+w13/extExplIU_190x40_dt0.01:     application: interIsoGoamExt nx: 190 nz: 40 maxCo: 0.2 endTime: 10 dt=0.01 app=interIsoGoamExt PIMPLE.ddtCorr=no PIMPLE.explicitConvection=yes libs=interfaceSchemes conv=interfaceUpwind#alpha.water#1e-6#limitedLinearV#1

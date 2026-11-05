@@ -12,7 +12,7 @@ configurations of `makeCases.sh`: interFoam and interIsoFoam (interIsoGoam, basi
 constantHeight, and the geometric model with nLayers 1, 2 (and 3), each with corrected
 schemes from a zero p_rgh with 0 or 2 non-orthogonal correctors, from a hydrostatic
 p_rgh (`setHydrostaticPressure`), and with uncorrected schemes. 10 time steps of 0.01 s.
-Case names: `scan/<configuration>_z<z_w>`.
+Case names: `waterLevel_10steps/<configuration>_z<z_w>`.
 
 In the interFoam cases the `surfaces` (interface) function object is removed: it needs
 the isoAdvector reconstruction and aborts interFoam at the first write.
@@ -43,14 +43,14 @@ the isoAdvector reconstruction and aborts interFoam at the first write.
 ## Running
 
 ```sh
-./Allrun             # scan (357 cases, about a minute), paperData/ and paper figures
-./Allclean [-scans]  # remove generated files (and with -scans the scan)
+./Allrun             # study waterLevel_10steps (357 cases, about a minute), data/ and case images
+./Allclean [-scans]  # remove generated files (and with -scans the study)
 ```
 
-`Allrun` writes `paperData/levelScan.txt` (`summarise.py`: first- and tenth-step max|U|
-and first p_rgh residuals per configuration and level), `paperData/table.txt`
-(`table.py`: the paper table), `snGradRhoReach.txt`, `maxUCell.txt` (`maxUCell.py`) and
-`checkMesh.txt`, and the figures `figure_levelScan.pdf` (`plotLevelScan.py`),
-`paperFigures/reach_*.png` (`renderSnGradReach.py`, pvbatch) and
-`figure_refinedBox.pdf` (`generateFigure.py` in four cases at z_w = 0.49, pvbatch, and
-`figure_refinedBox.tex`).
+`Allrun` writes `data/waterLevel_10steps.txt` (`summarise.py`: first- and tenth-step
+max|U| per configuration and level), `snGradRhoReach.txt`, `maxUCell.txt` (`maxUCell.py`)
+and `checkMesh.txt`, and renders the case images of the velocity-field figure
+(`generateFigure.py` in four cases at z_w = 0.49, pvbatch). The paper figures and the
+table are made in `papers/part1/fig_levelScan`, `fig_reach`, `fig_refinedBox` and
+`tab_nonOrthRefined`. `waterLevel_10steps_ddtCorrOff` holds the same runs with PIMPLE
+`ddtCorr no` (Part I, Appendix A; `runCase_ddtCorrOff.sh`).

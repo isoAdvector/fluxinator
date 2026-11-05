@@ -1,0 +1,31 @@
+Kinematic rig, 50x50, dt 0.005 s, 1 s, water/air 1000/1, disc r 0.15 m.
+Entry: max over steps of max |U - u_exact| [m/s] (mean over steps of interface rms).
+Flows: uniform U0 (0.2,0,0.05); acceleration U0 (0.1,0,0.05) + a (0.5,0,0); shear u = (z-0.5, 0, -0.2), disc at (0.5, 0.75);
+rotation solid body Omega 2 about (0.5,0.5). Reference: u at the cell centre. Mode: one step (reset) or
+carried (...Carried). Sources: run/prescribedFlows/<case>/postProcessing/convectionTest/<variant>.dat
+
+-- time scheme, time level, shear
+variant                                            uniform            acceleration     accelerationCarried                   shear            shearCarried
+implicit, Euler, rho^{n+1}              1.72e-16 (4.1e-17)      4.96e-03 (9.8e-04)      4.95e-02 (1.4e-02)      2.13e-02 (2.0e-03)      4.33e-02 (1.0e-02)
+implicit, Euler, rho^n                  1.72e-16 (4.1e-17)      3.90e-13 (8.7e-16)      5.86e-14 (2.5e-15)      1.98e-02 (2.0e-03)      5.47e-02 (1.2e-02)
+explicit, Euler, rho^{n+1}              1.69e-15 (4.3e-17)      1.38e-14 (1.5e-16)      7.04e-14 (4.0e-16)      4.09e-01 (5.6e-03)      1.12e+00 (2.3e-02)
+explicit, Euler, rho^n                  1.69e-15 (4.3e-17)      2.08e-01 (3.7e-03)      3.03e+00 (6.2e-02)      3.68e-01 (4.9e-03)      8.39e-01 (2.1e-02)
+implicit, backward, rho^{n+1}           2.42e+00 (8.7e-03)      1.52e+01 (6.3e-02)      2.32e+01 (1.3e-01)      5.47e+00 (2.8e-02)      7.02e+00 (9.8e-02)
+explicit, linear                        1.69e-15 (4.3e-17)      1.38e-14 (1.5e-16)      3.44e-13 (3.5e-15)      4.09e-01 (5.6e-03)      2.27e+00 (3.9e-02)
+explicit, LW (limitedLinearV)           1.69e-15 (4.3e-17)      1.38e-14 (1.5e-16)      4.72e-14 (3.7e-16)      3.88e-01 (5.2e-03)      1.20e+00 (2.0e-02)
+explicit, interfaceUpwind               1.69e-15 (4.3e-17)      1.38e-14 (1.5e-16)      2.22e-14 (3.0e-16)      1.85e-02 (2.3e-03)      5.50e-02 (1.6e-02)
+explicit, LW + interfaceUpwind                          --      1.38e-14 (1.5e-16)                      --      1.85e-02 (2.3e-03)      1.07e-01 (1.7e-02)
+implicit, interfaceUpwind               1.43e-16 (3.5e-17)      2.77e-03 (6.8e-04)      2.91e-02 (9.3e-03)      1.84e-02 (2.2e-03)      5.15e-02 (1.5e-02)
+
+-- rotation
+variant                                           rotation         rotationCarried
+implicit, Euler, rho^{n+1}              1.10e-01 (9.2e-03)      1.80e-01 (3.5e-02)
+implicit, Euler, rho^n                  1.09e-01 (9.2e-03)      1.26e-01 (4.4e-02)
+explicit, Euler, rho^{n+1}              2.24e+00 (5.3e-02)      8.89e+00 (2.7e-01)
+explicit, Euler, rho^n                  1.70e+00 (4.0e-02)      1.10e+01 (2.1e-01)
+implicit, backward, rho^{n+1}           2.40e+01 (1.4e-01)      2.61e+01 (2.9e-01)
+explicit, linear                        2.24e+00 (5.3e-02)      3.87e+02 (3.7e-01)
+explicit, LW (limitedLinearV)           1.96e+00 (4.6e-02)      4.92e+00 (1.5e-01)
+explicit, interfaceUpwind               3.55e-01 (1.5e-02)      1.93e-01 (4.9e-02)
+explicit, LW + interfaceUpwind          3.56e-01 (1.5e-02)      1.79e-01 (5.2e-02)
+implicit, interfaceUpwind               3.65e-02 (8.2e-03)      1.13e-01 (3.9e-02)

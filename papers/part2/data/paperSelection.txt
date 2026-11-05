@@ -1,0 +1,23 @@
+Relative cost at max Co 0.1, normalised by interIsoGoam (clock time, steps, clock per step)
+  95 interFoam          clock  1.52 steps  1.52 perStep  1.00
+ 190 interFoam          clock  1.26 steps  1.34 perStep  0.95
+ 380 interFoam          clock  1.40 steps  1.37 perStep  1.02
+ 760 interFoam          clock  1.42 steps  1.38 perStep  1.03
+  95 interIsoFoam       clock  1.35 steps  1.41 perStep  0.96
+ 190 interIsoFoam       clock  1.21 steps  1.28 perStep  0.95
+ 380 interIsoFoam       clock  1.17 steps  1.20 perStep  0.98
+ 760 interIsoFoam       clock  1.11 steps  1.11 perStep  1.00
+  95 interIsoGoam       clock  1.00 steps  1.00 perStep  1.00
+ 190 interIsoGoam       clock  1.00 steps  1.00 perStep  1.00
+ 380 interIsoGoam       clock  1.00 steps  1.00 perStep  1.00
+ 760 interIsoGoam       clock  1.00 steps  1.00 perStep  1.00
+  95 final              clock  0.81 steps  0.82 perStep  0.99
+ 190 final              clock  0.82 steps  0.83 perStep  0.99
+ 380 final              clock  0.79 steps  0.85 perStep  0.93
+ 760 final              clock  0.94 steps  0.87 perStep  1.09
+
+380x80, max Co 0.1: dHfit, dc, Uair median, emax, ulow
+interFoam          dH  +1.87% dc +0.115% Uair 1.705 emax 13.30% ulow -0.0190
+interIsoFoam       dH  -1.78% dc +0.084% Uair 1.447 emax 41.69% ulow -0.0350
+interIsoGoam       dH  -0.80% dc +0.124% Uair 1.222 emax 36.85% ulow -0.0324
+final              dH  +0.82% dc -0.129% Uair 0.966 emax  2.18% ulow +0.0014

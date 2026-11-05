@@ -1,5 +1,0 @@
-Scan nLayersHydrostaticScan
-0000  rotAngle: 0 gravityModel: geometric nLayers: 1 application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
-      first p_rgh residual 6.0554076730108e-15  max|U| t=0.01: 8.8344318e-13  t=0.1: 7.6842964e-10  peak: 1.7814820e-09
-0001  rotAngle: 0 gravityModel: geometric nLayers: 2 application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
-      first p_rgh residual 6.0560963029586e-15  max|U| t=0.01: 8.8344318e-13  t=0.1: 7.6948125e-10  peak: 1.7813828e-09

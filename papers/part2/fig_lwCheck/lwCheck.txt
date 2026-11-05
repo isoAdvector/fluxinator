@@ -1,0 +1,24 @@
+LW check: explicit convection + interfaceUpwind with and without the Lax-Wendroff correction.
+Progressive wave of Part I, 30 s, Courant-limited; metrics as in finalSolver.txt (script finalSolver.py):
+dH wave height error after 15 periods [%], dc mean celerity error [%], Umax median domain max|U|/u_crest,
+Uair median max|U| in air/u_crest, emax crest-column speed error 28-30 s [% of crest-surface speed],
+r0 u/u_exact top water cell, ulow mean current at depth/u_crest, steps time steps.
+Runs: run/progressiveWave/finalSolver_maxCo/<case> (with LW), finalSolverNoLW/<case> (without).
+
+mesh     maxCo convection                 dH     dc   Umax   Uair   emax     r0   ulow  steps
+ 190x40    0.5 LW + interfaceUpwind    +19.8  -0.35   1.28   1.22   16.0   1.08 +0.137   2087
+ 190x40    0.5 interfaceUpwind         +26.3  -0.38   1.30   1.29   25.8   1.04 +0.154   2083
+ 190x40    0.2 LW + interfaceUpwind     +4.1  -0.22   0.99   0.95    5.2   1.04 +0.025   4139
+ 190x40    0.2 interfaceUpwind          +5.8  -0.22   0.99   0.95    5.0   1.03 +0.038   4132
+ 190x40    0.1 LW + interfaceUpwind     -0.5  -0.18   0.99   0.97    1.9   1.01 -0.007   8077
+ 190x40    0.1 interfaceUpwind          +0.1  -0.18   0.98   0.96    1.7   1.01 -0.002   8068
+ 380x80    0.5 LW + interfaceUpwind    +18.9  -0.14   1.11   1.09   18.6   0.98 +0.130   3770
+ 380x80    0.5 interfaceUpwind         +22.0  -0.18   1.16   1.07   34.1   0.93 +0.141   3811
+ 380x80    0.2 LW + interfaceUpwind     +3.3  -0.13   1.00   0.94    3.3   1.02 +0.019   8141
+ 380x80    0.2 interfaceUpwind          +4.0  -0.14   0.98   0.93    5.1   0.99 +0.024   8083
+ 380x80    0.1 LW + interfaceUpwind     +0.8  -0.13   0.99   0.97    2.2   1.01 +0.001  16160
+ 380x80    0.1 interfaceUpwind          +1.1  -0.13   0.99   0.96    1.6   1.00 +0.004  16121
+
+Fixed time step 0.02 s, 190x40 (max Courant number 0.65-0.83): time reached of 10 s
+  LW + interfaceUpwind   last time   5.76 s  stopped (diverged or running)
+  interfaceUpwind        last time   3.48 s  stopped (diverged or running)

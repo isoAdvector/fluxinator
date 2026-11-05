@@ -1,0 +1,8 @@
+scanName                      nLayers_1000steps
+baseCase                      baseCase
+gravityModel                  nLayers                       application           deltaT              endTime             writeInterval
+constant/gravityProperties    constant/gravityProperties    system/controlDict    system/controlDict  system/controlDict  system/controlDict
+geometric                     0                             interIsoGoam          0.01                10                  1000
+geometric                     1                             interIsoGoam          0.01                10                  1000
+geometric                     2                             interIsoGoam          0.01                10                  1000
+constantHeight                1                             interIsoGoam          0.01                10                  1000

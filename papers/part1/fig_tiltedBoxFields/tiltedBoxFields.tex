@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{papersize={12.6cm,10.80cm},total={12.6cm,10.80cm}}
+% Velocity fields in the tilted box (Part I, Figure fig:tiltedBoxFields). The
+% images are written by each case (run/tiltedBox/baseCase/generateFigure.py).
+
+\begin{document}
+\begin{figure}
+    \centering
+\begin{minipage}[c]{0.030\linewidth}
+    \centering
+    \rotatebox[origin=c]{90}{\textbf{T = 0.01s}}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \textbf{interFoam \\ basic} \\
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_1step/0000/0000.png}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \textbf{interIsoFoam \\ basic} \\
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_1step/0001/0001.png}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \textbf{interIsoGoam \\ constantHeight} \\
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_1step/0002/0002.png}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \textbf{interIsoGoam \\ geometric} \\
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_1step/0003/0003.png}
+\end{minipage}
+
+\begin{minipage}[c]{0.030\linewidth}
+    \centering
+    \rotatebox[origin=c]{90}{\textbf{T = 1s}}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_100steps/0000/0000.png}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_100steps/0001/0001.png}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_100steps/0002/0002.png}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_100steps/0003/0003.png}
+\end{minipage}
+
+\begin{minipage}[c]{0.030\linewidth}
+    \centering
+    \rotatebox[origin=c]{90}{\textbf{T = 10s}}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_1000steps/0000/0000.png}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_1000steps/0001/0001.png}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_1000steps/0002/0002.png}
+\end{minipage}%
+\begin{minipage}[c]{0.2400\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{../../../run/tiltedBox/gravityModels_1000steps/0003/0003.png}
+\end{minipage}
+\end{figure}
+\end{document}

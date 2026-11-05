@@ -1,0 +1,17 @@
+#!/bin/bash
+# runCase.sh <case> [conv=<div(rhoPhi,U) scheme, '#' = blank>] [force=old] [PIMPLE.<key>=<value> ...]
+# The body acceleration is set in baseCase/system/fvOptions (density new; force=old: old).
+set +u; source /home/roenby/OpenFOAM/OpenFOAM-v2512/etc/bashrc > /dev/null 2>&1
+out=$1; shift
+BASE=$(readlink -f "$(dirname "$0")/baseCase")
+rm -rf "$out"; mkdir -p "$out"; cp -r $BASE/{0.orig,constant,system,Allrun} "$out"/; cd "$out" || exit 1
+for kv in "$@"; do k=${kv%%=*}; v=${kv#*=}; v=${v//#/ }
+  case $k in
+    conv) foamDictionary -entry 'divSchemes.div(rhoPhi,U)' -set "Gauss $v" system/fvSchemes > /dev/null;;
+    force) [ "$v" = old ] && sed -i 's/eqn += rho\*/eqn += rho.oldTime()*/' system/fvOptions;;
+    PIMPLE.*) foamDictionary -entry "$k" -set "$v" system/fvSolution > /dev/null;;
+  esac
+done
+echo "$out $*" > caseInfo
+./Allrun > log.Allrun 2>&1
+grep -q "^End" log.interIsoGoam || echo "FAILED $out"

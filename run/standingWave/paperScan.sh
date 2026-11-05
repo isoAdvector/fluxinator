@@ -9,16 +9,16 @@
 # every entry is repeated over NOFF interface offsets spanning one coarse cell
 # and the median is reported.
 #
-# Usage:  ./paperScan.sh [outdir]      (default: scan)
+# Usage:  ./paperScan.sh [outdir]      (default: solvers)
 #
 # Writes <outdir>/scan.csv and <outdir>/history_<app>.csv
 set +u
 source ${FOAM_ETC:-/home/roenby/OpenFOAM/OpenFOAM-v2512/etc}/bashrc > /dev/null 2>&1
 HERE=$(cd "${0%/*}" && pwd)
-OUT=${1:-$HERE/scan}
+OUT=${1:-$HERE/solvers}
 NOFF=${NOFF:-12}
 DZ=0.02                      # coarse cell height
-RUN=$HERE/experiments/runCase.sh
+RUN=$HERE/runCase.sh
 
 mkdir -p "$OUT"
 csv=$OUT/scan.csv
@@ -26,8 +26,8 @@ echo "mesh,app,offset,first,peak20" > $csv
 
 for mesh in uniform refined; do
   case $mesh in
-    uniform) export SWBASE=/tmp/swbase_uni ;;
-    refined) export SWBASE=/tmp/swbase ;;
+    uniform) export SWBASE=$HERE/baseUniformMesh ;;
+    refined) export SWBASE=$HERE/baseRefinedMesh ;;
   esac
   for app in interFoam interIsoFoam interIsoGoam; do
     for i in $(seq 0 $((NOFF-1))); do
@@ -43,7 +43,7 @@ for mesh in uniform refined; do
 done
 
 # Time history over two wave periods on the refined mesh, middle offset
-export SWBASE=/tmp/swbase
+export SWBASE=$HERE/baseRefinedMesh
 for app in interFoam interIsoFoam interIsoGoam; do
   d=$OUT/hist_$app
   $RUN "$d" app=$app endTime=2.4 wint=120 nLayers=2 > /dev/null 2>&1

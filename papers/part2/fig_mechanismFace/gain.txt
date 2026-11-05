@@ -1,0 +1,8 @@
+Gain of one explicit convection step in the interface cells of the crest model (crestFaces.py),
+190x40, dt 0.005 s: gain = sum_k |dU_i^{n+1}/dU_k^n| (x component); F_out/m^{n+1} = mass leaving
+the cell in the step over its mass after the step. Cells where the surface falls: x - x_c < 0.
+207 interface cells, max F_out/m^{n+1} 12.5; F_out/m^n max 0.93
+scheme            max gain  max gain (rising surface)  max |gain - (1 + F_out/m^{n+1})|
+interfaceUpwind       1.07       1.01        12.54
+limitedLinearV        8.19       1.76        12.54
+linear               13.54       1.10         0.00

@@ -1,0 +1,55 @@
+#!/bin/bash
+#------------------------------------------------------------------------------
+# Runs the skewed box studies, renders the case images of the paper figure
+# (papers/part1/fig_skewedBox) and writes the study summaries to data/.
+#
+# Requirements: OpenFOAM v2512 environment with interIsoGoam and libgravityModels
+# built (../../Allwmake), cfdTools, pvbatch (ParaView), pdflatex and python3.
+# Environment variables: CFDTOOLS (path to cfdTools/cfdTools), MAXJOBS (number
+# of simultaneous cases, default nproc), PVBATCH (default pvbatch).
+#------------------------------------------------------------------------------
+cd "${0%/*}" || exit 1
+
+cfdTools=${CFDTOOLS:-../../../cfdTools/cfdTools}
+[ -f "$cfdTools" ] || { echo "cfdTools not found at $cfdTools; set CFDTOOLS" >&2; exit 1; }
+[ -n "$WM_PROJECT_DIR" ] || { echo "Source the OpenFOAM environment first" >&2; exit 1; }
+source "$cfdTools"
+maxJobs=${MAXJOBS:-$(nproc)}
+pvbatch=${PVBATCH:-pvbatch}
+
+# Corrected and uncorrected schemes, rows sheared relative to the interface (paper figure)
+parmScanner -file schemes_10steps.csv -exec Allrun -parallel -maxJobs "$maxJobs"
+
+if command -v "$pvbatch" > /dev/null
+then
+    for c in schemes_10steps/[0-9][0-9][0-9][0-9]
+    do
+        ( cd "$c" && "$pvbatch" --force-offscreen-rendering generateFigure.py > log.generateFigure 2>&1 )
+    done
+else
+    echo "pvbatch not found: case images (papers/part1/fig_skewedBox) not generated" >&2
+fi
+
+# Mesh rotated by 90 degrees, non-orthogonal correctors, hydrostatic start
+for scan in schemesRotatedMesh_10steps nonOrthCorrectors_10steps hydrostaticStart_10steps
+do
+    parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
+done
+
+# Numbers behind the paper (tracked in git): one summary per scan
+mkdir -p data
+for scan in schemes_10steps schemesRotatedMesh_10steps nonOrthCorrectors_10steps hydrostaticStart_10steps
+do
+    python3 ../common/summariseScan.py "$scan" > "data/$scan.txt"
+done
+
+# Cells adjacent to faces with non-zero uncorrected and corrected snGrad(rho)
+postProcess -case schemes_10steps/0002 -time 0 -dict "$(pwd)/../common/snGradRhoReach" \
+    > log.snGradRhoReach 2>&1
+grep snGradReach log.snGradRhoReach > data/snGradRhoReach.txt
+
+# Mesh quality
+checkMesh -case schemes_10steps/0002 -time 0 > log.checkMesh 2>&1
+sed -n '/Mesh stats/,/End/p' log.checkMesh > data/checkMesh.txt
+
+#------------------------------------------------------------------------------

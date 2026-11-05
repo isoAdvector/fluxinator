@@ -1,9 +1,0 @@
-scanName                      gravityModelScan
-baseCase                      baseCase
-gravityModel                  application           deltaT              endTime             writeInterval
-constant/gravityProperties    system/controlDict    system/controlDict  system/controlDict  
-basic                         interFoam             0.01                0.01
-basic                         interIsoGoam          0.01                0.01
-constantHeight                interIsoGoam          0.01                0.01
-geometric                     interIsoGoam          0.01                0.01
-gravityRecon                  interIsoGoam          0.01                0.01

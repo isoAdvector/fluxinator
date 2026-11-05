@@ -1,0 +1,28 @@
+scanName                      airDensity_1000steps
+baseCase                      baseCase
+gravityModel                  application           air.rho                        deltaT              endTime             writeInterval
+constant/gravityProperties    system/controlDict    constant/transportProperties   system/controlDict  system/controlDict  system/controlDict
+basic                         interFoam             1e-4                           0.01                10                  1000
+basic                         interFoam             1e-3                           0.01                10                  1000
+basic                         interFoam             1e-2                           0.01                10                  1000
+basic                         interFoam             1e-1                           0.01                10                  1000
+basic                         interFoam             1e0                            0.01                10                  1000
+basic                         interFoam             1e1                            0.01                10                  1000
+basic                         interFoam             1e2                            0.01                10                  1000
+basic                         interFoam             1e3                            0.01                10                  1000
+basic                         interIsoGoam          1e-4                           0.01                10                  1000
+basic                         interIsoGoam          1e-3                           0.01                10                  1000
+basic                         interIsoGoam          1e-2                           0.01                10                  1000
+basic                         interIsoGoam          1e-1                           0.01                10                  1000
+basic                         interIsoGoam          1e0                            0.01                10                  1000
+basic                         interIsoGoam          1e1                            0.01                10                  1000
+basic                         interIsoGoam          1e2                            0.01                10                  1000
+basic                         interIsoGoam          1e3                            0.01                10                  1000
+geometric                     interIsoGoam          1e-4                           0.01                10                  1000
+geometric                     interIsoGoam          1e-3                           0.01                10                  1000
+geometric                     interIsoGoam          1e-2                           0.01                10                  1000
+geometric                     interIsoGoam          1e-1                           0.01                10                  1000
+geometric                     interIsoGoam          1e0                            0.01                10                  1000
+geometric                     interIsoGoam          1e1                            0.01                10                  1000
+geometric                     interIsoGoam          1e2                            0.01                10                  1000
+geometric                     interIsoGoam          1e3                            0.01                10                  1000

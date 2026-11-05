@@ -1,0 +1,94 @@
+Exact wave (streamFunctionWave output, solvers_fixedDt/0036/constant/out)
+  H = 0.125 m, d = 0.4 m, T = 2.0 s, L = 3.7874 m, kd = 0.664, H/d = 0.3125, H/L = 0.0330
+  crest 81.87 mm, trough -43.13 mm, u_crest 0.4445 m/s
+  sampled at the gauge in 0036: crest 81.94 mm, trough -43.03 mm, H 124.976 mm
+
+Average max Courant number at the largest and smallest fixed time step
+  dt0/1: 0.390 ... 0.654
+  dt0/8: 0.033 ... 0.058
+
+Wave height error: local linear trend at the last wave minus height of the last wave
+  fixed dt: median 0.17, max 1.44 percentage points (47 runs)
+  adaptive: median 0.21, max 2.84 percentage points (48 runs)
+
+380x80 mesh, fixed dt: trend and last-wave height error, last crest and trough, phase, Courant number
+  dt = 5 ms interFoam    dHfit -14.7 %  dHend -14.8 %  crest -14.4 %  trough +18.0 %  phase -0.189 s  Co 0.560
+  dt = 5 ms interIsoFoam dHfit -13.5 %  dHend -13.2 %  crest -13.1 %  trough +16.6 %  phase -0.180 s  Co 0.528
+  dt = 5 ms interIsoGoam dHfit +11.1 %  dHend +11.3 %  crest +20.9 %  trough +2.4 %  phase -0.193 s  Co 0.450
+  dt = 1.25 ms interFoam    dHfit +0.4 %  dHend +0.4 %  crest +1.7 %  trough +1.9 %  phase -0.032 s  Co 0.090
+  dt = 1.25 ms interIsoFoam dHfit -6.5 %  dHend -6.4 %  crest -6.8 %  trough +5.6 %  phase -0.014 s  Co 0.090
+  dt = 1.25 ms interIsoGoam dHfit -0.7 %  dHend -0.5 %  crest +0.0 %  trough +1.5 %  phase -0.001 s  Co 0.076
+
+Ratio of the wave height errors of interIsoFoam and interIsoGoam at the smallest dt / maxCo
+  fixed dt: 1.20, 1.39, 2.48, 5.18
+  adaptive: 1.08, 1.47, 3.52, 6.22
+
+Mean celerity error at the smallest dt / maxCo, all solvers and meshes
+  fixed dt: -0.123 ... +0.057 % (max |dc/c| = 0.123 %)
+  adaptive: -0.072 ... +0.073 % (max |dc/c| = 0.073 %)
+Mean celerity error at the largest dt / maxCo, and the spread across solvers
+  fixed dt 95x20: interFoam +0.628, interIsoFoam --, interIsoGoam -0.191  spread --
+  fixed dt 190x40: interFoam +1.233, interIsoFoam +1.114, interIsoGoam +1.239  spread 0.125
+  fixed dt 380x80: interFoam +0.751, interIsoFoam +0.722, interIsoGoam +0.814  spread 0.092
+  fixed dt 760x160: interFoam +0.299, interIsoFoam +0.293, interIsoGoam +0.317  spread 0.024
+  adaptive 95x20: interFoam +0.996, interIsoFoam +1.039, interIsoGoam +0.119  spread 0.920
+  adaptive 190x40: interFoam +1.136, interIsoFoam +0.998, interIsoGoam +1.498  spread 0.500
+  adaptive 380x80: interFoam +0.708, interIsoFoam +0.717, interIsoGoam +1.057  spread 0.349
+  adaptive 760x160: interFoam +0.378, interIsoFoam +0.365, interIsoGoam +0.572  spread 0.207
+Crest arrival-time (phase) error at the smallest dt / maxCo, all solvers and meshes
+  fixed dt: -0.011 ... +0.039 s
+  adaptive: -0.017 ... +0.022 s
+Crest arrival-time (phase) error at the largest dt / maxCo
+  fixed dt 95x20: interFoam -0.196 (Co 0.62), interIsoFoam -- (Co --), interIsoGoam +0.056 (Co 0.39)
+  fixed dt 190x40: interFoam -0.330 (Co 0.65), interIsoFoam -0.286 (Co 0.63), interIsoGoam -0.303 (Co 0.50)
+  fixed dt 380x80: interFoam -0.189 (Co 0.56), interIsoFoam -0.180 (Co 0.53), interIsoGoam -0.193 (Co 0.45)
+  fixed dt 760x160: interFoam -0.080 (Co 0.44), interIsoFoam -0.081 (Co 0.43), interIsoGoam -0.084 (Co 0.39)
+  adaptive 95x20: interFoam -0.293 (Co 0.50), interIsoFoam -0.285 (Co 0.48), interIsoGoam -0.025 (Co 0.49)
+  adaptive 190x40: interFoam -0.305 (Co 0.50), interIsoFoam -0.269 (Co 0.50), interIsoGoam -0.375 (Co 0.50)
+  adaptive 380x80: interFoam -0.181 (Co 0.50), interIsoFoam -0.183 (Co 0.50), interIsoGoam -0.267 (Co 0.50)
+  adaptive 760x160: interFoam -0.102 (Co 0.50), interIsoFoam -0.100 (Co 0.50), interIsoGoam -0.141 (Co 0.50)
+
+Runs whose crests carry more than one peak (mean peaks per crest, see analyseScan.py)
+  fixed dt 0043 interFoam 760x160 level 0.000625: 1.93
+  fixed dt 0046 interFoam 760x160 level 0.0003125: 1.93
+  adaptive 0043 interFoam 760x160 level 0.1: 2.00
+  adaptive 0046 interFoam 760x160 level 0.05: 2.07
+
+Median max|U|/u_crest: runs where interIsoGoam is not the lowest
+  none
+
+max|U|/u_crest over time, 760x160 mesh, dt0/8 (fixed dt)
+  0046: max 3.554, t > 2 s: 1.101 ... 3.554, median 2-7 s 1.157, median 7-30 s 1.936, 10-90 % percentiles t > 10 s 1.60 ... 2.41, final 2.125
+  0047: max 1.288, t > 2 s: 1.097 ... 1.288, median 2-7 s 1.127, median 7-30 s 1.225, 10-90 % percentiles t > 10 s 1.18 ... 1.26, final 1.243
+  0048: max 1.126, t > 2 s: 1.001 ... 1.126, median 2-7 s 1.026, median 7-30 s 1.087, 10-90 % percentiles t > 10 s 1.06 ... 1.12, final 1.121
+
+Diverged runs
+  fixed dt 0001 interIsoFoam 95x20 level 0.02 stopped at t = 4.84 s
+
+Wall time per step [ms], fixed dt, all solvers and time steps
+  95x20: 20.8 ... 30.7
+  190x40: 70.5 ... 86.0
+  380x80: 337.2 ... 387.8
+  760x160: 2140.0 ... 2977.5
+
+Change in the number of time steps of interIsoGoam relative to interFoam / interIsoFoam [%]
+  95x20: maxCo 0.5: -34 / -36, maxCo 0.2: -33 / -36, maxCo 0.1: -37 / -36, maxCo 0.05: -34 / -43
+  190x40: maxCo 0.5: -18 / -10, maxCo 0.2: -21 / -17, maxCo 0.1: -23 / -25, maxCo 0.05: -19 / -26
+  380x80: maxCo 0.5: -13 / -9, maxCo 0.2: -15 / -12, maxCo 0.1: -16 / -14, maxCo 0.05: -14 / -16
+  760x160: maxCo 0.5: -10 / -8, maxCo 0.2: -11 / -7, maxCo 0.1: -29 / -9, maxCo 0.05: -37 / -8
+  interFoam relative to interIsoFoam, 760x160, maxCo 0.1 and 0.05: +28, +47
+
+Runs with |dH| <= 2 % and shape error <= 1 %
+  fixed dt interFoam: 5 runs: 190x40 level 0.00125 (Co 0.04), 380x80 level 0.00125 (Co 0.09), 380x80 level 0.000625 (Co 0.04), 760x160 level 0.00125 (Co 0.19), 760x160 level 0.000625 (Co 0.11)
+  fixed dt interIsoFoam: 1 runs: 760x160 level 0.0003125 (Co 0.04)
+  fixed dt interIsoGoam: 5 runs: 380x80 level 0.00125 (Co 0.08), 380x80 level 0.000625 (Co 0.04), 760x160 level 0.00125 (Co 0.17), 760x160 level 0.000625 (Co 0.08), 760x160 level 0.0003125 (Co 0.04)
+  adaptive interFoam: 4 runs: 190x40 level 0.05 (Co 0.05), 380x80 level 0.1 (Co 0.10), 380x80 level 0.05 (Co 0.05), 760x160 level 0.2 (Co 0.20)
+  adaptive interIsoFoam: 1 runs: 760x160 level 0.05 (Co 0.05)
+  adaptive interIsoGoam: 5 runs: 380x80 level 0.1 (Co 0.10), 380x80 level 0.05 (Co 0.05), 760x160 level 0.2 (Co 0.20), 760x160 level 0.1 (Co 0.10), 760x160 level 0.05 (Co 0.05)
+
+Adaptive runs against the fixed-dt trend interpolated to their mean time step
+  39 of 48 runs comparable, median difference 0.31 percentage points, 35 within 2 points
+  exception: interFoam 95x20 maxCo 0.5: -55.0 % against -46.0 %
+  exception: interIsoGoam 95x20 maxCo 0.2: -13.3 % against -16.5 %
+  exception: interFoam 190x40 maxCo 0.5: -27.1 % against -29.1 %
+  exception: interIsoGoam 190x40 maxCo 0.5: +8.1 % against +3.0 %

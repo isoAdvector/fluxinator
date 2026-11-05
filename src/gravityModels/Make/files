@@ -1,0 +1,8 @@
+gravityModel/gravityModel.C
+gravityModel/gravityModelNew.C
+basic/basicGravityModel.C
+geometric/geometricGravityModel.C
+include/markInterfaceRegion/markInterfaceRegion.C
+constantHeight/constantHeightGravityModel.C
+
+LIB = $(FOAM_USER_LIBBIN)/libgravityModels

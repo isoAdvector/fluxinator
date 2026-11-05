@@ -1,5 +1,0 @@
-runs/IU/m3_dt0.005 108 40 0.005 40 app=interIsoGoamExt ddt=Euler PIMPLE.ddtCorr=no PIMPLE.explicitConvection=yes libs=interfaceSchemes conv=interfaceUpwind#alpha.water#1e-6#limitedLinearV#1
-runs/IU/m3_dt0.01 108 40 0.01 40 app=interIsoGoamExt ddt=Euler PIMPLE.ddtCorr=no PIMPLE.explicitConvection=yes libs=interfaceSchemes conv=interfaceUpwind#alpha.water#1e-6#limitedLinearV#1
-runs/IU/m2_dt0.01 54 20 0.01 40 app=interIsoGoamExt ddt=Euler PIMPLE.ddtCorr=no PIMPLE.explicitConvection=yes libs=interfaceSchemes conv=interfaceUpwind#alpha.water#1e-6#limitedLinearV#1
-runs/IU/m2_dt0.02 54 20 0.02 40 app=interIsoGoamExt ddt=Euler PIMPLE.ddtCorr=no PIMPLE.explicitConvection=yes libs=interfaceSchemes conv=interfaceUpwind#alpha.water#1e-6#limitedLinearV#1
-runs/IU/m1_dt0.02 27 10 0.02 40 app=interIsoGoamExt ddt=Euler PIMPLE.ddtCorr=no PIMPLE.explicitConvection=yes libs=interfaceSchemes conv=interfaceUpwind#alpha.water#1e-6#limitedLinearV#1

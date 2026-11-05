@@ -1,12 +1,13 @@
 #!/bin/bash
 #------------------------------------------------------------------------------
 # Runs the untilted refined box: every configuration of makeCases.sh at 17 still
-# water levels over one coarse cell (340 cases of 10 time steps), and writes the
-# paper data and figures.
+# water levels over one coarse cell (340 cases of 10 time steps), writes the
+# summaries to data/ and renders the case images of papers/part1/fig_refinedBox.
+# The paper figures and tables are made in papers/part1/{fig,tab}_* (make.py).
 #
 # Requirements: OpenFOAM v2512 environment with interIsoGoam, libgravityModels and
 # setHydrostaticPressure built (../../Allwmake), pvbatch (ParaView) on PATH or in
-# PVBATCH, python3 with numpy and matplotlib, pdflatex. MAXJOBS (default nproc).
+# PVBATCH, python3 with numpy. MAXJOBS (default nproc).
 #------------------------------------------------------------------------------
 cd "${0%/*}" || exit 1
 [ -n "$WM_PROJECT_DIR" ] || { echo "Source the OpenFOAM environment first" >&2; exit 1; }
@@ -16,32 +17,28 @@ maxJobs=${MAXJOBS:-$(nproc)}
 xargs -P "$maxJobs" -L 1 ./runCase.sh < cases.txt 2>&1 | grep -v Aborted
 
 # Numbers behind the paper (tracked in git)
-mkdir -p paperData
-python3 summarise.py > paperData/levelScan.txt
-python3 table.py > paperData/table.txt
+mkdir -p data
+python3 summarise.py > data/waterLevel_10steps.txt
 
 # Cells adjacent to faces with non-zero uncorrected and corrected snGrad(rho), z_w = 0.49
-postProcess -case scan/g1_zero_z0.4900 -time 0 -dict "$(pwd)/../snGradRhoReach" \
+postProcess -case waterLevel_10steps/g1_zero_z0.4900 -time 0 -dict "$(pwd)/../common/snGradRhoReach" \
     > log.snGradRhoReach 2>&1
-grep snGradReach log.snGradRhoReach > paperData/snGradRhoReach.txt
+grep snGradReach log.snGradRhoReach > data/snGradRhoReach.txt
 
 # Location of the maximum velocity (cell centres needed)
-postProcess -case scan/g1_zero_z0.4900 -func writeCellCentres -time 0 > log.writeCellCentres 2>&1
-python3 maxUCell.py > paperData/maxUCell.txt
+postProcess -case waterLevel_10steps/g1_zero_z0.4900 -func writeCellCentres -time 0 > log.writeCellCentres 2>&1
+python3 maxUCell.py > data/maxUCell.txt
 
 # Mesh quality
-checkMesh -case scan/g1_zero_z0.4900 -time 0 > log.checkMesh 2>&1
-sed -n '/Mesh stats/,/End/p' log.checkMesh > paperData/checkMesh.txt
+checkMesh -case waterLevel_10steps/g1_zero_z0.4900 -time 0 > log.checkMesh 2>&1
+sed -n '/Mesh stats/,/End/p' log.checkMesh > data/checkMesh.txt
 
-# Figures: first-step velocity against the water level, reach, velocity fields
-python3 plotLevelScan.py
+# Case images for papers/part1/fig_refinedBox
 pvbatch=${PVBATCH:-pvbatch}
-"$pvbatch" --force-offscreen-rendering renderSnGradReach.py > log.renderSnGradReach 2>&1
 for c in iIF_hyd cH_hyd g1_hyd g2_hyd
 do
-    ( cd "scan/${c}_z0.4900" && "$pvbatch" --force-offscreen-rendering generateFigure.py \
+    ( cd "waterLevel_10steps/${c}_z0.4900" && "$pvbatch" --force-offscreen-rendering generateFigure.py \
         > log.generateFigure 2>&1 )
 done
-pdflatex -interaction=nonstopmode figure_refinedBox.tex > log.figure_refinedBox 2>&1
 
 #------------------------------------------------------------------------------

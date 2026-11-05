@@ -1,0 +1,32 @@
+Progressive wave, 8-10 s. dH [%]; r0 = u/u_exact in the top full water cell under the crest and
+emax [% of exact crest-surface speed], both against the exact input wave; surface current
+[m/s]; celerity error against the input wave [%]; execution time [s] (serial).
+Sources: run/progressiveWave/convection/<case>
+
+-- 190x40, dt 0.005 s
+variant                            case                                 dH    r0   emax  current  celer.    time
+implicit                           implicit_190x40_dt0.005            -0.9  1.31   30.1   +0.075   +0.07     152
+Crank-Nicolson                     crankNicolson_190x40_dt0.005       +0.0  1.16   15.5   +0.038   -0.06     154
+explicit                           explicit_190x40_dt0.005            +4.2  1.01    3.5   -0.011   -0.11     151
+explicit + LW                      explicitLW_190x40_dt0.005          +3.1  1.02    2.3   -0.006   -0.13     162
+explicit + interfaceUpwind         explicitIU_190x40_dt0.005          +0.3  0.99    1.7   +0.000   -0.21     158
+explicit + LW + interfaceUpwind    explicitLWIU_190x40_dt0.005        +0.1  1.00    1.5   +0.002   -0.22     152
+
+-- 190x40, dt 0.01 s
+variant                            case                                 dH    r0   emax  current  celer.    time
+implicit                           implicit_190x40_dt0.01             +1.5  1.57   56.1   +0.136   +0.24      75
+Crank-Nicolson                     crankNicolson_190x40_dt0.01        +4.5  1.30   29.5   +0.066   -0.23      81
+explicit                           explicit_190x40_dt0.01            +10.8  0.97    9.9   -0.037   -0.13      81
+explicit + LW                      explicitLW_190x40_dt0.01          +10.0  1.00    6.4   -0.024   -0.19      86
+explicit + interfaceUpwind         explicitIU_190x40_dt0.01           +3.2  0.98    2.2   -0.008   -0.29      80
+explicit + LW + interfaceUpwind    explicitLWIU_190x40_dt0.01         +2.7  0.99    1.8   -0.003   -0.29      80
+
+-- 380x80, dt 0.0025 s
+variant                            case                                 dH    r0   emax  current  celer.    time
+implicit                           implicit_380x80_dt0.0025           -0.2  1.26   25.3   +0.072   +0.02    1417
+Crank-Nicolson                     crankNicolson_380x80_dt0.0025      +0.3  1.13   13.2   +0.037   -0.05    1429
+explicit                           explicit_380x80_dt0.0025           +2.5  0.98    2.7   -0.013   -0.08    1449
+explicit + LW                      explicitLW_380x80_dt0.0025         +1.8  1.00    1.5   -0.007   -0.10    1524
+explicit + interfaceUpwind         explicitIU_380x80_dt0.0025         +0.5  0.99    1.1   -0.001   -0.15    1417
+explicit + LW + interfaceUpwind    explicitLWIU_380x80_dt0.0025       +0.4  1.00    1.4   +0.001   -0.15    1485
+

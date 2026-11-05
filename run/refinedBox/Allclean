@@ -1,5 +1,5 @@
 #!/bin/sh
 # Removes generated files; the scan cases only with -scans
 cd "${0%/*}" || exit 1
-rm -f log.* cases.txt figure_refinedBox.aux figure_refinedBox.log
-[ "$1" = "-scans" ] && rm -rf scan
+rm -f log.* cases.txt
+[ "$1" = "-scans" ] && rm -rf waterLevel_10steps

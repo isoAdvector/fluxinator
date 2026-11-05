@@ -1,0 +1,12 @@
+scanName                  nLayers_maxCo
+baseCase                  baseCase
+application               nx                      nz                      maxCo                   nLayers                     numberOfSubdomains         method
+system/controlDict.run    system/blockMeshDict    system/blockMeshDict    system/controlDict.run  constant/gravityProperties  system/decomposeParDict    system/decomposeParDict
+interIsoGoam              760                     160                     0.05                    1                           4                          scotch
+interIsoGoam              760                     160                     0.05                    2                           4                          scotch
+interIsoGoam              760                     160                     0.1                     1                           4                          scotch
+interIsoGoam              760                     160                     0.1                     2                           4                          scotch
+interIsoGoam              760                     160                     0.2                     1                           4                          scotch
+interIsoGoam              760                     160                     0.2                     2                           4                          scotch
+interIsoGoam              760                     160                     0.5                     1                           4                          scotch
+interIsoGoam              760                     160                     0.5                     2                           4                          scotch

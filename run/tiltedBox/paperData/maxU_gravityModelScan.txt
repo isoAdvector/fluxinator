@@ -1,7 +1,0 @@
-max|U| [m/s] in gravityModelScan_1000deltaT
-case  gravityModel    application       t=0.01      t=0.1        t=1       t=10       peak
-0000  basic           interFoam      3.297e-01  7.716e-01  1.201e+00  1.644e+00  1.644e+00
-0001  basic           interIsoGoam   3.297e-01  1.448e+00  2.078e+00  4.437e+00  4.611e+00
-0002  constantHeight  interIsoGoam   1.820e-10  1.368e-10  6.364e-10  6.757e-10  1.397e-09
-0003  geometric       interIsoGoam   4.022e-10  2.790e-10  1.786e-09  7.211e-10  2.475e-09
-0004  gravityRecon    interIsoGoam   3.489e-06  3.510e-07  4.911e-07  1.241e-07  3.489e-06

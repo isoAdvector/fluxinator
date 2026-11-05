@@ -1,7 +1,9 @@
 #!/bin/sh
 cd ${0%/*} || exit 1
 
-wclean newGeometricVoF
-wclean gravityModels
-wclean applications/interIsoGoam
+wclean libso src/geometricVoF
+wclean libso src/gravityModels
+wclean libso src/interfaceSchemes
+wclean applications/solvers/interIsoGoam
+wclean applications/test/convectionTest
 wclean applications/utilities/setHydrostaticPressure

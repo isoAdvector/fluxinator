@@ -1,0 +1,68 @@
+Progressive wave in a periodic domain of one wavelength
+=======================================================
+
+A stream function wave (H = 0.125 m, T = 2 s, depth 0.4 m, wavelength 3.787 m),
+the initial condition of every run, propagated for 15 periods (30 s) in a periodic
+domain of one wavelength on four meshes (nx x nz = 95x20, 190x40, 380x80,
+760x160). Case 0036 of each Part I study runs streamFunFoam, which evaluates the
+exact solution, as the reference. Part I Section 6 and Appendix A; Part II
+Sections 1, 3, 6 and 7.
+
+Studies
+-------
+
+Part I (parmScanner, parameter file <study>.csv):
+  solvers_maxCo             interFoam, interIsoFoam, interIsoGoam (geometric) under a
+                            Courant limit, maxCo 0.5, 0.2, 0.1, 0.05 on each mesh
+  solvers_fixedDt           the same with fixed time steps dt0, dt0/2, dt0/4, dt0/8,
+                            dt0 = 0.02 s on 95x20, halved with each mesh refinement
+  nLayers_maxCo             interIsoGoam with nLayers 1 and 2
+  solvers_*_ddtCorrOff      the solver studies with PIMPLE ddtCorr no (Appendix A;
+                            stock solvers as interFoamDdtCorr, interIsoFoamDdtCorr;
+                            run/common/runStoredDdtCorrOff.sh)
+Part II:
+  finalSolver_maxCo,        the final solver of Part II (interIsoGoam, explicit
+  finalSolver_fixedDt       convection, laxWendroff + interfaceUpwind, ddtCorr no) on
+                            the interIsoGoam cases of solvers_* (same case numbers;
+                            finalSolver_buildMatrix.sh, finalSolver_runMatrix.py,
+                            finalSolver_checkMatrix.py)
+  finalSolverNoLW           the same without the Lax-Wendroff correction, cases 0014,
+                            0017, 0020, 0026, 0029, 0032 and a fixed dt 0.02 s run
+                            (runAll.sh)
+  convection/<variant>_<mesh>_dt<dt>
+                            the convection variants of Part II Section 6 at fixed dt,
+                            from the Part I interIsoGoam case: implicit, crankNicolson,
+                            explicit, explicitLW, explicitIU, explicitLWIU (the final
+                            solver); the implicit 190x40 runs at dt 0.005 and 0.0025
+                            write the momentum budget (PIMPLE momentumBudget)
+
+Scripts
+-------
+
+analyseScan.py            accuracy and efficiency metrics per run (CSV in data/): wave
+                          height error from a quadratic trend through all waves,
+                          wave-to-wave scatter, shape and phase errors, spurious
+                          velocities, cost
+writeData.py              data/statistics.txt: derived numbers quoted in Part I
+plotCrestHeight.py        crest, trough and wave height against time; shared functions
+
+The paper figures and tables are made in papers/part1 and papers/part2 (one directory
+per figure or table, named after its LaTeX label).
+
+Requirements
+------------
+
+Stream function wave solution (streamFunFoam):
+https://github.com/InterFlowers/streamFunctionWave
+
+Running studies with parmScanner:
+https://github.com/isoAdvector/cfdTools
+
+Post-processing: python3 with numpy, scipy and matplotlib.
+
+Old names (runs made before 2026-11-04): solvers_maxCo = gravityModelScan,
+solvers_fixedDt = gravityModelScan_fixedDt, nLayers_maxCo = nLayersScan,
+finalSolver_* = finalSolver/scan_*, finalSolverNoLW = finalSolver/IUonly; the
+convection variants were interfaceRelativePressure/run/waveLab/w*/... (map in
+../../../geometricGravity_archive/reorg_20261104/waveLab_map.tsv).
+Logs of the Part II runs name the solver interIsoGoamExt (now interIsoGoam).

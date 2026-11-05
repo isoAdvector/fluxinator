@@ -1,7 +1,11 @@
 #!/bin/sh
 cd ${0%/*} || exit 1
 
-wmake "$@" newGeometricVoF
-wmake "$@" gravityModels
-wmake "$@" applications/interIsoGoam
+wmake "$@" libso src/geometricVoF
+wmake "$@" libso src/gravityModels
+wmake "$@" libso src/interfaceSchemes
+wmake "$@" applications/solvers/interIsoGoam
+wmake "$@" applications/test/convectionTest
 wmake "$@" applications/utilities/setHydrostaticPressure
+# applications/test/ddtCorrSwitch (Part I, Appendix A) is built separately:
+# wmake in each of its solver directories.

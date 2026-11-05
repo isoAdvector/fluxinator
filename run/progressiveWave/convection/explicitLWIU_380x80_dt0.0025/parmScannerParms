@@ -1,0 +1,1 @@
+w14/LWIU_380x80_dt0.0025:     application: interIsoGoamExt nx: 380 nz: 80 maxCo: 0.2 endTime: 10 dt=0.0025 app=interIsoGoamExt PIMPLE.ddtCorr=no PIMPLE.explicitConvection=yes libs=interfaceSchemes conv=laxWendroff#U#phi#interfaceUpwind#alpha.water#1e-6#limitedLinearV#1

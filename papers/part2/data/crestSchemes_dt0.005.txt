@@ -1,0 +1,11 @@
+dt 0.005: 207 interface cells (202 water-dominated by mass), water crest speed 0.362 m/s
+one-step error     max wdom   max adom   max pure  rms iface   max gain
+upwind               0.2432     0.0532     0.0544     0.0210       1.00
+linear               0.1486     0.1854     0.0161     0.0239      13.54
+limitedLinearV       0.1317     0.0488     0.0513     0.0121       8.19
+interfaceUpwind      0.2432     0.0532     0.0543     0.0210       1.07
+phaseUpwind          0.0147     0.0435     0.0011     0.0038       1.17
+upwindFIFO           0.2432     0.0532     0.0544     0.0210       1.00
+phaseUpwindFIFO      0.0147     0.0080     0.0011     0.0020       1.17
+phaseUpwindFIFOlim     0.0144     0.0080     0.0011     0.0020      11.54
+ideal                0.0000     0.0000     0.0000     0.0000       1.00

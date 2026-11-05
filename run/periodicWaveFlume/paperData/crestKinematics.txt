@@ -1,9 +1,0 @@
-Crest kinematics, 380x80 mesh, max Co 0.2 (gravityModelScan 0027-0029)
-dH: wave height change [%]; r0: u/u_exact in the top full water cell under the crest;
-emax: max ||U|-|U_exact|| in the crest column [% of exact crest-surface speed];
-exact = the input stream function wave. Script: crestKinematics.py
-
-solver            8-10 s: dH   r0    emax    18-20 s: dH   r0    emax    28-30 s: dH   r0    emax
-interFoam             -1.4  1.17   34.1 %         -2.5  1.33   49.6 %         -3.8  1.44   61.4 %
-interIsoFoam          -3.7  1.23   40.0 %         -7.3  1.42   57.9 %        -11.1  1.55   53.0 %
-interIsoGoam          +0.5  1.28   28.1 %         +1.4  1.47   46.1 %         +2.0  1.60   60.4 %

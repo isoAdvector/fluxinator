@@ -1,7 +1,0 @@
-Cells more than 0.06 m above z = 0.5 m count as air region.
-solver        t [s]  band  nAir   wet  mean alpha  max alpha  rho_air   ratio reduction %
-initial           0    27
-interFoam         1    46   275    48   3.748e-06  5.478e-04   1.0037   996.3        0.37
-interIsoFoam      1    28   275     0   0.000e+00  0.000e+00   1.0000  1000.0        0.00
-interFoam        10    67   275   273   2.195e-05  1.041e-03   1.0219   978.5        2.15
-interIsoFoam     10    30   275     0   0.000e+00  0.000e+00   1.0000  1000.0        0.00

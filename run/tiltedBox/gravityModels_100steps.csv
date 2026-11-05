@@ -1,0 +1,8 @@
+scanName                      gravityModels_100steps
+baseCase                      baseCase
+gravityModel                  application           deltaT              endTime             writeInterval
+constant/gravityProperties    system/controlDict    system/controlDict  system/controlDict  system/controlDict
+basic                         interFoam             0.01                1                   100
+basic                         interIsoGoam          0.01                1                   100
+constantHeight                interIsoGoam          0.01                1                   100
+geometric                     interIsoGoam          0.01                1                   100

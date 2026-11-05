@@ -1,11 +1,12 @@
 #!/bin/bash
 #------------------------------------------------------------------------------
-# Runs the tilted box scans and generates the paper figures.
+# Runs the tilted box studies and writes their summaries to data/.
+# The paper figures and tables are made in papers/part1/{fig,tab}_* (make.py).
 #
 # Requirements: OpenFOAM v2512 environment with interIsoGoam and libgravityModels
 # built (../../Allwmake), cfdTools, pvpython (ParaView) on PATH for the per-case
-# velocity images (baseCase/Allrun calls it), pdflatex, and python3 with numpy
-# and matplotlib. Environment variables: CFDTOOLS (path to cfdTools/cfdTools),
+# velocity images (baseCase/Allrun calls it), and python3 with numpy.
+# Environment variables: CFDTOOLS (path to cfdTools/cfdTools),
 # MAXJOBS (number of simultaneous cases, default nproc).
 #------------------------------------------------------------------------------
 cd "${0%/*}" || exit 1
@@ -17,37 +18,17 @@ command -v pvpython > /dev/null || echo "Warning: pvpython not found; case image
 source "$cfdTools"
 maxJobs=${MAXJOBS:-$(nproc)}
 
-for scan in \
-    gravityModelScan_1deltaT \
-    gravityModelScan_100deltaT \
-    gravityModelScan_1000deltaT \
-    meshDeltaTScan \
-    airDensityScan_1000deltaT \
-    nLayersScan \
-    tiltScan_1deltaT \
-    waterLevelScan_1deltaT
+for study in \
+    gravityModels_1step \
+    gravityModels_100steps \
+    gravityModels_1000steps \
+    meshTimeStep_1step \
+    airDensity_1000steps \
+    nLayers_1000steps
 do
-    parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
+    parmScanner -file "$study.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
 done
 
-# Numbers behind the paper (tracked in git): scan summaries, max|U| table,
-# first step against dt, interface band and numerical vapour
-python3 paperData.py > log.paperData 2>&1
-
-# Velocity fields after 1, 100 and 1000 time steps (gravityRecon column omitted)
-pdflatex -interaction=nonstopmode figure_paper.tex > log.figure_paper 2>&1
-
-# Maximum velocity against time, against the time step (first step) and against air density
-python3 plotMaxU.py > log.plotMaxU 2>&1
-python3 plotFirstStepMaxU.py > log.plotFirstStepMaxU 2>&1
-python3 plotMaxUvsRhoAir.py > log.plotMaxUvsRhoAir 2>&1
-
-# Which cells the standard gravity term hits: closed-form theory against the
-# tilt scan (vertexOffsetTheory.py holds the theory, plotVertexOffset.py the figure)
-python3 plotOffsetGeometry.py > log.plotOffsetGeometry 2>&1
-python3 plotVertexOffset.py > log.plotVertexOffset 2>&1
-
-echo "Figures: figure_paper.pdf, maxU_tiltedBox.pdf, firstStepMaxU_tiltedBox.pdf, maxUvsRhoAir_tiltedBox.pdf, offsetGeometry_tiltedBox.pdf, vertexOffset_tiltedBox.pdf"
-echo "Data: paperData/"
+python3 writeData.py > log.writeData 2>&1
 
 #------------------------------------------------------------------------------

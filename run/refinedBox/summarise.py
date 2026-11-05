@@ -1,5 +1,5 @@
 """max|U| after the first and the tenth step, and the first p_rgh residual, per
-configuration (rows) and water level z_w (columns), for scan/<cfg>_z<zw>
+configuration (rows) and water level z_w (columns), for waterLevel_10steps/<cfg>_z<zw>
 (configurations: makeCases.sh). Usage: python3 summarise.py"""
 import glob, os, re, sys
 H = os.path.dirname(os.path.abspath(__file__))
@@ -13,8 +13,8 @@ def read(c):
     L = open(f'{c}/log.{app}').read() if os.path.exists(f'{c}/log.{app}') else ''
     m = re.search(r'Solving for p_rgh, Initial residual = ([^,]+)', L)
     return [float(r[2]) for r in rows], (float(m.group(1)) if m else float('nan'))
-Z = sorted({re.search(r'_z([0-9.]+)$', d).group(1) for d in glob.glob(f'{H}/scan/*_z*')})
-data = {(c, z): read(f'{H}/scan/{c}_z{z}') for c in CFG for z in Z}
+Z = sorted({re.search(r'_z([0-9.]+)$', d).group(1) for d in glob.glob(f'{H}/waterLevel_10steps/*_z*')})
+data = {(c, z): read(f'{H}/waterLevel_10steps/{c}_z{z}') for c in CFG for z in Z}
 for title, k in (('max|U| after step 1 [m/s]', 0), ('max|U| after step 10 [m/s]', -1)):
     print(f'\n{title}\n{"z_w":9s}' + ''.join(f'{z[1:]:>8s}' for z in Z))
     for c in CFG:

@@ -1,0 +1,4 @@
+interfaceUpwindSchemes.C
+laxWendroffSchemes.C
+
+LIB = $(FOAM_USER_LIBBIN)/libinterfaceSchemes

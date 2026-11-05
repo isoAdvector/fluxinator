@@ -1,0 +1,11 @@
+"""Part I, Figure fig:crests: crest heights (crests_nz160), from ../waveFigures.py.
+Output: crests.pdf. Usage: python3 make.py"""
+import os
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, ".."))
+import waveFigures  # noqa: E402
+
+waveFigures.OUT = HERE
+waveFigures.fig_crests()

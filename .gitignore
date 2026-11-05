@@ -91,8 +91,18 @@ __pycache__/
 # Build logs
 log.wmake
 
-# Part II (convection) work in progress; to move to its own repository
-# interfaceConvection, which will use this repository as a dependency
-/interfaceRelativePressure/
-/run/periodicWaveFlume/finalSolver/
-/run/periodicWaveFlume/ddtCorrStudy/
+# Run results inside the case directories (case set-ups and scripts are tracked):
+# time and case-number directories, logs, post-processing, meshes. Studies made by
+# parmScanner or a script are ignored as a whole in the case's own .gitignore.
+run/**/[0-9]/
+run/**/[0-9]*[0-9]/
+run/**/processor*/
+run/**/postProcessing/
+run/**/dynamicCode/
+run/**/constant/polyMesh/
+run/**/log.*
+run/**/*.foam
+
+# Logs of the figure and table scripts
+papers/**/log.*
+papers/**/*.aux

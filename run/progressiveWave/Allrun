@@ -1,0 +1,46 @@
+#!/bin/bash
+#------------------------------------------------------------------------------
+# Runs the Part I studies of the progressive wave (stream function wave in a
+# periodic domain of one wavelength) and writes their metrics and summaries to
+# data/. The paper figures and tables are made in papers/part{1,2}/{fig,tab}_*.
+#
+# Usage:
+#   ./Allrun                    # run (or complete) the studies, then post-process
+#   ./Allrun -postProcessOnly   # only post-process existing studies
+#
+# Studies run here: solvers_maxCo, solvers_fixedDt (Part I, Section 6) and
+# nLayers_maxCo. The other studies have their own scripts (README).
+#
+# Requirements: OpenFOAM v2512 environment with interIsoGoam and libgravityModels
+# built (../../Allwmake), streamFunFoam (see README), cfdTools, python3 with
+# numpy, scipy and matplotlib. Environment variables: CFDTOOLS (path to
+# cfdTools/cfdTools), MAXJOBS (number of simultaneous cases, default nproc).
+#
+# Note: the full studies take several days; parmScanner skips cases that have
+# already been run, so an interrupted study can be completed by rerunning.
+#------------------------------------------------------------------------------
+cd "${0%/*}" || exit 1
+
+maxJobs=${MAXJOBS:-$(nproc)}
+
+if [ "$1" != "-postProcessOnly" ]
+then
+    cfdTools=${CFDTOOLS:-../../../cfdTools/cfdTools}
+    [ -f "$cfdTools" ] || { echo "cfdTools not found at $cfdTools; set CFDTOOLS" >&2; exit 1; }
+    [ -n "$WM_PROJECT_DIR" ] || { echo "Source the OpenFOAM environment first" >&2; exit 1; }
+    source "$cfdTools"
+
+    for study in solvers_maxCo solvers_fixedDt nLayers_maxCo
+    do
+        parmScanner -file "$study.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
+    done
+fi
+
+# Accuracy and efficiency metrics per run, and the derived numbers quoted in Part I
+for study in solvers_maxCo solvers_fixedDt nLayers_maxCo
+do
+    python3 analyseScan.py --scanDir "$study" --csv "data/$study.csv" > "log.analyseScan_$study" 2>&1
+done
+python3 writeData.py > log.writeData 2>&1
+
+#------------------------------------------------------------------------------

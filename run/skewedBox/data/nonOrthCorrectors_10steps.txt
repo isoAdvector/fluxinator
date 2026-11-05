@@ -1,0 +1,23 @@
+Scan nonOrthCorrectors_10steps
+0000  rotAngle: 0 gravityModel: geometric application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+      first p_rgh residual 1  max|U| t=0.01: 4.2607505e-02  t=0.1: 3.4938833e-02  peak: 4.2607505e-02
+0001  rotAngle: 0 gravityModel: geometric application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 1
+      first p_rgh residual 1  max|U| t=0.01: 1.2150119e-05  t=0.1: 1.1972559e-05  peak: 1.2150119e-05
+0002  rotAngle: 0 gravityModel: geometric application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 2
+      first p_rgh residual 1  max|U| t=0.01: 2.1490930e-08  t=0.1: 1.9817331e-08  peak: 2.1490930e-08
+0003  rotAngle: 0 gravityModel: geometric application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 5
+      first p_rgh residual 1  max|U| t=0.01: 1.6085791e-08  t=0.1: 1.4485702e-08  peak: 1.6085791e-08
+0004  rotAngle: 0 gravityModel: geometric application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 10
+      first p_rgh residual 1  max|U| t=0.01: 1.6085101e-08  t=0.1: 1.4485888e-08  peak: 1.6085101e-08
+0005  rotAngle: 0 gravityModel: basic application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+      first p_rgh residual 1  max|U| t=0.01: 2.0288238e+00  t=0.1: 7.8116719e+00  peak: 7.8116719e+00
+0006  rotAngle: 0 gravityModel: basic application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 5
+      first p_rgh residual 1  max|U| t=0.01: 1.9862592e+00  t=0.1: 7.8223985e+00  peak: 7.8223985e+00
+0007  rotAngle: 0 gravityModel: constantHeight application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+      first p_rgh residual 1  max|U| t=0.01: 4.2607505e-02  t=0.1: 3.5540127e-02  peak: 4.2607505e-02
+0008  rotAngle: 0 gravityModel: constantHeight application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 2
+      first p_rgh residual 1  max|U| t=0.01: 2.1490099e-08  t=0.1: 2.0957400e-08  peak: 2.1490099e-08
+0009  rotAngle: 0 gravityModel: basic application: interFoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 2
+      first p_rgh residual 1  max|U| t=0.01: 1.9862592e+00  t=0.1: 5.6578834e+00  peak: 5.6578834e+00
+0010  rotAngle: 0 gravityModel: basic application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 2
+      first p_rgh residual 1  max|U| t=0.01: 1.9862592e+00  t=0.1: 7.8223753e+00  peak: 7.8223753e+00

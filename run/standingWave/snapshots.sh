@@ -8,22 +8,21 @@
 # exactly on T/2 and T, with T = 2*pi/omega = 1.181816 s from the linear
 # dispersion relation for k = pi, d = 0.5 m.
 #
-# Needs the prepared refined base case of experiments/README.md ($SWBASE,
-# default /tmp/swbase).
+# Uses the prepared refined base case baseRefinedMesh (mesh built; $SWBASE overrides).
 #
 # Usage:  ./snapshots.sh [outdir]      (default: snapshots)
 set +u
 source ${FOAM_ETC:-/home/roenby/OpenFOAM/OpenFOAM-v2512/etc}/bashrc > /dev/null 2>&1
 HERE=$(cd "${0%/*}" && pwd)
 OUT=${1:-$HERE/snapshots}
-export SWBASE=${SWBASE:-/tmp/swbase}
+export SWBASE=${SWBASE:-$HERE/baseRefinedMesh}
 
 T=1.181816
 DT=$(python3 -c "print($T/118)")
 
 mkdir -p "$OUT"
 for app in interFoam interIsoFoam interIsoGoam; do
-  $HERE/experiments/runCase.sh "$OUT/$app" app=$app nLayers=2 \
+  $HERE/runCase.sh "$OUT/$app" app=$app nLayers=2 \
       dt=$DT endTime=$T wint=59 > /dev/null 2>&1
   echo "$app: $(ls -d $OUT/$app/[0-9]* | xargs -n1 basename | tr '\n' ' ')"
 done

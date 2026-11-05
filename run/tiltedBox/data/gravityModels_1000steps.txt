@@ -1,0 +1,9 @@
+Scan gravityModels_1000steps
+0000  gravityModel: basic application: interFoam deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 3.2974762e-01  t=10: 1.6440892e+00  peak: 1.6440892e+00
+0001  gravityModel: basic application: interIsoGoam deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 3.2974762e-01  t=10: 4.4371733e+00  peak: 4.6109962e+00
+0002  gravityModel: constantHeight application: interIsoGoam deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 1.8200702e-10  t=10: 6.7570743e-10  peak: 1.3969810e-09
+0003  gravityModel: geometric application: interIsoGoam deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 4.0219164e-10  t=10: 7.2112425e-10  peak: 2.4750284e-09

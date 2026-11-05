@@ -1,0 +1,10 @@
+Toy: final amplitude / (dt/2), prediction -theta t_end
+implicit_dt0.02    a(10)/(dt/2)  -6.699
+implicit_dt0.01    a(10)/(dt/2)  -7.041
+implicit_dt0.005   a(10)/(dt/2)  -7.228
+crankNicolson_dt0.01 a(10)/(dt/2)  -3.688
+explicitLW_dt0.01  a(10)/(dt/2)  -3.612
+explicit_dt0.01    a(10)/(dt/2)  -0.002
+implicitNoTranslation_dt0.01 a(10)/(dt/2)  +0.000
+
+Wave, Part 1 solvers, max Co <= 0.2: measured/predicted median 1.68, correlation 0.945, n 36

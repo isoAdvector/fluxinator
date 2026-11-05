@@ -1,0 +1,8 @@
+Standing wave (median over interface offsets; history: refined mesh, two periods)
+mesh     solver           1 step    peak20   2T peak   2T mean   band
+uniform  interFoam         0.773     0.815
+uniform  interIsoFoam      0.773     1.644
+uniform  interIsoGoam      0.119     0.475
+refined  interFoam         3.719     3.719      2.52      0.84    436
+refined  interIsoFoam      3.719     3.914      4.78      2.37    104
+refined  interIsoGoam      0.680     1.425      1.92      0.88     91

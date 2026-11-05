@@ -5,9 +5,9 @@
 # after 10 steps for the geometric model with a hydrostatic start (nLayers 1 and 2).
 # Gives the cell centre, the volume fraction and the ring level of the cell in the
 # corrected snGrad(rho) reach field written by postProcess -time 0 -dict
-# ../snGradRhoReach in scan/g1_zero_z0.4900 (-1: no adjacent face with non-zero
+# ../common/snGradRhoReach in waterLevel_10steps/g1_zero_z0.4900 (-1: no adjacent face with non-zero
 # snGrad(rho)). Needs the cell centres written by postProcess -func writeCellCentres
-# in scan/g1_zero_z0.4900 (Allrun).
+# in waterLevel_10steps/g1_zero_z0.4900 (Allrun).
 #
 # Usage (from this directory):
 #   python3 maxUCell.py
@@ -16,10 +16,10 @@ import re
 
 import numpy as np
 
-BASE = "scan/g1_zero_z0.4900/0"
-CASES = [("interFoam, basic, uncorrected, t = 0.01", "scan/iF_unc_z0.4900/0.01"),
-         ("geometric, nLayers 1, hydrostatic, t = 0.1", "scan/g1_hyd_z0.4900/0.1"),
-         ("geometric, nLayers 2, hydrostatic, t = 0.1", "scan/g2_hyd_z0.4900/0.1")]
+BASE = "waterLevel_10steps/g1_zero_z0.4900/0"
+CASES = [("interFoam, basic, uncorrected, t = 0.01", "waterLevel_10steps/iF_unc_z0.4900/0.01"),
+         ("geometric, nLayers 1, hydrostatic, t = 0.1", "waterLevel_10steps/g1_hyd_z0.4900/0.1"),
+         ("geometric, nLayers 2, hydrostatic, t = 0.1", "waterLevel_10steps/g2_hyd_z0.4900/0.1")]
 
 
 def internal(path):

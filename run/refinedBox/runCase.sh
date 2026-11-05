@@ -1,9 +1,9 @@
 #!/bin/bash
 # runCase.sh <name> <zw> <app> <gravityModel> <nLayers> <corr|uncorr> <zero|hydro> <nNonOrth>
-# One untilted refined-box case in scan/<name>_z<zw>, 10 steps of 0.01 s.
+# One untilted refined-box case in waterLevel_10steps/<name>_z<zw>, 10 steps of 0.01 s.
 [ -n "$WM_PROJECT_DIR" ] || { echo "Source the OpenFOAM environment first" >&2; exit 1; }
 H=$(dirname "$(readlink -f "$0")"); name=$1; zw=$2; app=$3; gm=$4; nL=$5; sch=$6; start=$7; nc=$8
-c=$H/scan/${name}_z$zw; rm -rf $c; mkdir -p $H/scan; cp -r $H/baseCase $c; cd $c
+c=$H/waterLevel_10steps/${name}_z$zw; rm -rf $c; mkdir -p $H/waterLevel_10steps; cp -r $H/baseCase $c; cd $c
 foamDictionary -entry origin -set "(0 0 $zw)" system/setAlphaFieldDict > /dev/null 2>&1
 foamDictionary -entry gravityModel -set $gm constant/gravityProperties > /dev/null 2>&1
 foamDictionary -entry nLayers -set $nL constant/gravityProperties > /dev/null 2>&1
