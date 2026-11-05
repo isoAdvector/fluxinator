@@ -83,6 +83,13 @@ class laxWendroff
         void checkUncorrected() const
         {}
 
+        //- The correction, given the weights w of the underlying scheme
+        tmp<GeometricField<Type, fvsPatchField, surfaceMesh>> correction
+        (
+            const GeometricField<Type, fvPatchField, volMesh>& vf,
+            const surfaceScalarField& w
+        ) const;
+
 
 public:
 
@@ -156,6 +163,16 @@ public:
         //- -lambda (dt/2) (u_f & grad(vf)_f) on internal and coupled faces
         virtual tmp<GeometricField<Type, fvsPatchField, surfaceMesh>>
         correction
+        (
+            const GeometricField<Type, fvPatchField, volMesh>& vf
+        ) const;
+
+        using surfaceInterpolationScheme<Type>::interpolate;
+
+        //- Face values with the correction; the weights of the underlying
+        //  scheme are computed once
+        virtual tmp<GeometricField<Type, fvsPatchField, surfaceMesh>>
+        interpolate
         (
             const GeometricField<Type, fvPatchField, volMesh>& vf
         ) const;

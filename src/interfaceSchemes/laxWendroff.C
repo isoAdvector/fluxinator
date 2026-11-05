@@ -19,7 +19,8 @@ template<class Type>
 Foam::tmp<Foam::GeometricField<Type, Foam::fvsPatchField, Foam::surfaceMesh>>
 Foam::laxWendroff<Type>::correction
 (
-    const GeometricField<Type, fvPatchField, volMesh>& vf
+    const GeometricField<Type, fvPatchField, volMesh>& vf,
+    const surfaceScalarField& w
 ) const
 {
     typedef typename outerProduct<vector, Type>::type GradType;
@@ -86,7 +87,6 @@ Foam::laxWendroff<Type>::correction
     // w_upwind (the limiter of a limited scheme, 0 on the upwind faces of
     // interfaceUpwind, 1 for linear)
     {
-        const surfaceScalarField w(tScheme_().weights(vf));
         const surfaceScalarField& wLin = mesh.weights();
         const auto lambda = [](scalar w, scalar wl, scalar fl)
         {
@@ -132,6 +132,42 @@ Foam::laxWendroff<Type>::correction
     }
 
     return tcorr;
+}
+
+
+template<class Type>
+Foam::tmp<Foam::GeometricField<Type, Foam::fvsPatchField, Foam::surfaceMesh>>
+Foam::laxWendroff<Type>::correction
+(
+    const GeometricField<Type, fvPatchField, volMesh>& vf
+) const
+{
+    return correction(vf, tScheme_().weights(vf));
+}
+
+
+template<class Type>
+Foam::tmp<Foam::GeometricField<Type, Foam::fvsPatchField, Foam::surfaceMesh>>
+Foam::laxWendroff<Type>::interpolate
+(
+    const GeometricField<Type, fvPatchField, volMesh>& vf
+) const
+{
+    // As surfaceInterpolationScheme::interpolate, with the weights of the
+    // underlying scheme computed once for the face values and the correction
+    const tmp<surfaceScalarField> tw(tScheme_().weights(vf));
+
+    tmp<GeometricField<Type, fvsPatchField, surfaceMesh>> tsf
+    (
+        surfaceInterpolationScheme<Type>::interpolate
+        (
+            vf,
+            tmp<surfaceScalarField>(tw())
+        )
+    );
+    tsf.ref() += correction(vf, tw());
+
+    return tsf;
 }
 
 

@@ -4,11 +4,22 @@
     // U^n = U.oldTime() also on later outer iterations; convTheta and its
     // defaults (explicitConvection, nOuterCorrectors) in timeWeights.H.
     // Explicit convection (theta 0) uses the mass flux rhoPhi (from phi^n)
-    // and the convected velocity of the same time level.
+    // and the convected velocity of the same time level; the implicit
+    // operator, zero then, is not assembled.
 
     fvVectorMatrix UEqn
     (
-        convTheta < 1
+        convTheta == 0
+      ? tmp<fvVectorMatrix>
+        (
+            fvm::ddt(rho, U)
+          + fvc::div(rhoPhi, U.oldTime(), "div(rhoPhi,U)")
+          + MRF.DDt(rho, U)
+          + turbulence->divDevRhoReff(rho, U)
+         ==
+            fvOptions(rho, U)
+        )
+      : convTheta < 1
       ? tmp<fvVectorMatrix>
         (
             fvm::ddt(rho, U)
