@@ -11,5 +11,5 @@
 `geometricVoF`, which many function objects pull in. Its sampled surface type is therefore
 `reconstructedInterface`, not `interface`.
 
-Build all of them with `../Allwmake` in an OpenFOAM v2512 environment. Example settings
+Build all of them with `../Allwmake` in an OpenFOAM v2606 environment. Example settings
 are in the test cases in `../run`.

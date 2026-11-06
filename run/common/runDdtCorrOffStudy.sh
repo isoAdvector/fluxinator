@@ -3,7 +3,7 @@
 # (runStoredDdtCorrOff.sh). The study's cases must exist; their results are not needed. Finished
 # cases are skipped. The 760x160 wave cases run on 4 subdomains, all others serially.
 # Usage: runDdtCorrOffStudy.sh <study> [case ...]   (default: all cases; MAXJOBS: default nproc)
-[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 script=$(dirname "$(readlink -f "$0")")/runStoredDdtCorrOff.sh
 study=$1; shift
 [ $# -gt 0 ] || set -- $(ls "$study" | grep -E '^[0-9]{4}$')

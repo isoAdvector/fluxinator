@@ -4,7 +4,7 @@ A 1 m x 1 m two-dimensional box with 25 x 25 cells is rotated by 5 degrees about
 its centre while gravity stays vertical. Water (1000 kg/m3) lies below the
 horizontal plane z = 0.5 m and air above; both fluids are inviscid and surface
 tension is zero. The exact solution is rest, U = 0, so every velocity is a
-spurious current. Fixed time step 0.01 s, OpenFOAM v2512.
+spurious current. Fixed time step 0.01 s, OpenFOAM v2606.
 
 ## Studies
 

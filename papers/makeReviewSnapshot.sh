@@ -29,7 +29,7 @@ removed for double-blind review (ANONYMISED). `README.md` describes the contents
 for the wave cases, and cfdTools, needed for the parameter scans.
 
 ```shell
-source <OpenFOAM-v2512>/etc/bashrc
+source <OpenFOAM-v2606>/etc/bashrc
 ./Allwmake -j
 thirdParty/streamFunctionWave/Allwmake
 export CFDTOOLS=$PWD/thirdParty/cfdTools/cfdTools

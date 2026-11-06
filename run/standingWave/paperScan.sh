@@ -13,7 +13,7 @@
 #
 # Writes <outdir>/scan.csv and <outdir>/history_<app>.csv
 set +u
-[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 HERE=$(cd "${0%/*}" && pwd)
 OUT=${1:-$HERE/solvers}
 NOFF=${NOFF:-12}

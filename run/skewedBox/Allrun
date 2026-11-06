@@ -3,7 +3,7 @@
 # Runs the skewed box studies, renders the case images of the paper figure
 # (papers/part1/fig_skewedBox) and writes the study summaries to data/.
 #
-# Requirements: OpenFOAM v2512 environment with interIsoGoam and libgravityModels
+# Requirements: OpenFOAM v2606 environment with interIsoGoam and libgravityModels
 # built (../../Allwmake), cfdTools, pvbatch (ParaView), pdflatex and python3.
 # Environment variables: CFDTOOLS (path to cfdTools/cfdTools), MAXJOBS (number
 # of simultaneous cases, default nproc), PVBATCH (default pvbatch).

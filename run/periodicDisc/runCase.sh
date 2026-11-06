@@ -1,7 +1,7 @@
 #!/bin/bash
 # runCase.sh <case> [conv=<div(rhoPhi,U) scheme, '#' = blank>] [force=old] [PIMPLE.<key>=<value> ...]
 # The body acceleration is set in baseCase/system/fvOptions (density new; force=old: old).
-[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 out=$1; shift
 BASE=$(readlink -f "$(dirname "$0")/baseCase")
 rm -rf "$out"; mkdir -p "$out"; cp -r $BASE/{0.orig,constant,system,Allrun} "$out"/; cd "$out" || exit 1

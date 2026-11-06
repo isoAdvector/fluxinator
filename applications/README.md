@@ -9,4 +9,4 @@
 | `utilities/setHydrostaticPressure` | sets the hydrostatic initial `p_rgh` |
 | `utilities/surfacePosition` | surface position utility (submodule) |
 
-Build all of them with `../Allwmake` in an OpenFOAM v2512 environment.
+Build all of them with `../Allwmake` in an OpenFOAM v2606 environment.

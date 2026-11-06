@@ -98,7 +98,7 @@ summary) and helper scripts are in `run/common/`.
 ## Building
 
 ```shell
-source <OpenFOAM-v2512>/etc/bashrc
+source <OpenFOAM-v2606>/etc/bashrc
 ./Allwmake
 ```
 

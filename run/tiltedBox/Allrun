@@ -3,7 +3,7 @@
 # Runs the tilted box studies and writes their summaries to data/.
 # The paper figures and tables are made in papers/part1/{fig,tab}_* (make.py).
 #
-# Requirements: OpenFOAM v2512 environment with interIsoGoam and libgravityModels
+# Requirements: OpenFOAM v2606 environment with interIsoGoam and libgravityModels
 # built (../../Allwmake), cfdTools, pvpython (ParaView) on PATH for the per-case
 # velocity images (baseCase/Allrun calls it), and python3 with numpy.
 # Environment variables: CFDTOOLS (path to cfdTools/cfdTools),

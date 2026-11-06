@@ -5,7 +5,7 @@
 # summaries to data/ and renders the case images of papers/part1/fig_refinedBox.
 # The paper figures and tables are made in papers/part1/{fig,tab}_* (make.py).
 #
-# Requirements: OpenFOAM v2512 environment with interIsoGoam, libgravityModels and
+# Requirements: OpenFOAM v2606 environment with interIsoGoam, libgravityModels and
 # setHydrostaticPressure built (../../Allwmake), pvbatch (ParaView) on PATH or in
 # PVBATCH, python3 with numpy. MAXJOBS (default nproc).
 #------------------------------------------------------------------------------

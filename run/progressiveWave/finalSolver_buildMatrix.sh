@@ -7,7 +7,7 @@
 # fields written every 0.2 s; the 760x160 cases decomposed into 4 subdomains.
 # Usage: ./finalSolver_buildMatrix.sh   (creates finalSolver_fixedDt/ and finalSolver_maxCo/)
 set -e
-[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 here=$(pwd)
 for pair in "solvers_fixedDt:finalSolver_fixedDt" "solvers_maxCo:finalSolver_maxCo"; do
     src=${pair%%:*}; dst=${pair##*:}

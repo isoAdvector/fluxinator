@@ -12,7 +12,7 @@
 #
 # Usage:  ./snapshots.sh [outdir]      (default: snapshots)
 set +u
-[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 HERE=$(cd "${0%/*}" && pwd)
 OUT=${1:-$HERE/snapshots}
 export SWBASE=${SWBASE:-$HERE/baseRefinedMesh}

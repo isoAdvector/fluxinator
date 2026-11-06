@@ -3,7 +3,7 @@
 # to the fluxinator cases finalSolver_maxCo/{0014,0017,0020,0026,0029,0032} (190x40, 380x80 at
 # maxCo 0.5/0.2/0.1, 30 s) and convection/explicitLWIU_190x40_dt0.02 (fixed dt 0.02, diverged with LW).
 # Usage: bash runAll.sh   (7 serial runs in parallel)
-[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 cd "$(dirname "$0")"
 # The cases 00xx are copies of the fluxinator cases with the correction taken out of the scheme
 for c in 0032 0029 0026 0020 0017 0014; do
