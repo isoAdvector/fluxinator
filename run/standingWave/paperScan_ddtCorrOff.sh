@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Copy of paperScan.sh with PIMPLE ddtCorr no (runCase_ddtCorrOff.sh).
 # Data for the standing-wave section: spurious air velocities of interFoam,

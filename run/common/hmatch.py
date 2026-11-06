@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Height-matched crest kinematics: compare each run with the exact stream-function
 wave of the run's own mean wave height in the window (same T, calcStreamFunctionWave),
 so that wave damping does not masquerade as a smaller velocity overshoot.

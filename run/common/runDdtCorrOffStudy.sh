@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Runs a study again with PIMPLE ddtCorr no, as <study>_ddtCorrOff with the same case numbers
 # (runStoredDdtCorrOff.sh). The study's cases must exist; their results are not needed. Finished
 # cases are skipped. The 760x160 wave cases run on 4 subdomains, all others serially.

@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Schematic of the two mechanisms. (a) Time lag: at a fixed point below the trough of a
 progressive wave, u and w are 90 degrees out of phase, so <w u> = 0; the convection term pairs the mass
 flux at t with the velocity at t + theta*dt, and <w(t) u(t + dt)> > 0 (dt exaggerated, T/10).

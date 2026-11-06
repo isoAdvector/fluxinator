@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #------------------------------------------------------------------------------
 # Runs the tilted box studies and writes their summaries to data/.
 # The paper figures and tables are made in papers/part1/{fig,tab}_* (make.py).

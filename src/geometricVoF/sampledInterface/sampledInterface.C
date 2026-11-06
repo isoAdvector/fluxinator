@@ -6,6 +6,7 @@
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
     Copyright (C) 2020 DLR
+    Modified code Copyright (C) 2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.

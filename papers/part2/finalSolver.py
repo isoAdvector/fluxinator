@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """fluxinator (explicit convection, Gauss laxWendroff ... interfaceUpwind, ddtCorr off;
 run/progressiveWave/finalSolver_*) against the Part 1 solvers rerun with ddtCorr off
 (run/progressiveWave/solvers_*_ddtCorrOff), on the progressive wave of Part 1 (H 0.125 m, T 2 s,

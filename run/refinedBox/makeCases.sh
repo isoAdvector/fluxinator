@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Prints the case list for runCase.sh: every configuration at every water level
 # z_w = 0.48, 0.4825, ..., 0.52 (one coarse cell, 17 levels).
 # Columns: name z_w application gravityModel nLayers schemes start nNonOrthogonalCorrectors

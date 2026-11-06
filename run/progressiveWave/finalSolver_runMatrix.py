@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Runs the fluxinator matrix (finalSolver_fixedDt, finalSolver_maxCo) on at most MAXCORES cores, cheapest
 cases first. Cost estimate: clock time of the Part 1 interIsoGoam run with the same case number
 (data/solvers_*.csv). 760x160 cases run with AllrunParallel on 4 cores (one NUMA node) and

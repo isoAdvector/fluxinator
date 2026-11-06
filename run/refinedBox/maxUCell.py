@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Prints where the maximum velocity occurs for water level z_w = 0.49: after the
 # first step for the basic gravity term with uncorrected schemes (interFoam), and

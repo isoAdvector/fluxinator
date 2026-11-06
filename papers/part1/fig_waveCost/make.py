@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Figure fig:waveCost: runs under a Courant limit, change of interIsoGoam relative to interFoam
 and interIsoFoam in the number of time steps and the wall-clock time (see ../waveRuns.py).
 Output: waveCost.pdf. Usage: python3 make.py"""

@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Schematic of the height in the gravity term on a tilted mesh with a flat interface.
 (a) basic model: the height of the face centres of the faces across which the density changes;
 (b) interface height: the centroids of the interface segments, all at the interface height.

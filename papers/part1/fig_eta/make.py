@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Figure fig:eta: surface elevation (eta_nz80), from ../waveFigures.py.
 Output: eta.pdf. Usage: python3 make.py"""
 import os

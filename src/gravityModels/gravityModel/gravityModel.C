@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2025 Johan Roenby
+    Copyright (C) 2025-2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -45,42 +45,9 @@ Foam::gravityModel::gravityModel
     const fvMesh& mesh
 )
 :
-    mesh_(mesh)/*,
-    accf_
-    (
-        IOobject
-        (
-            "ghf",
-            mesh.time().timeName(),
-            mesh
-        ),
-        mesh,
-        dimensionedScalar("accf_", dimAcceleration*dimLength, 0.0)
-    ),
-    acc_
-    (
-        IOobject
-        (
-            "gh",
-            mesh.time().timeName(),
-            mesh
-        ),
-        mesh,
-        dimensionedScalar("acc_", dimAcceleration*dimLength, 0.0)
-    )
-*/
+    mesh_(mesh)
 {
 }
-
-
-// * * * * * * * * * * * * * * Public Access Member Functions  * * * * * * * //
-
-/*
-void Foam::gravityModel::calculateAcc()
-{
-    notImplemented("bool Foam::gravityModel::calculateAcc()");;
-}
-*/
 
 
 // ************************************************************************* //

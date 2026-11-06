@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Progressive wave, 380x80, max Co 0.2, t = 30 s (run/progressiveWave/solvers_maxCo 0027 interFoam, 0028
 interIsoFoam, 0029 interIsoGoam): error of the horizontal velocity in the water relative to the
 exact input wave at the crest position of the run; air (alpha < 0.5) not shown.

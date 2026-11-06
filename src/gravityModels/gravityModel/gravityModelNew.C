@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2025 Johan Roenby
+    Copyright (C) 2025-2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -47,7 +47,7 @@ Foam::gravityModel::New
             mesh,
             IOobject::READ_IF_PRESENT,
             IOobject::NO_WRITE,
-            false  // Register object? Set to false for now
+            false  // Not registered
         )
     );
 

@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Shared code of the Part I progressive-wave figures fig_eta, fig_crests and
 # fig_spurious (each make.py sets OUT and calls one fig_* function). Metrics are

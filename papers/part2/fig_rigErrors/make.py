@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Kinematic rig: largest velocity error per time step against time for the convection
 variants. (a) shear with cross-flow, one-step mode (error of one step from the exact field);
 (b) solid-body rotation, carried mode (error accumulated over the run). 50x50, dt 0.005 s.

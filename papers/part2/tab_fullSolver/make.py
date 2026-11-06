@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Table tab:fullSolver: accelerated disc and uniform flow, full solver (fullSolver.txt).
 Made by the shared script ../fullSolver.py, which also writes fig_fullSolver/fullSolver.pdf.
 Inputs: run/periodicDisc/<case>.

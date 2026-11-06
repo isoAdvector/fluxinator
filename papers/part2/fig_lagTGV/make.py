@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Figure fig:lagTGV: time lag in the translating Taylor-Green vortex (lagTGV.pdf).
 Made by the shared script ../lag.py, which also writes fig_lagWave/lagWave.pdf and ../data/lag.txt.
 Inputs: run/taylorGreenVortex/<case>, ../data/browser_runs.json (browserFiles.py).

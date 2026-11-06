@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Face-value schemes in the crest model of crestFaces.py.
 Reads data/crestFaces_dt<dt>.pkl and evaluates, per scheme, the velocity error that explicit
 convection puts into each cell in one step,

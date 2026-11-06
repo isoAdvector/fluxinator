@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Splits data/browser.json (browserData.py) into the four data files of the results browser
 (dashboard artifact "Wave Solver Explorer"): browser_runs.json (one row per run, rounded
 metrics), browser_series.json (time series), browser_snaps.json (profiles and surfaces at

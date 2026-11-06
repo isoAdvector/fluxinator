@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Runs the Part II studies of the progressive wave. Allrun must have run first, since the
 # fluxinator cases are built from the Part I cases. Needs streamFunFoam (README).
 # The full set takes several days; finished runs are skipped when it is started again.

@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Computes accuracy and efficiency metrics for all 4-digit cases in a scan
 # directory, compared against a reference case (by default the analytic

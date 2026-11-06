@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Time per step of each timing run, over 2 <= t <= 6 s, from ExecutionTime in the log.
 Writes ../data/timing_maxCo0.1.csv. Usage: python3 analyse.py"""
 import csv

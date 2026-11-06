@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Figure fig:selCase: selected case (selCase.pdf).
 Made by the shared script ../selection.py, which also writes fig_selHeight, fig_selCost and ../data/paperSelection.txt.
 Inputs: ../data/browser.json (python3 ../browserData.py).

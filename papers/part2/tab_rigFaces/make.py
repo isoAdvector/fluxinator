@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Table tab:rigFaces: prescribed shear and rotation (../data/rig.txt).
 Made by the shared script ../rig.py, which also writes ../data/rig.txt and tab_rigConvergence/rigConvergence.txt.
 Inputs: run/prescribedFlows/<case>/postProcessing/convectionTest.

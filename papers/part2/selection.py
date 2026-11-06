@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Selected Courant-limited results for the paper, from data/browser.json (browserData.py).
 Selection rule, fixed before looking at the figures: the 380x80 mesh (12 cells per wave height)
 at max Co 0.1; the wave height for all four Courant numbers of the same mesh; the cost at max Co 0.1.

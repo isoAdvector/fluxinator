@@ -6,7 +6,7 @@
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
     Copyright (C) 2025 Henning Scheufler
-    Copyright (C) 2026 Johan Roenby
+    Copyright (C) 2025-2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -53,6 +53,7 @@ Usage
     \verbatim
     gravityModel    geometric;
     nLayers         2;      // Optional, default 2
+    nInitReconstructs 3;    // Optional, default 3: reconstructions at start-up
     \endverbatim
 
 SourceFiles
@@ -87,10 +88,10 @@ class geometricGravityModel
     public gravityModel
 {
 
-        // g*h at faces based on geometrically reconstructed interface height
+        //- g*h at faces based on the reconstructed interface height
         surfaceScalarField ghf_;
 
-        // g*h at cell centres based on geometrically reconstructed interface height
+        //- g*h at cell centres based on the reconstructed interface height
         volScalarField gh_;
 
         //- Height reference field
@@ -149,9 +150,6 @@ public:
         return nLayers_;
     }
 
-    //- Set the number of rings, for solvers whose default differs from the
-    //  default of this model (2) when nLayers is not given
-    void setNLayers(const label n);
 
 };
 

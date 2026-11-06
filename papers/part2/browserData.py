@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Data of the selection figures (selection.py) and the results browser: the Part 1 solvers rerun
 with ddtCorr off and fluxinator (run/progressiveWave/finalSolver_*), progressive wave of
 Part 1, 30 s.

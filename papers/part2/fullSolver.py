@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Full solver (interIsoGoam) on the periodic disc case (run/periodicDisc) (tutorial discInConstantFlowCyclicBCs,
 50x50, g = 0, U0 = (0.1, 0, 0.05) m/s, dt 0.005 s, 1 s, ddtCorr off):
 (1) uniform acceleration a = (0.5, 0, 0) m/s^2 applied as the body force rho*a with rho^{n+1}

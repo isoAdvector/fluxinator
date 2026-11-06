@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Runs the given case directories, each with its own Allrun, at most MAXJOBS at a time
 # (default: the number of cores). A case with a solver log has been run and is skipped.
 # Usage: runCases.sh <solver log name> <case> ...

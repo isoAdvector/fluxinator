@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Figure fig:waveCrest: crest velocity of the convection variants (waveCrest.pdf).
 Made by the shared script ../wave.py, which also writes tab_wave/wave.txt.
 Inputs: run/progressiveWave/convection/<case>.

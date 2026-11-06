@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # run.sh <outdir> [key=value ...]
 # Keys: model nLayers snGrad laplacian nOrthCorr nCorr amplitude endTime app alphaOrigin
 set +u

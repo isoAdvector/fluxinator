@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Writes a summary of each study of the tilted box to data/<study>.txt
 # (../common/summariseScan.py: scanned parameters, first p_rgh residual,

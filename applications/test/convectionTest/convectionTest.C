@@ -5,54 +5,63 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
+    Copyright (C) 2026 Johan Roenby
+-------------------------------------------------------------------------------
+License
+    This file is part of OpenFOAM.
+
+    OpenFOAM is free software: you can redistribute it and/or modify it
+    under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    OpenFOAM is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+    for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+
 Application
     convectionTest
 
 Description
     Kinematic test of the momentum convection of a VoF solver with a moving
-    density jump. A 2D (one empty direction) linear velocity field is
+    density jump (Part II). A 2D velocity field with one empty direction n is
     prescribed,
         u(r, t) = U0 + a t + (Omega - beta |d|^2) n x d + S ((r - r0).e_s) e_f,
-    d = (r - c) in the plane (uniform translation and acceleration, solid-body
-    rotation, a vortex u_theta = Omega r - beta r^3 with curvature in its
-    velocity profile (beta = Omega2), shear, or any superposition).
-    n the empty direction, e_s = n x e_f. The face
-    fluxes come from the stream function psi (u = grad(psi) x n),
-        phi_f = sum over the face edges of psi n . dl,
-    so they are divergence free to round-off on any mesh. alpha is advected
-    with isoAdvector, rhoPhi is isoAdvector's mass flux.
+    with d = (r - c) in the plane and e_s = n x e_f: uniform translation and
+    acceleration, solid-body rotation, a vortex with curvature in its velocity
+    profile (beta = Omega2), shear, or any superposition. The face fluxes come
+    from the stream function psi (u = grad(psi) x n), so they are divergence
+    free to round-off on any mesh. alpha is advected with isoAdvector, and
+    rhoPhi is isoAdvector's mass flux.
 
-    Each variant (system/convectionTestDict) solves the momentum equation
+    Each variant in system/convectionTestDict solves the momentum equation
     without pressure,
         ddt(rho, Uv) + div(rhoPhi, Uv) = rho* a_exact,
-    with a_exact = dU/dt + grad(u).u at the cell centres (grad(u) by central
-    differences of the analytic u, step 1e-6 m; the force a
-    pressure gradient or body force would have to supply), rho* = rho^{n+1}
-    (force new) or rho^n (force old), the convection term implicit
-    (fvm::div with the new Uv) or explicit (fvc::div with Uv^n), any ddt
-    and div scheme. mode reset: Uv starts every step from the exact cell
-    centre field (one-step error); mode evolve: Uv is carried.
-    Error e = Uv - u(cell centre, t^{n+1}); per step and variant
+    with a_exact = dU/dt + grad(u).u and rho* = rho^{n+1} (force new) or rho^n
+    (force old). Convection is implicit or explicit, with any ddt and div
+    scheme. Mode reset starts every step from the exact field (one-step error);
+    mode evolve carries Uv.
+
+    Output, for e = Uv - u(reference, t^{n+1}): per step and variant
     postProcessing/convectionTest/<variant>.dat holds
         t maxAll maxWater maxInterface rmsInterface maxAir momentumError
-    (water: alpha >= 0.99 at both time levels, air: <= 0.01 at both,
-    interface: the rest; momentumError = |sum V (rho Uv - rho u)|). Error
-    fields err_<variant> are written at write times.
+    (water: alpha >= 0.99 at both time levels, air: <= 0.01 at both, interface:
+    the rest; momentumError = |sum V (rho Uv - rho u)|). Error fields
+    err_<variant> are written at write times.
 
     Reference (convectionTestDict entry reference, default cellCentre):
       cellCentre    u and a_exact at the cell centre. In interface cells the
                     exact mass-averaged velocity differs from it by
-                    O(|grad u| dx) for the rotation and shear.
-      massCentroid  u and a_exact at the mass centroid of the cell,
-                    x_m = (rho1 V_w x_w + rho2 V_a x_a)/m, with the water
-                    centroid x_w of a PLIC cut of the cell with the volume
-                    fraction alpha (isoAdvector's water distribution) and the
-                    normal grad(alpha) (Youngs; the reconstruction of the
-                    advector is not called, so that the advection does not
-                    depend on the reference), and x_a = (V x_c - V_w x_w)/V_a. For a linear u this is
-                    the exact mass-averaged cell velocity. Used for the
-                    initial Uv, the reference at t^{n+1}, the reset value and
-                    the force.
+                    O(|grad u| dx) for rotation and shear.
+      massCentroid  u and a_exact at the mass centroid of the cell, from a PLIC
+                    cut with the normal grad(alpha) (Youngs), not from the
+                    advector's reconstruction, so that the advection does not
+                    depend on the reference. For a linear u this is the exact
+                    mass-averaged cell velocity.
 
 \*---------------------------------------------------------------------------*/
 

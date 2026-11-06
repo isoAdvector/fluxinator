@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Figure fig:finalOverview: fluxinator against the Part I solvers rerun with ddtCorr
 off (finalOverview.pdf), with the numbers in finalSolver.txt and finalSolver.csv.
 Made by ../finalSolver.py (main). Inputs: run/progressiveWave/{finalSolver,solvers}_{maxCo,fixedDt}*.

@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #------------------------------------------------------------------------------
 # Runs the skewed box studies, renders the case images of the paper figure
 # (papers/part1/fig_skewedBox) and writes the study summaries to data/.

@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------
     Copyright (C) 2016-2017 DHI
     Copyright (C) 2016-2017 OpenCFD Ltd.
-    Copyright (C) 2018 Johan Roenby
+    Copyright (C) 2018, 2026 Johan Roenby
     Copyright (c) 2017-2019, German Aerospace Center (DLR)
 -------------------------------------------------------------------------------
 License

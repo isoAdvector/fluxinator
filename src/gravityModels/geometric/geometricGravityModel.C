@@ -6,7 +6,7 @@
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
     Copyright (C) 2025 Henning Scheufler
-    Copyright (C) 2025 Johan Roenby
+    Copyright (C) 2025-2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -125,9 +125,13 @@ Foam::geometricGravityModel::geometricGravityModel
 
 // * * * * * * * * * * * * * * Public Access Member Functions  * * * * * * * //
 
+// Sets g*h from the reconstructed interface: (1) collect the interface centres
+// and normals, adding faces that are themselves the interface, (2) mark the
+// interface cells and the rings around them, (3) assign g*h in the interface
+// cells and the first ring, (4) then in each further ring, (5) interpolate to
+// the faces.
 void Foam::geometricGravityModel::calculateGhf()
 {
-
     const fvMesh& mesh = gh_.mesh();
     zoneDistribute& exchangeFields = zoneDistribute::New(mesh);
 
@@ -149,7 +153,6 @@ void Foam::geometricGravityModel::calculateGhf()
         reconstructionSchemes& surf =
             mesh.lookupObjectRef<reconstructionSchemes>("reconstructionScheme");
 
-//        surf.reconstruct();
         // Interface centres, normals and cells of the reconstruction, extended
         // below by faces that are themselves the interface
         volVectorField faceCentre("ghInterfaceCentre", surf.centre());
@@ -306,7 +309,7 @@ void Foam::geometricGravityModel::calculateGhf()
             }
             else if(inLayer(celli, 1))
             {
-                // the to the interface
+                // Weighted mean of the neighbouring interface centres
                 vector averageSurfP = vector::zero;
                 scalar avgWeight = 0;
                 const point p = mesh.C()[celli];
@@ -354,11 +357,6 @@ void Foam::geometricGravityModel::calculateGhf()
                     assigned[celli] = 1;
                 }
             }
-            else
-            {
-                // do nothing
-            }
-
         }
 
         // Further rings: average of the values already assigned to the
@@ -421,11 +419,6 @@ void Foam::geometricGravityModel::calculateGhf()
         ghf_ = fvc::interpolate(gh_);
 
     }
-    else
-    {
-        Info << "notFound" << endl;
-    }
-
 }
 
 
@@ -434,21 +427,6 @@ Foam::tmp<Foam::surfaceScalarField> Foam::geometricGravityModel::force()
     calculateGhf();
     const volScalarField& rho = mesh_.lookupObject<volScalarField>("rho");
     return -ghf_*fvc::snGrad(rho);
-}
-
-
-void Foam::geometricGravityModel::setNLayers(const label n)
-{
-    if (n < 0)
-    {
-        FatalErrorInFunction
-            << "nLayers = " << n << " must be zero or positive"
-            << exit(FatalError);
-    }
-
-    nLayers_ = n;
-
-    Info<< "geometric gravity model: nLayers = " << nLayers_ << endl;
 }
 
 

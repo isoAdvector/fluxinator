@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Runs all cases of the translating Taylor-Green vortex (Part II, Section 3).
 # Results: python3 writeData.py <case> ...; figure: papers/part2/fig_lagTGV/make.py
 cd "${0%/*}" || exit 1

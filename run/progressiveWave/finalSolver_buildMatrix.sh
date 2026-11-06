@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Builds the Part 2 fluxinator test matrix from the Part 1 interIsoGoam cases
 # (solvers_fixedDt and solvers_maxCo), keeping the case numbers.
 # Changes relative to the Part 1 case: application fluxinator, whose defaults are explicit

@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # runStored.sh <storedCase> <outdir> [nProcs]
 # Rerun a stored Part I case (run/<case>/<study>/<run>, any Allrun-driven case)
 # with the single change PIMPLE ddtCorr no (DDTCORR=yes in the environment for

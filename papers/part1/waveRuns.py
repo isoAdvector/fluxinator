@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Progressive-wave results of Part I as figures, from the metrics of all runs
 (run/progressiveWave/data/solvers_fixedDt.csv and solvers_maxCo.csv, written by analyseScan.py).
 fig_waveResults: for each mesh, (top) wave height error after 15 periods (dHfit) and

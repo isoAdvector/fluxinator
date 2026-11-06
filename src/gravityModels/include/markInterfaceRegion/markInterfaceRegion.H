@@ -1,5 +1,6 @@
 /*---------------------------------------------------------------------------*\
             Copyright (c) 2017-2019, German Aerospace Center (DLR)
+    Modified code Copyright (C) 2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of the VoFLibrary source code library, which is an
@@ -22,9 +23,8 @@ Class
     Foam::markInterfaceRegion
 
 Description
-    Calculates a reconstructed distance function if the cells a more than
-    two cell layer a ways the octree based method needs to be used. Also
-    marks the cell layers near the interface cells.
+    Marks the interface cells and a given number of rings of point neighbours
+    around them, with the ring number of each cell.
 
 Author
     Henning Scheufler, DLR, all rights reserved.

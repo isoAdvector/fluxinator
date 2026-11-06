@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Render the velocity snapshot of one standing-wave case with ParaView.
 #
 # The look reproduces baseCase/state.pvsm: cells with white edges coloured by

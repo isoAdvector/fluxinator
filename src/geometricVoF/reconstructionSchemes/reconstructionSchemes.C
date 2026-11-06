@@ -6,6 +6,7 @@
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
     Copyright (C) 2019-2020 DLR
+    Modified code Copyright (C) 2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -145,16 +146,10 @@ Foam::isoAdvection::reconstructionSchemes::reconstructionSchemes
 
 void Foam::isoAdvection::reconstructionSchemes::storeOld()
 {
-    // Touching oldTime() (re-)synchronises normal_'s and centre_'s
-    // old-time fields with their current values now, before this time
-    // step's first reconstruct() call overwrites them. On later calls
-    // within the same time step this is a no-op, since GeometricField
-    // only shifts values into the old-time field once per time step.
+    // oldTime() stores the field once per time step, before the first
+    // reconstruct() overwrites it
     normal_.oldTime();
     centre_.oldTime();
-
-    // boolList and DynamicField have no equivalent built-in mechanism,
-    // so interfaceCell and interfaceLabels are stored explicitly.
     interfaceCellOld_ = interfaceCell_;
     interfaceLabelsOld_ = interfaceLabels_;
 }

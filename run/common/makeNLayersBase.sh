@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Copies a base case and adds an nLayers entry, for the studies that vary it: parmScanner sets
 # existing entries only. All other cases use the default, so that nobody copies the entry into a
 # case on another mesh, where nLayers 1 is not enough (Part I).

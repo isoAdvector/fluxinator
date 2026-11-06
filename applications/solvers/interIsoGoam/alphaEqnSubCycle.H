@@ -1,3 +1,6 @@
+// Modified code Copyright (C) 2026 Johan Roenby
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 if (pimple.nCorrPIMPLE() > 1)
 {
     // If nOuterCorrectors > 1 then for all but the first loop the advection

@@ -1,4 +1,6 @@
 #!/usr/bin/env pvbatch
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Renders caseIllustration.pvsm (mesh and stream function wave) to a PNG.
 #

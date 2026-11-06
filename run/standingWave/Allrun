@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Runs the standing-wave studies of Part I, Section 5 and Appendix A.
 # Figure and table: papers/part1/fig_standingWaveSnapshots, tab_standingWave.
 cd "${0%/*}" || exit 1

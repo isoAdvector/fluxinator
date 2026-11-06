@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # runCT.sh <case> <mode reset|evolve> <disc origin "x 0 z"> <endTime> "<flow dictionary entries>"
 # REF=massCentroid sets the reference point (default cellCentre, see convectionTest.C)
 # e.g. runCT.sh rot reset "0.5 0 0.75" 1 "Omega 2; rotationCentre (0.5 0 0.5);"

@@ -1,1 +1,0 @@
-sv_explLW_new conv=laxWendroff#U#phi#limitedLinearV#1 PIMPLE.explicitConvection=yes

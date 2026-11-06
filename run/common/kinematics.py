@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Crest kinematics of a periodic stream-function wave against the exact solution.
 
 Works for any uniform 2D blockMesh case of the periodic flume (one wavelength,

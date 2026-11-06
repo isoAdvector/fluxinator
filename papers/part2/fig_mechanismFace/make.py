@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Figure 6 (fig:mechanismFace): how far one explicit convection step can amplify velocities in the
 interface cells of a wave crest, for upwind and non-upwind face values. Uses the crest model of
 crestFaces.py / crestSchemes.py (linear two-phase wave, 190x40 mesh, dt 0.005 s, exact mass fluxes).

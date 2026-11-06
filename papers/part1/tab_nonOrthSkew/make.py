@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Table tab:nonOrthSkew: maximum velocity magnitude [m/s] in the skewed box
 after 10 time steps (t = 0.1 s). Each entry names the run it comes from
 (run/skewedBox/<study>/<case>). Output: tab_nonOrthSkew.txt. Usage: python3 make.py"""

@@ -8,7 +8,7 @@
     Copyright (C) 2016-2017 DHI
     Modified code Copyright (C) 2016-2019 OpenCFD Ltd.
     Modified code Copyright (C) 2019 DLR
-    Modified code Copyright (C) 2018, 2021 Johan Roenby
+    Modified code Copyright (C) 2018, 2021, 2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.

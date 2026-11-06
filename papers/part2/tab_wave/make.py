@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Table tab:wave: progressive wave, 8-10 s, convection variants (wave.txt).
 Made by the shared script ../wave.py, which also writes fig_waveCrest/waveCrest.pdf.
 Inputs: run/progressiveWave/convection/<case>.

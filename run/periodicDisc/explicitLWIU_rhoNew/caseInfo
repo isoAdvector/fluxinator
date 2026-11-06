@@ -1,1 +1,0 @@
-sv_explLWIU_new conv=laxWendroff#U#phi#interfaceUpwind#alpha.water#1e-6#limitedLinearV#1 PIMPLE.explicitConvection=yes

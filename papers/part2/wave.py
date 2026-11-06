@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Progressive wave (H 0.125 m, T 2 s, d 0.4 m, periodic, one wavelength), interIsoGoam with
 the geometric gravity model, Euler, ddtCorr off, one outer corrector unless stated, 10 s.
 Per case and convection variant, over 8-10 s: dH (wave height change), r0 and emax against the

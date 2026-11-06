@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Part I, Figure fig:standingWaveSnapshots: velocity snapshots of the standing wave at
 # t = T for interFoam, interIsoFoam and interIsoGoam.
 # Inputs: run/standingWave/snapshots/<solver>/1.181817 (run/standingWave/snapshots.sh).

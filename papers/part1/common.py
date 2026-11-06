@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Shared paths for the Part I figure and table scripts.
 
 Every figure or table of Part I with LaTeX label fig:X or tab:X has its own

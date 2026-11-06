@@ -65,28 +65,6 @@ functions
         writeControl    timeStep;
         writeInterval   1;
     }
-/*
-    surfaces
-    {
-        type            surfaces;
-        libs            (geometricVoF sampling);
-        writeControl    writeTime;
-
-        surfaceFormat   vtp;
-        fields          (p U);
-
-        interpolationScheme cell;
-
-        surfaces
-        {
-            freeSurf
-            {
-                type            reconstructedInterface;
-                interpolate     false;
-            }
-        }
-    }
-*/
 }
 
 // ************************************************************************* //

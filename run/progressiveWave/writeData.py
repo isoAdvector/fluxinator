@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Writes data/statistics.txt: derived numbers quoted in the Part I text, from the
 # metrics data/solvers_fixedDt.csv and data/solvers_maxCo.csv (analyseScan.py, see

@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Crest kinematics of the three solvers in the stored adaptive runs on the 380x80 mesh
 (run/progressiveWave/solvers_maxCo cases 0027 interFoam, 0028 interIsoFoam, 0029 interIsoGoam, max Co 0.2,
 30 s). Horizontal velocity under the crest compared with the exact stream function wave of

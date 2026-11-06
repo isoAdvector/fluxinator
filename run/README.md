@@ -10,7 +10,7 @@
 | `taylorGreenVortex` | translating Taylor-Green vortex, single phase (the time lag) | Part II Sec. 3 |
 | `prescribedFlows` | water disc in air, prescribed velocity, momentum equation only | Part II Secs. 4, 5 |
 | `periodicDisc` | water disc in a periodic box, full solver, uniform acceleration or no force | Part II Secs. 4, 5 |
-| `quickTest` | fluxinator on the accelerated disc and one wave period, a few minutes | |
+| `quickTest` | fluxinator on the accelerated disc and one wave period, about a minute | |
 | `common` | shared Python modules and helper scripts | |
 
 Every case has a README. A study directory holds the runs of one parameter

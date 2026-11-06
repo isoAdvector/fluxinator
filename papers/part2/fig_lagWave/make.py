@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Figure fig:lagWave: time lag in the progressive wave (lagWave.pdf).
 Made by the shared script ../lag.py, which also writes fig_lagTGV/lagTGV.pdf and ../data/lag.txt.
 Inputs: run/taylorGreenVortex/<case>, ../data/browser_runs.json (browserFiles.py).

@@ -1,3 +1,6 @@
+// Modified code Copyright (C) 2026 Johan Roenby
+// SPDX-License-Identifier: GPL-3.0-or-later
+
     MRF.correctBoundaryVelocity(U);
 
     // Convection theta*div(rhoPhi, U^{n+1}) + (1 - theta)*div(rhoPhi, U^n),

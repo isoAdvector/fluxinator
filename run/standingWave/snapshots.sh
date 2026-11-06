@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Velocity snapshots for the standing-wave figure: interFoam, interIsoFoam and
 # interIsoGoam on the refined mesh, written at exactly half and one wave

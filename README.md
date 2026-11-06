@@ -113,7 +113,7 @@ for the ParaView figures.
 
 ## Running
 
-`run/quickTest/Allrun` builds nothing and takes a few minutes: it runs the final
+`run/quickTest/Allrun` builds nothing and takes about a minute: it runs the final
 solver on the accelerated disc and on one period of the wave, and prints the results
 next to the expected values. Each case in `run/` has an `Allrun` for its studies
 (`run/README.md`); `MAXJOBS` limits the number of simultaneous runs. All scripts use

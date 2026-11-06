@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Builds the meshes of the prepared base cases copied by runCase.sh:
 #   baseUniformMesh  blockMesh only
 #   baseRefinedMesh  blockMesh, then one level of refinement around the interface

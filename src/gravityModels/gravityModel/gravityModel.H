@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2025 Johan Roenby
+    Copyright (C) 2025-2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -63,12 +63,6 @@ class gravityModel
 protected:
 
         const fvMesh& mesh_;
-
-//        surfaceScalarField accf_; // ghf
-//        volScalarField acc_; // gh
-
-        //- Re-calculate the interface curvature
-//        virtual void calculateAcc();
 
 private:
 

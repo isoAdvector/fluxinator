@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Reading a tilted box case: the ascii fields, the mesh vertices of the 2-D
 # plane, the tilt angle and the water level it was initialised with.

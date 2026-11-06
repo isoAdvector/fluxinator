@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # runCase.sh <name> <zw> <app> <gravityModel> <nLayers> <corr|uncorr> <zero|hydro> <nNonOrth>
 # One untilted refined-box case in waterLevel_10steps/<name>_z<zw>, 10 steps of 0.01 s.
 [ -n "$WM_PROJECT_DIR" ] || { echo "Source the OpenFOAM environment first" >&2; exit 1; }

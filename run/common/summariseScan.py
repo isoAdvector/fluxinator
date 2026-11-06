@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Prints a summary per case of a parmScanner scan of the hydrostatic box
 # tests: the scanned parameters, the initial residual of the first p_rgh solve,

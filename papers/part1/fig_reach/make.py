@@ -1,4 +1,6 @@
 #!/usr/bin/env pvbatch
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Renders the paper figure panels reach_uncorrected.png and reach_corrected.png
 # for the untilted box with a refined region (z_w = 0.49): cells adjacent to faces with a

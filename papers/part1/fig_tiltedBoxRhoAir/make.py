@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Plots the maximum velocity magnitude at the end of the runs against the air
 # density for interFoam, interIsoFoam (interIsoGoam with the basic gravity

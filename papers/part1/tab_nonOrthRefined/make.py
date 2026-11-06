@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Maximum velocity magnitude [m/s] after 10 time steps (t = 0.1 s), maximum over the
 scanned water levels, in the layout of the non-orthogonal tables of the paper:
 corrected schemes with zero initial p_rgh and 0 or 2 non-orthogonal correctors, with a

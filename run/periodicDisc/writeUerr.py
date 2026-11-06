@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Write Uerr = U - (U0 + a t) (the spurious velocity) into every time directory of the
 full-solver uniform-acceleration cases, for viewing in ParaView. Usage: python3 writeUerr.py <case> ..."""
 import os, re, sys, numpy as np

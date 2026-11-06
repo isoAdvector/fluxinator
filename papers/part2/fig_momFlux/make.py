@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Wave-averaged vertical flux of horizontal momentum below the wave trough, 190x40 progressive
 wave, 2 < t <= 10 s: solver value rho_f phi_f U_f,x / A_f on the horizontal faces, with U_f the
 face velocity the convection term used (theta-weighted between U^n and U^{n+1}; function object

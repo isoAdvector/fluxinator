@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Figure fig:fullSolver: velocity error of the accelerated disc (fullSolver.pdf).
 Made by the shared script ../fullSolver.py, which also writes tab_fullSolver/fullSolver.txt.
 Inputs: run/periodicDisc/<case>.

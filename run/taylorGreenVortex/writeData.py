@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Time-lag toy: translating Taylor-Green vortex, single phase, doubly periodic. The exact
 x-mean <u>(z) stays U0. With the mass flux at t^n and the convected velocity at t^n + theta dt
 the predicted spurious mean flow is <u>(z, t) - U0 = a(t) cos 2z, a(t) = -theta dt U0 t / 2.

@@ -1,3 +1,6 @@
+// Copyright (C) 2026 Johan Roenby
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // Run-time defaults that differ between the two solvers built from this source.
 // interIsoGoam keeps the defaults of interIsoFoam, so that its stored cases give
 // the same results; fluxinator (../fluxinator) has the recommended ones. An entry

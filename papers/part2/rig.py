@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Kinematic test rig (applications/test/convectionTest, run/prescribedFlows): per variant and case
 the maximum over all time steps of the largest velocity error [m/s] and the mean over the
 time steps of the rms error in interface cells. Writes data/rig.txt (tables tab:rigUniform,

@@ -1,3 +1,6 @@
+// Modified code Copyright (C) 2026 Johan Roenby
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "createRDeltaT.H"
 
 Info<< "Reading field p_rgh\n" << endl;
@@ -87,8 +90,6 @@ autoPtr<transportModelType> turbulence
 
 #include "readGravitationalAcceleration.H"
 #include "readhRef.H"
-//#include "gh.H"
-
     Info<< "Calculating field g.h\n" << endl;
     dimensionedScalar ghRef
     (
@@ -100,7 +101,6 @@ autoPtr<transportModelType> turbulence
     const auto oldConsistency = FieldBase::localBoundaryConsistency(0);
 
     volScalarField gh("gh", (g & mesh.C()) - ghRef);
-//    surfaceScalarField ghf("ghf", (g & mesh.Cf()) - ghRef);
 
     FieldBase::localBoundaryConsistency(oldConsistency);
 

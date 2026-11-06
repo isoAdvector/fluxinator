@@ -1,3 +1,6 @@
+// Copyright (C) 2026 Johan Roenby
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 // Time weights of the momentum convection and the gravity force (PIMPLE
 // entries), evaluated once per time step:
 //
@@ -13,16 +16,14 @@
 //   nOuter > 1                          convectionTheta 1/2, gravityTheta 1/2
 //
 // The first line is interIsoFoam. The last line, with outerCorrBlending 1/2
-// (alpha solver dictionary, default), is time-centred: alpha is advected with (phi^n + phi^{n+1})/2,
-// and convection and gravity are averages of the start and end of the time
-// step. With one outer corrector, U^{n+1} and F^{n+1} are not available
-// before the pressure solution, and the convection term is explicit.
+// (alpha solver dictionary, default), is time-centred: alpha is advected with
+// (phi^n + phi^{n+1})/2, and convection and gravity are averages of the start
+// and end of the time step. With one outer corrector, U^{n+1} and F^{n+1} are
+// not available before the pressure solution, and the convection term is
+// explicit.
 //
-// The Lax-Wendroff face value (laxWendroff scheme) cancels the
-// anti-diffusion (dt/2)(u & grad)^2 of forward Euler; the theta scheme has
-// (1 - 2 theta) times this anti-diffusion, so the scheme scales its
-// correction by the registered factor laxWendroffFactor = 1 - 2 theta
-// (1 for explicit convection, 0 for the centred scheme).
+// laxWendroffFactor = 1 - 2 theta scales the correction of the laxWendroff
+// scheme (see laxWendroff.H).
 
 const bool explicitConvection =
     pimple.dict().getOrDefault<bool>

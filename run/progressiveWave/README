@@ -45,9 +45,6 @@ Part II:
                             convectiveMomentumFlux (system/controlDict)
   timing_maxCo0.1_noGauge/  time per step at max Co 0.1 without the wave gauge (Part II
                             Figure fig:selCost; data/timing_maxCo0.1.csv); see its README
-  pressureSolver_maxCo0.1/  nNonOrthogonalCorrectors, GAMG and p_rghFinal variants (not in the
-                            papers; the 380x80 runs stopped at t about 5 s)
-  pFinalTolerance_maxCo0.1/ p_rghFinal tolerance 1e-10 to 1e-13, fluxinator (not in the papers)
 
 Scripts
 -------

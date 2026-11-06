@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Table tab:crest: crest kinematics (../crestKinematics.py). Output: tab_crest.txt. Usage: python3 make.py"""
 import os
 import sys

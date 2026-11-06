@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Copy of snapshots.sh with PIMPLE ddtCorr no (runCase_ddtCorrOff.sh).
 # Velocity snapshots for the standing-wave figure: interFoam, interIsoFoam and

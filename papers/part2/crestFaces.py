@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Model of explicit momentum convection at the faces near a wave crest.
 Two-phase linear wave on the 190x40 mesh of the paper (dx = L/190, dz = 0.02, water depth 0.4,
 air 0.4 under a lid). The flow is given by a stream function in each phase; the surface is the

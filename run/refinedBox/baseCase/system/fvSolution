@@ -78,13 +78,6 @@ PIMPLE
     nNonOrthogonalCorrectors 0;
     pRefCell            10;
     pRefValue           0;
-/*
-    gravityFactor       0;
-    useHeightFromSetAlphaFieldDict false;
-    reconstructGhf      true;
-    useOldGhf           false;
-    implicitConvection  true;
-*/
 }
 
 relaxationFactors

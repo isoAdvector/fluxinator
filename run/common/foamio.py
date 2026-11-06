@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Minimal OpenFOAM ASCII reader: points, faces, owner, neighbour, vol fields."""
 import re, numpy as np
 

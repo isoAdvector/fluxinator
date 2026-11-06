@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Common paths, plotting style and output routing of the Part II figures and tables.
 
 Every figure or table of Part II with LaTeX label fig:X or tab:X has its own

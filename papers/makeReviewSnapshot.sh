@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Makes the anonymised code snapshot for double-blind review from the committed state: this
 # repository without the papers and git history, surfacePosition without its large tests,
 # and copies of streamFunctionWave and cfdTools, with names and repository addresses removed.

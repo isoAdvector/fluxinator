@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Maximum velocity magnitude after the first time step in the untilted box with a
 # refined region, against the still water level z_w, which is scanned over one

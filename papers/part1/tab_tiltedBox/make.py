@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Table tab:tiltedBox: maximum velocity magnitude [m/s] in the tilted box
 at t = 0.01 s, at t = 10 s and its peak over t <= 10 s.
 Inputs: run/tiltedBox/gravityModels_1000steps (cases 0000-0002) and

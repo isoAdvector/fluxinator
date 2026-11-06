@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Quick test of fluxinator of Part II, a few minutes on one core. Copies two stored
 # cases to this directory, runs them and prints the results next to the expected values:
 #   disc: the accelerated disc of Part II, Section 4 (needs only ../../Allwmake)

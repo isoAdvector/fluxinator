@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """The problem: progressive wave (190x40, dt 0.005 s) with the hardcoded implicit convection.
 Horizontal velocity in the column nearest (a) the crest and (b) the trough after one, three and
 five periods, against the exact input wave. Under the crest the top cells become too fast; under

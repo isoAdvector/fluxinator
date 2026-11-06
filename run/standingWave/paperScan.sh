@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Data for the standing-wave section: spurious air velocities of interFoam,
 # interIsoFoam and interIsoGoam on a uniform and on a locally refined mesh.

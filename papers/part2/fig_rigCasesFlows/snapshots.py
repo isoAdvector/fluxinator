@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """ParaView snapshots of the prescribed-flow cases (run/prescribedFlows/<case>) at t = 1 s:
 volume fraction in the cells (white air, blue water) with the mesh lines, the prescribed
 velocity as arrows at every 5th cell in each direction, and the interface alpha = 0.5 at

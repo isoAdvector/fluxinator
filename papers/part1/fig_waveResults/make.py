@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Figure fig:waveResults: wave height error and median max|U|/u_crest of all runs against the
 time-averaged maximum Courant number (see ../waveRuns.py). Output: waveResults.pdf. Usage: python3 make.py"""
 import os

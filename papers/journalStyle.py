@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Apply the OpenFOAM Journal writing style to LaTeX sections of a paper.
 
     python3 papers/journalStyle.py paper2/paper2/*.tex

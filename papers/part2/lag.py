@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """The time lag between mass flux and convected velocity: sketch and evidence.
   lagTGV    (a) translating Taylor-Green vortex u = U0 + sin(x - U0 t) cos z, w = -cos(x - U0 t) sin z:
               predicted spurious mean flow <u> - U0 = -theta dt U0 t cos(2z)/2

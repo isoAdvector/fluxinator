@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Table tab:firstStep: first-step spurious acceleration max|U|/(dt g) of the
 standard (basic) gravity term in the tilted box, per mesh, min ... max over
 dt = 1e-4 ... 1 s. Input: run/tiltedBox/data/meshTimeStep_1step.txt (written by

@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Figure fig:crestProfiles: velocity under the crest (../crestKinematics.py). Output: crestProfiles.pdf. Usage: python3 make.py"""
 import os
 import sys

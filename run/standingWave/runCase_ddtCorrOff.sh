@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # runCase.sh <outdir> [key=value ...]  (copy of runCase.sh)
 # With PIMPLE ddtCorr ${DDTCORR:-no}; interFoam and interIsoFoam run as interFoamDdtCorr and
 # interIsoFoamDdtCorr (applications/ddtCorrSwitch). Base cases: baseUniformMesh, baseRefinedMesh.

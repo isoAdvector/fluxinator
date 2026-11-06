@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Overview of the test cases of Part 1: mesh and initial interface (water shaded).
 (a) tilted box, 25x25 rotated by 5 deg; (b) skewed box, 25x25 with rows rising 0.1 m over 1 m;
 (c) box with a refined region (central 13x13 cells split 2x2), water level 0.49 m;

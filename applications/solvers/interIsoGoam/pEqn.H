@@ -1,3 +1,6 @@
+// Modified code Copyright (C) 2026 Johan Roenby
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 {
     if (correctPhi)
     {

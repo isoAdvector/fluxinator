@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part II, Figure fig:rigCasesFlows. Prescribed-flow cases: ParaView snapshots from snapshots.py
 (run that first: pvbatch snapshots.py)
 arranged as the figure of the non-uniform flows of Section 5.

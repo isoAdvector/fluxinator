@@ -8,7 +8,7 @@
     Copyright (C) 2011-2017 OpenFOAM Foundation
     Copyright (C) 2016 DHI
     Copyright (C) 2017 OpenCFD Ltd.
-    Copyright (C) 2018 Johan Roenby
+    Copyright (C) 2018, 2026 Johan Roenby
     Copyright (C) 2019-2020 DLR
     Copyright (C) 2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------

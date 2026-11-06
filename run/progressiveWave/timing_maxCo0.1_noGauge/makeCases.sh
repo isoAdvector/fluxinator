@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Builds the timing cases: three repeats per solver and mesh, from the finished set-ups of
 # solvers_maxCo_ddtCorrOff and finalSolver_maxCo, with endTime 6 and the wave gauge off.
 cd "${0%/*}" || exit 1

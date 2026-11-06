@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Figure fig:ddtCorr: progressive wave with adjusted time step on the 190x40 and
 380x80 meshes, ddtCorr on (run/progressiveWave/solvers_maxCo) and off
 (run/progressiveWave/solvers_maxCo_ddtCorrOff). dHfit: wave height error after 15 periods [%]

@@ -8,7 +8,7 @@
     Copyright (C) 2016-2017 DHI
     Modified code Copyright (C) 2016-2017 OpenCFD Ltd.
     Modified code Copyright (C) 2019-2020 DLR
-    Modified code Copyright (C) 2021 Johan Roenby
+    Modified code Copyright (C) 2021, 2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -441,24 +441,6 @@ void Foam::isoAdvection::isoAdvector::advect(const SpType& Sp, const SuType& Su)
 
     const scalar rDeltaT = 1.0/mesh_.time().deltaTValue();
 
-    // Diagnostic only (alpha solver entry diagnoseNewInterfaceCells, default
-    // false): mark the surface cells at the start of the step, to report the
-    // cells that become interface cells during the step, whose outflow faces
-    // keep the upwind flux below
-    const bool diagNewInterfaceCells =
-        dict_.getOrDefault("diagnoseNewInterfaceCells", false);
-    boolList wasSurfaceCell;
-    if (diagNewInterfaceCells)
-    {
-        wasSurfaceCell.setSize(mesh_.nCells(), false);
-        for (const label celli : surf_->interfaceLabels())
-        {
-            if (mag(surf_->normal()[celli]) != 0)
-            {
-                wasSurfaceCell[celli] = true;
-            }
-        }
-    }
 
     // Initialising dVf with upwind values
     // i.e. phi[facei]*alpha1[upwindCell[facei]]*dt
@@ -499,59 +481,6 @@ void Foam::isoAdvection::isoAdvector::advect(const SpType& Sp, const SuType& Su)
     // Adjust dVf for unbounded cells
     limitFluxes(Sp, Su);
 
-    if (diagNewInterfaceCells)
-    {
-        // New interface cells: not surface cells at the start of the step,
-        // with surfCellTol < alpha < 1 - surfCellTol at its end
-        const scalarField& V = mesh_.V();
-        const scalarField& alphaOld = alpha1_.oldTime().primitiveField();
-        boolList isNew(mesh_.nCells(), false);
-        label nNew = 0;
-        scalar dVAll = 0, dVNew = 0;
-        forAll(alpha1In_, celli)
-        {
-            const scalar dV = mag(alpha1In_[celli] - alphaOld[celli])*V[celli];
-            dVAll += dV;
-            if
-            (
-                !wasSurfaceCell[celli]
-             && alpha1In_[celli] > surfCellTol_
-             && alpha1In_[celli] < 1 - surfCellTol_
-            )
-            {
-                isNew[celli] = true;
-                ++nNew;
-                dVNew += dV;
-            }
-        }
-
-        // Volume leaving the new interface cells through their outflow faces,
-        // all of it computed with the upwind (start-of-step) value
-        const labelUList& own = mesh_.owner();
-        const labelUList& nei = mesh_.neighbour();
-        const scalarField& phiIn = phi_.primitiveField();
-        const scalarField& dVfIn = dVf_.primitiveField();
-        scalar outNew = 0;
-        forAll(nei, facei)
-        {
-            const label up = phiIn[facei] >= 0 ? own[facei] : nei[facei];
-            if (isNew[up])
-            {
-                outNew += mag(dVfIn[facei]);
-            }
-        }
-
-        reduce(nNew, sumOp<label>());
-        reduce(dVAll, sumOp<scalar>());
-        reduce(dVNew, sumOp<scalar>());
-        reduce(outNew, sumOp<scalar>());
-
-        Info<< "isoAdvector: new interface cells: n = " << nNew
-            << ", |dalpha|V new = " << dVNew
-            << ", all = " << dVAll
-            << ", fraction = " << dVNew/max(dVAll, VSMALL)
-            << ", upwind outflow of new = " << outNew << endl;
-    }
 
     {
         auto limits = gMinMax(alpha1In_);

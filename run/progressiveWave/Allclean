@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #------------------------------------------------------------------------------
 # Removes the logs written by Allrun (data/ is tracked in git and kept).
 # ./Allclean -scans also deletes the study directories run by Allrun.

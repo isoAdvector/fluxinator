@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Runs all prescribed-flow cases (Part II, Sections 4 and 5).
 # Results: ./summarise.sh <case>; tables and figures: papers/part2/tab_rig*, fig_rig*
 cd "${0%/*}" || exit 1

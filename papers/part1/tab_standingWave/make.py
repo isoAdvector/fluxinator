@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Part I, Table tab:standingWave: standing wave, max|U| after one time step and its peak
 over the first twenty steps (median over twelve interface offsets), peak and mean of
 max|U| over the first two wave periods on the refined mesh, and the number of cells with

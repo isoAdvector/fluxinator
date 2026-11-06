@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Writes 0/U of the translating Taylor-Green vortex u = U0 + sin(x - U0 t) cos z,
 w = -cos(x - U0 t) sin z at t = 0 on the 64x1x64 blockMesh of [0, 2 pi]^2 (x fastest, then z).
 U0 is read from the file U0 in the case. Usage: python3 writeU.py <case>"""

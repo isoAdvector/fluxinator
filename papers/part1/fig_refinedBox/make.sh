@@ -1,4 +1,6 @@
 #!/bin/sh
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Velocity magnitude in the box with a refined region, z_w = 0.49, t = 0.1 s.
 # Inputs: run/refinedBox/waterLevel_10steps/{iIF,cH,g1,g2}_hyd_z0.4900/*.png (written in
 # each case by pvbatch generateFigure.py, see run/refinedBox/Allrun). Output: refinedBox.pdf

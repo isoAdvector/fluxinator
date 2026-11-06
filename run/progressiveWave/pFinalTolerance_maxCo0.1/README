@@ -1,4 +1,0 @@
-Sensitivity to the p_rghFinal tolerance around surfCellTol (1e-10): fluxinator, 190x40,
-max Co 0.1, 30 s, tolerances 1e-10, 1e-11 and 1e-13. Reference (1e-12) and the failing 1e-9 are in
-../pressureSolver_maxCo0.1 (final_190x40_B0; final_190x40_B3, which also has GAMG and nNonOrth 0).
-Only p_rghFinal tolerance differs from final_190x40_B0.

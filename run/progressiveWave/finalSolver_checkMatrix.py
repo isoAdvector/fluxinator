@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Compares the finished fluxinator cases with their Part 1 interIsoGoam counterparts (same case
 number) using the metrics of analyseScan.py, and flags results that are worse than expected
 from the earlier tests. Writes finalSolver_maxCo/check.txt. Usage: python3 finalSolver_checkMatrix.py

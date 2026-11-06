@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Error of the horizontal velocity in the water of the progressive wave at t = 10 s (190x40,
 dt 0.005 s): u - u_exact, with the exact input wave at the crest position of the run; air (alpha < 0.5) masked. Implicit convection and explicit convection with
 LW + interfaceUpwind. Part II, Figure fig:waveField. Output: waveField.pdf. Usage: python3 make.py"""

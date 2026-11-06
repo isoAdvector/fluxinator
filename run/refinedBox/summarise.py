@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """max|U| after the first and the tenth step, and the first p_rgh residual, per
 configuration (rows) and water level z_w (columns), for waterLevel_10steps/<cfg>_z<zw>
 (configurations: makeCases.sh). Usage: python3 summarise.py"""

@@ -1,6 +1,6 @@
 # Quick test
 
-`./Allrun` in an OpenFOAM v2606 environment, after `../../Allwmake`, takes a few minutes on one
+`./Allrun` in an OpenFOAM v2606 environment, after `../../Allwmake`, takes about a minute on one
 core. It runs fluxinator of Part II on the accelerated disc (Section 4) and on one period of the
 progressive wave (needs `streamFunFoam`, skipped otherwise), and prints the results next to the
 expected values.

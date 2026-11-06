@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Is the Lax-Wendroff correction worth keeping? fluxinator (explicit + LW + interfaceUpwind,
 run/progressiveWave/finalSolver_maxCo) against the same cases without LW (explicit +
 interfaceUpwind, run/progressiveWave/finalSolverNoLW), 190x40 and 380x80 at maximum Courant

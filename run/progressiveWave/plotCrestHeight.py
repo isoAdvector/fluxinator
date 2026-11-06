@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Plots relative crest and trough heights, (h - h1)/h1, as functions of time,
 # where h1 is the height of the first crest (or trough). Heights are taken
