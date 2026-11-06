@@ -102,7 +102,7 @@ functions
         {
             freeSurf
             {
-                type            interface;
+                type            reconstructedInterface;
                 interpolate     false;
             }
         }

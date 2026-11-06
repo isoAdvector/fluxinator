@@ -26,7 +26,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::cutCellPLIC
+    Foam::isoAdvection::cutCellPLIC
 
 Description
     Class for cutting a cell, cellI, of an fvMesh, mesh_, at its intersection
@@ -63,6 +63,8 @@ SourceFiles
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
+{
+namespace isoAdvection
 {
 
 /*---------------------------------------------------------------------------*\
@@ -198,6 +200,7 @@ class cutCellPLIC
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+} // End namespace isoAdvection
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

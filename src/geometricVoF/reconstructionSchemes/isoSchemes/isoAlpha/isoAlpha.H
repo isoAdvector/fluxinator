@@ -24,7 +24,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::reconstruction::isoAlpha
+    Foam::isoAdvection::isoAlpha
 
 Description
     Reconstructs an interface (centre and normal vectors) consisting of isosurfaces
@@ -66,7 +66,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace reconstruction
+namespace isoAdvection
 {
 
 /*---------------------------------------------------------------------------*\
@@ -140,7 +140,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace reconstruction
+} // End namespace isoAdvection
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

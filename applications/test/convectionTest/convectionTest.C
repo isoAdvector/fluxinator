@@ -57,7 +57,7 @@ Description
 \*---------------------------------------------------------------------------*/
 
 #include "fvCFD.H"
-#include "isoAdvection.H"
+#include "isoAdvector.H"
 #include "surfaceIteratorPLIC.H"
 #include "ddtScheme.H"
 #include "convectionScheme.H"
@@ -65,6 +65,8 @@ Description
 #include "StringStream.H"
 #include "emptyFvPatch.H"
 #include "zeroField.H"
+
+using namespace Foam::isoAdvection;
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -431,7 +433,7 @@ int main(int argc, char *argv[])
     }
 
     alpha1.oldTime();
-    isoAdvection advector(alpha1, phi, U);
+    isoAdvector advector(alpha1, phi, U);
     zeroField Sp, Su;
     surfaceIteratorPLIC sIter(mesh, 1e-12);
 

@@ -25,7 +25,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::sampledInterface
+    Foam::isoAdvection::sampledInterface
 
 Description
     A sampledSurface that calculates the PLIC interface in VoF simulations
@@ -40,7 +40,7 @@ Usage
     {
         freeSurf
         {
-            type        interface;
+            type        reconstructedInterface;
             interpolate false;
         }
     }
@@ -49,7 +49,7 @@ Usage
     Where the sub-entries comprise:
     \table
         Property | Description                             | Required | Default
-        type     | interface                               | yes      |
+        type     | reconstructedInterface                               | yes      |
     \endtable
 
     Original code supplied by Henning Scheufler, DLR (2019)
@@ -70,6 +70,8 @@ SourceFiles
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
+{
+namespace isoAdvection
 {
 
 /*---------------------------------------------------------------------------*\
@@ -274,6 +276,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+} // End namespace isoAdvection
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

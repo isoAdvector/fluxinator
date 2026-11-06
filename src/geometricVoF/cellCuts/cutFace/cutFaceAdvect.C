@@ -32,7 +32,7 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::cutFaceAdvect::cutFaceAdvect
+Foam::isoAdvection::cutFaceAdvect::cutFaceAdvect
 (
     const fvMesh& mesh,
     const volScalarField& alpha1
@@ -56,7 +56,7 @@ Foam::cutFaceAdvect::cutFaceAdvect
 
 // * * * * * * * * * * * Public Member Functions  * * * * * * * * * * * * * //
 
-Foam::label Foam::cutFaceAdvect::calcSubFace
+Foam::label Foam::isoAdvection::cutFaceAdvect::calcSubFace
 (
     const label faceI,
     const vector& normal,
@@ -120,7 +120,7 @@ Foam::label Foam::cutFaceAdvect::calcSubFace
 }
 
 
-Foam::label Foam::cutFaceAdvect::calcSubFace
+Foam::label Foam::isoAdvection::cutFaceAdvect::calcSubFace
 (
     const face& f,
     const pointField& points,
@@ -184,7 +184,7 @@ Foam::label Foam::cutFaceAdvect::calcSubFace
 }
 
 
-Foam::scalar Foam::cutFaceAdvect::timeIntegratedFaceFlux
+Foam::scalar Foam::isoAdvection::cutFaceAdvect::timeIntegratedFaceFlux
 (
     const label faceI,
     const vector& x0,
@@ -331,7 +331,7 @@ Foam::scalar Foam::cutFaceAdvect::timeIntegratedFaceFlux
 }
 
 
-Foam::scalar Foam::cutFaceAdvect::timeIntegratedFaceFlux
+Foam::scalar Foam::isoAdvection::cutFaceAdvect::timeIntegratedFaceFlux
 (
     const label faceI,
     const scalarField& times,
@@ -378,7 +378,7 @@ Foam::scalar Foam::cutFaceAdvect::timeIntegratedFaceFlux
 }
 
 
-Foam::scalar Foam::cutFaceAdvect::timeIntegratedArea
+Foam::scalar Foam::isoAdvection::cutFaceAdvect::timeIntegratedArea
 (
     const pointField& fPts,
     const scalarField& pTimes,
@@ -517,7 +517,7 @@ Foam::scalar Foam::cutFaceAdvect::timeIntegratedArea
 }
 
 
-void Foam::cutFaceAdvect::isoFacesToFile
+void Foam::isoAdvection::cutFaceAdvect::isoFacesToFile
 (
     const DynamicList<List<point>>& faces,
     const word& filNam,
@@ -573,7 +573,7 @@ void Foam::cutFaceAdvect::isoFacesToFile
 }
 
 
-Foam::label Foam::cutFaceAdvect::calcSubFace
+Foam::label Foam::isoAdvection::cutFaceAdvect::calcSubFace
 (
     const label faceI,
     const label sign,
@@ -636,7 +636,7 @@ Foam::label Foam::cutFaceAdvect::calcSubFace
 }
 
 
-Foam::scalar Foam::cutFaceAdvect::timeIntegratedArea
+Foam::scalar Foam::isoAdvection::cutFaceAdvect::timeIntegratedArea
 (
     const label faceI,
     const scalar dt,
@@ -776,7 +776,7 @@ Foam::scalar Foam::cutFaceAdvect::timeIntegratedArea
 }
 
 
-void Foam::cutFaceAdvect::quadAreaCoeffs
+void Foam::isoAdvection::cutFaceAdvect::quadAreaCoeffs
 (
     const DynamicList<point>& pf0,
     const DynamicList<point>& pf1,
@@ -878,7 +878,7 @@ void Foam::cutFaceAdvect::quadAreaCoeffs
 }
 
 
-void Foam::cutFaceAdvect::cutPoints
+void Foam::isoAdvection::cutFaceAdvect::cutPoints
 (
     const label faceI,
     const scalar f0,
@@ -933,7 +933,7 @@ void Foam::cutFaceAdvect::cutPoints
 }
 
 
-void Foam::cutFaceAdvect::cutPoints
+void Foam::isoAdvection::cutFaceAdvect::cutPoints
 (
     const pointField& pts,
     const scalarField& f,
@@ -983,7 +983,7 @@ void Foam::cutFaceAdvect::cutPoints
 }
 
 
-void Foam::cutFaceAdvect::clearStorage()
+void Foam::isoAdvection::cutFaceAdvect::clearStorage()
 {
     subFaceCentre_ = Zero;
     subFaceArea_ = Zero;

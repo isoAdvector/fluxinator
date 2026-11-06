@@ -2,8 +2,7 @@
 cases first. Cost estimate: clock time of the Part 1 interIsoGoam run with the same case number
 (data/solvers_*.csv). 760x160 cases run with AllrunParallel on 4 cores (one NUMA node) and
 are reconstructed afterwards; all others serially with Allrun. A case counts as finished when its
-solver log ends with 'End' (the solvers abort at exit after 'End' because of duplicate static
-objects in libgeometricVoF and libnewGeometricVoF; this does not affect the results).
+solver log ends with 'End'.
 Progress: log.matrix. Usage: nohup python3 finalSolver_runMatrix.py > log.runMatrix 2>&1 &"""
 import csv
 import os

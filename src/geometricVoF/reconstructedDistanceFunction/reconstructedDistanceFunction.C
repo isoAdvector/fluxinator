@@ -36,7 +36,7 @@ License
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 Foam::autoPtr<Foam::indirectPrimitivePatch>
-Foam::reconstructedDistanceFunction::coupledFacesPatch() const
+Foam::isoAdvection::reconstructedDistanceFunction::coupledFacesPatch() const
 {
     const polyBoundaryMesh& patches = mesh_.boundaryMesh();
 
@@ -73,7 +73,7 @@ Foam::reconstructedDistanceFunction::coupledFacesPatch() const
 }
 
 
-void Foam::reconstructedDistanceFunction::markCellsNearSurf
+void Foam::isoAdvection::reconstructedDistanceFunction::markCellsNearSurf
 (
     const boolList& interfaceCells,
     const label neiRingLevel
@@ -189,7 +189,7 @@ void Foam::reconstructedDistanceFunction::markCellsNearSurf
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::reconstructedDistanceFunction::reconstructedDistanceFunction
+Foam::isoAdvection::reconstructedDistanceFunction::reconstructedDistanceFunction
 (
     const fvMesh& mesh
 )
@@ -228,7 +228,7 @@ Foam::reconstructedDistanceFunction::reconstructedDistanceFunction
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-const Foam::volScalarField&  Foam::reconstructedDistanceFunction::constructRDF
+const Foam::volScalarField&  Foam::isoAdvection::reconstructedDistanceFunction::constructRDF
 (
     const boolList& nextToInterface,
     const volVectorField& centre,
@@ -421,7 +421,7 @@ const Foam::volScalarField&  Foam::reconstructedDistanceFunction::constructRDF
 }
 
 
-void Foam::reconstructedDistanceFunction::updateContactAngle
+void Foam::isoAdvection::reconstructedDistanceFunction::updateContactAngle
 (
     const volScalarField& alpha,
     const volVectorField& U,

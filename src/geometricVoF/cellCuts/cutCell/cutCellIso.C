@@ -31,7 +31,7 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::cutCellIso::cutCellIso(const fvMesh& mesh, scalarField& f)
+Foam::isoAdvection::cutCellIso::cutCellIso(const fvMesh& mesh, scalarField& f)
 :
     cutCell(mesh),
     mesh_(mesh),
@@ -56,7 +56,7 @@ Foam::cutCellIso::cutCellIso(const fvMesh& mesh, scalarField& f)
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::label Foam::cutCellIso::calcSubCell
+Foam::label Foam::isoAdvection::cutCellIso::calcSubCell
 (
     const label cellI,
     const scalar cutValue
@@ -170,7 +170,7 @@ Foam::label Foam::cutCellIso::calcSubCell
 }
 
 
-const Foam::DynamicList<Foam::point>& Foam::cutCellIso::facePoints()
+const Foam::DynamicList<Foam::point>& Foam::isoAdvection::cutCellIso::facePoints()
 {
     if (facePoints_.empty())
     {
@@ -188,7 +188,7 @@ const Foam::DynamicList<Foam::point>& Foam::cutCellIso::facePoints()
 }
 
 
-void Foam::cutCellIso::clearStorage()
+void Foam::isoAdvection::cutCellIso::clearStorage()
 {
     cellI_ = -1;
     cutValue_ = 0;

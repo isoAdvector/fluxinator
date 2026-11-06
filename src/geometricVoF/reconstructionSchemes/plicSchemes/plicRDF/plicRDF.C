@@ -37,7 +37,7 @@ License
 
 namespace Foam
 {
-namespace reconstruction
+namespace isoAdvection
 {
     defineTypeNameAndDebug(plicRDF, 0);
     addToRunTimeSelectionTable(reconstructionSchemes,plicRDF, components);
@@ -47,7 +47,7 @@ namespace reconstruction
 
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
-void Foam::reconstruction::plicRDF::interpolateNormal()
+void Foam::isoAdvection::plicRDF::interpolateNormal()
 {
     addProfilingInFunction(geometricVoF);
     scalar dt = mesh_.time().deltaTValue();
@@ -182,7 +182,7 @@ void Foam::reconstruction::plicRDF::interpolateNormal()
     }
 }
 
-void Foam::reconstruction::plicRDF::gradSurf(const volScalarField& phi)
+void Foam::isoAdvection::plicRDF::gradSurf(const volScalarField& phi)
 {
     addProfilingInFunction(geometricVoF);
     leastSquareGrad<scalar> lsGrad("polyDegree1", mesh_.geometricD());
@@ -238,7 +238,7 @@ void Foam::reconstruction::plicRDF::gradSurf(const volScalarField& phi)
 }
 
 
-void Foam::reconstruction::plicRDF::setInitNormals(bool interpolate)
+void Foam::isoAdvection::plicRDF::setInitNormals(bool interpolate)
 {
     addProfilingInFunction(geometricVoF);
     zoneDistribute& exchangeFields = zoneDistribute::New(mesh_);
@@ -270,7 +270,7 @@ void Foam::reconstruction::plicRDF::setInitNormals(bool interpolate)
 }
 
 
-void Foam::reconstruction::plicRDF::calcResidual
+void Foam::isoAdvection::plicRDF::calcResidual
 (
     List<normalRes>& normalResidual
 )
@@ -341,7 +341,7 @@ void Foam::reconstruction::plicRDF::calcResidual
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::reconstruction::plicRDF::plicRDF
+Foam::isoAdvection::plicRDF::plicRDF
 (
     volScalarField& alpha1,
     const surfaceScalarField& phi,
@@ -412,7 +412,7 @@ Foam::reconstruction::plicRDF::plicRDF
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-void Foam::reconstruction::plicRDF::reconstruct(bool forceUpdate)
+void Foam::isoAdvection::plicRDF::reconstruct(bool forceUpdate)
 {
     addProfilingInFunction(geometricVoF);
     zoneDistribute& exchangeFields = zoneDistribute::New(mesh_);
@@ -578,7 +578,7 @@ void Foam::reconstruction::plicRDF::reconstruct(bool forceUpdate)
 }
 
 
-void Foam::reconstruction::plicRDF::mapAlphaField() const
+void Foam::isoAdvection::plicRDF::mapAlphaField() const
 {
     // without it we seem to get a race condition
     mesh_.C();

@@ -26,7 +26,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::cutFaceIso
+    Foam::isoAdvection::cutFaceIso
 
 Description
     Class for cutting a face, faceI, of an fvMesh, mesh_, at its intersection
@@ -60,6 +60,8 @@ SourceFiles
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
+{
+namespace isoAdvection
 {
 
 /*---------------------------------------------------------------------------*\
@@ -154,6 +156,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+} // End namespace isoAdvection
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

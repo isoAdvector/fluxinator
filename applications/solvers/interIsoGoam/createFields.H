@@ -147,7 +147,7 @@ mesh.setFluxRequired(alpha1.name());
 #include "createFvOptions.H"
 #include "createPorosity.H"
 
-isoAdvection advector(alpha1, phi, U);
+isoAdvector advector(alpha1, phi, U);
 
 // Gravity model for calculating gravity force read from
 // constant/gravityProperties or use default (solverDefaults.H).

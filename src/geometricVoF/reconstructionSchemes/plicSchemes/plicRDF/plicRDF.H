@@ -24,7 +24,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::reconstruction::plicRDF
+    Foam::isoAdvection::plicRDF
 
 Description
     Reconstructs an interface (centre and normal vector) consisting of planes
@@ -64,7 +64,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace reconstruction
+namespace isoAdvection
 {
 
 /*---------------------------------------------------------------------------*\
@@ -178,7 +178,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace reconstruction
+} // End namespace isoAdvection
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

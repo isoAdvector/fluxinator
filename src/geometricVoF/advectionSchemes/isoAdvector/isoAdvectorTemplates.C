@@ -28,14 +28,14 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "isoAdvection.H"
+#include "isoAdvector.H"
 #include "fvcSurfaceIntegrate.H"
 #include "upwind.H"
 
 // ************************************************************************* //
 
 template<typename Type>
-Type Foam::isoAdvection::faceValue
+Type Foam::isoAdvection::isoAdvector::faceValue
 (
     const GeometricField<Type, fvsPatchField, surfaceMesh>& f,
     const label facei
@@ -73,7 +73,7 @@ Type Foam::isoAdvection::faceValue
 
 
 template<typename Type>
-void Foam::isoAdvection::setFaceValue
+void Foam::isoAdvection::isoAdvector::setFaceValue
 (
     GeometricField<Type, fvsPatchField, surfaceMesh>& f,
     const label facei,
@@ -112,7 +112,7 @@ void Foam::isoAdvection::setFaceValue
 
 
 template<class SpType, class SuType>
-void Foam::isoAdvection::limitFluxes
+void Foam::isoAdvection::isoAdvector::limitFluxes
 (
     const SpType& Sp,
     const SuType& Su
@@ -132,7 +132,7 @@ void Foam::isoAdvection::limitFluxes
     const labelList& neighbour = mesh_.faceNeighbour();
 
     DebugInfo
-        << "isoAdvection: Before conservative bounding: min(alpha) = "
+        << "isoAdvector: Before conservative bounding: min(alpha) = "
         << minAlpha << ", max(alpha) = 1 + " << maxAlphaMinus1 << endl;
 
     surfaceScalarField dVfcorrectionValues("dVfcorrectionValues", dVf_*0.0);
@@ -262,7 +262,7 @@ void Foam::isoAdvection::limitFluxes
 
 
 template<class SpType, class SuType>
-void Foam::isoAdvection::boundFlux
+void Foam::isoAdvection::isoAdvector::boundFlux
 (
     const bitSet& nextToInterface,
     surfaceScalarField& dVfcorrectionValues,
@@ -427,7 +427,7 @@ void Foam::isoAdvection::boundFlux
 
 
 template<class SpType, class SuType>
-void Foam::isoAdvection::advect(const SpType& Sp, const SuType& Su)
+void Foam::isoAdvection::isoAdvector::advect(const SpType& Sp, const SuType& Su)
 {
     addProfilingInFunction(geometricVoF);
     DebugInFunction << endl;
@@ -464,7 +464,7 @@ void Foam::isoAdvection::advect(const SpType& Sp, const SuType& Su)
     // i.e. phi[facei]*alpha1[upwindCell[facei]]*dt
     dVf_ = upwind<scalar>(mesh_, phi_).flux(alpha1_)*mesh_.time().deltaT();
 
-    // Do the isoAdvection on surface cells
+    // Do the isoAdvector on surface cells
     timeIntegratedFlux();
 
     // Adjust alpha for mesh motion
@@ -546,7 +546,7 @@ void Foam::isoAdvection::advect(const SpType& Sp, const SuType& Su)
         reduce(dVNew, sumOp<scalar>());
         reduce(outNew, sumOp<scalar>());
 
-        Info<< "isoAdvection: new interface cells: n = " << nNew
+        Info<< "isoAdvector: new interface cells: n = " << nNew
             << ", |dalpha|V new = " << dVNew
             << ", all = " << dVAll
             << ", fraction = " << dVNew/max(dVAll, VSMALL)
@@ -556,7 +556,7 @@ void Foam::isoAdvection::advect(const SpType& Sp, const SuType& Su)
     {
         auto limits = gMinMax(alpha1In_);
 
-        Info<< "isoAdvection: After conservative bounding:"
+        Info<< "isoAdvector: After conservative bounding:"
             << " min(alpha) = " << limits.min()
             << ", max(alpha) = 1 + " << (limits.max()-1) << endl;
     }
@@ -574,7 +574,7 @@ void Foam::isoAdvection::advect(const SpType& Sp, const SuType& Su)
 
     advectionTime_ += (mesh_.time().elapsedCpuTime() - advectionStartTime);
     DebugInfo
-        << "isoAdvection: time consumption = "
+        << "isoAdvector: time consumption = "
         << label(100*advectionTime_/(mesh_.time().elapsedCpuTime() + SMALL))
         << "%" << endl;
 

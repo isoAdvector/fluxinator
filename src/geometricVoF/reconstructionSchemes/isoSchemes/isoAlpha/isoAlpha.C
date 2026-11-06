@@ -34,7 +34,7 @@ License
 
 namespace Foam
 {
-namespace reconstruction
+namespace isoAdvection
 {
     defineTypeNameAndDebug(isoAlpha, 0);
     addToRunTimeSelectionTable(reconstructionSchemes,isoAlpha, components);
@@ -44,7 +44,7 @@ namespace reconstruction
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::reconstruction::isoAlpha::isoAlpha
+Foam::isoAdvection::isoAlpha::isoAlpha
 (
     volScalarField& alpha1,
     const surfaceScalarField& phi,
@@ -73,7 +73,7 @@ Foam::reconstruction::isoAlpha::isoAlpha
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-void Foam::reconstruction::isoAlpha::reconstruct(bool forceUpdate)
+void Foam::isoAdvection::isoAlpha::reconstruct(bool forceUpdate)
 {
     addProfilingInFunction(geometricVoF);
     const bool uptodate = alreadyReconstructed(forceUpdate);

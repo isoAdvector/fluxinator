@@ -17,7 +17,7 @@ reconstructionSchemes/isoSchemes/isoAlpha/isoAlpha.C
 reconstructionSchemes/plicSchemes/gradAlpha/gradAlpha.C
 reconstructionSchemes/plicSchemes/plicRDF/plicRDF.C
 
-advectionSchemes/isoAdvection/isoAdvection.C
+advectionSchemes/isoAdvector/isoAdvector.C
 
 sampledInterface/sampledInterface.C
 

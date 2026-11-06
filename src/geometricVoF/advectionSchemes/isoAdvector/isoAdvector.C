@@ -28,7 +28,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "isoAdvection.H"
+#include "isoAdvector.H"
 #include "volFields.H"
 #include "interpolationCellPoint.H"
 #include "volPointInterpolation.H"
@@ -47,12 +47,15 @@ License
 
 namespace Foam
 {
-    defineTypeNameAndDebug(isoAdvection, 0);
+namespace isoAdvection
+{
+    defineTypeNameAndDebug(isoAdvector, 0);
+}
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::isoAdvection::isoAdvection
+Foam::isoAdvection::isoAdvector::isoAdvector
 (
     volScalarField& alpha1,
     const surfaceScalarField& phi,
@@ -181,7 +184,7 @@ Foam::isoAdvection::isoAdvection
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-void Foam::isoAdvection::setProcessorPatches()
+void Foam::isoAdvection::isoAdvector::setProcessorPatches()
 {
     const polyBoundaryMesh& patches = mesh_.boundaryMesh();
     surfaceCellFacesOnProcPatches_.clear();
@@ -203,7 +206,7 @@ void Foam::isoAdvection::setProcessorPatches()
 }
 
 
-void Foam::isoAdvection::extendMarkedCells
+void Foam::isoAdvection::isoAdvector::extendMarkedCells
 (
     bitSet& markedCell
 ) const
@@ -237,7 +240,7 @@ void Foam::isoAdvection::extendMarkedCells
 }
 
 
-void Foam::isoAdvection::timeIntegratedFlux()
+void Foam::isoAdvection::isoAdvector::timeIntegratedFlux()
 {
     addProfilingInFunction(geometricVoF);
     // Get time step
@@ -501,7 +504,7 @@ void Foam::isoAdvection::timeIntegratedFlux()
 
         if (debug || dict_.getOrDefault("diagnoseNewInterfaceCells", false))
         {
-            Info<< "isoAdvection: cells advected with an inherited isoface = "
+            Info<< "isoAdvector: cells advected with an inherited isoface = "
                 << returnReduce(nNewCells, sumOp<label>()) << endl;
         }
     }
@@ -560,7 +563,7 @@ void Foam::isoAdvection::timeIntegratedFlux()
 }
 
 
-void Foam::isoAdvection::setDownwindFaces
+void Foam::isoAdvection::isoAdvector::setDownwindFaces
 (
     const label celli,
     DynamicLabelList& downwindFaces
@@ -598,7 +601,7 @@ void Foam::isoAdvection::setDownwindFaces
 }
 
 
-Foam::scalar Foam::isoAdvection::netFlux
+Foam::scalar Foam::isoAdvection::isoAdvector::netFlux
 (
     const surfaceScalarField& dVf,
     const label celli
@@ -630,7 +633,7 @@ Foam::scalar Foam::isoAdvection::netFlux
 }
 
 
-Foam::DynamicList<Foam::label>  Foam::isoAdvection::syncProcPatches
+Foam::DynamicList<Foam::label>  Foam::isoAdvection::isoAdvector::syncProcPatches
 (
     surfaceScalarField& dVf,
     const surfaceScalarField& phi,
@@ -745,7 +748,7 @@ Foam::DynamicList<Foam::label>  Foam::isoAdvection::syncProcPatches
 }
 
 
-void Foam::isoAdvection::checkIfOnProcPatch(const label facei)
+void Foam::isoAdvection::isoAdvector::checkIfOnProcPatch(const label facei)
 {
     if (!mesh_.isInternalFace(facei))
     {
@@ -761,7 +764,7 @@ void Foam::isoAdvection::checkIfOnProcPatch(const label facei)
 }
 
 
-void Foam::isoAdvection::applyBruteForceBounding()
+void Foam::isoAdvection::isoAdvector::applyBruteForceBounding()
 {
     addProfilingInFunction(geometricVoF);
     bool alpha1Changed = false;
@@ -791,7 +794,7 @@ void Foam::isoAdvection::applyBruteForceBounding()
 }
 
 
-void Foam::isoAdvection::writeSurfaceCells() const
+void Foam::isoAdvection::isoAdvector::writeSurfaceCells() const
 {
     if (!mesh_.time().writeTime()) return;
 
@@ -815,7 +818,7 @@ void Foam::isoAdvection::writeSurfaceCells() const
 }
 
 
-void Foam::isoAdvection::writeIsoFaces
+void Foam::isoAdvection::isoAdvector::writeIsoFaces
 (
     const UList<List<point>>& faces
 ) const
@@ -841,7 +844,7 @@ void Foam::isoAdvection::writeIsoFaces
         {
             mkDir(outputFile.path());
             OBJstream os(outputFile);
-            Info<< nl << "isoAdvection: writing iso faces to file: "
+            Info<< nl << "isoAdvector: writing iso faces to file: "
                 << os.name() << nl << endl;
 
             for (const auto& procFacePts : allProcFaces)
@@ -857,7 +860,7 @@ void Foam::isoAdvection::writeIsoFaces
     {
         mkDir(outputFile.path());
         OBJstream os(outputFile);
-        Info<< nl << "isoAdvection: writing iso faces to file: "
+        Info<< nl << "isoAdvector: writing iso faces to file: "
             << os.name() << nl << endl;
 
         for (const auto& facePts : faces)

@@ -35,7 +35,7 @@ License
 
 template<class Type>
 Foam::tmp<Foam::Field<Type>>
-Foam::sampledInterface::sampleOnFaces
+Foam::isoAdvection::sampledInterface::sampleOnFaces
 (
     const interpolation<Type>& sampler
 ) const
@@ -54,7 +54,7 @@ Foam::sampledInterface::sampleOnFaces
 
 template<class Type>
 Foam::tmp<Foam::Field<Type>>
-Foam::sampledInterface::sampleOnPoints
+Foam::isoAdvection::sampledInterface::sampleOnPoints
 (
     const interpolation<Type>& interpolator
 ) const

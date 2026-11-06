@@ -31,7 +31,7 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::cutFaceIso::cutFaceIso(const fvMesh& mesh, scalarField& f)
+Foam::isoAdvection::cutFaceIso::cutFaceIso(const fvMesh& mesh, scalarField& f)
 :
     cutFace(mesh),
     mesh_(mesh),
@@ -50,7 +50,7 @@ Foam::cutFaceIso::cutFaceIso(const fvMesh& mesh, scalarField& f)
 
 // * * * * * * * * * * * Public Member Functions  * * * * * * * * * * * * * //
 
-Foam::label Foam::cutFaceIso::calcSubFace
+Foam::label Foam::isoAdvection::cutFaceIso::calcSubFace
 (
     const label faceI,
     const scalar cutValue
@@ -111,7 +111,7 @@ Foam::label Foam::cutFaceIso::calcSubFace
 }
 
 
-void Foam::cutFaceIso::clearStorage()
+void Foam::isoAdvection::cutFaceIso::clearStorage()
 {
     subFaceCentre_ = Zero;
     subFaceArea_ = Zero;

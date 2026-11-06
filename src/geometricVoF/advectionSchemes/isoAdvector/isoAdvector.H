@@ -27,7 +27,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::isoAdvection
+    Foam::isoAdvection::isoAdvector
 
 Description
     An implementation of the isoAdvector geometric Volume-of-Fluid method
@@ -62,8 +62,8 @@ Description
     Modified Henning Scheufler, DLR
 
 SourceFiles
-    isoAdvection.C
-    isoAdvectionTemplates.C
+    isoAdvector.C
+    isoAdvectorTemplates.C
 
 \*---------------------------------------------------------------------------*/
 
@@ -84,12 +84,14 @@ SourceFiles
 
 namespace Foam
 {
+namespace isoAdvection
+{
 
 /*---------------------------------------------------------------------------*\
-                        Class isoAdvection Declaration
+                        Class isoAdvector Declaration
 \*---------------------------------------------------------------------------*/
 
-class isoAdvection
+class isoAdvector
 {
     // Private data types
 
@@ -104,7 +106,7 @@ class isoAdvection
         //- Reference to mesh
         const fvMesh& mesh_;
 
-        //- Dictionary for isoAdvection controls
+        //- Dictionary for isoAdvector controls
         const dictionary dict_;
 
         //- VOF field
@@ -187,10 +189,10 @@ class isoAdvection
     // Private Member Functions
 
         //- No copy construct
-        isoAdvection(const isoAdvection&) = delete;
+        isoAdvector(const isoAdvector&) = delete;
 
         //- No copy assignment
-        void operator=(const isoAdvection&) = delete;
+        void operator=(const isoAdvector&) = delete;
 
 
         // Advection functions
@@ -301,13 +303,13 @@ class isoAdvection
 public:
 
     //- Runtime type information
-    TypeName("isoAdvection");
+    TypeName("isoAdvector");
 
     //- Constructors
 
         //- Construct given alpha, phi and velocity field. Note: phi should be
         // divergence free up to a sufficient tolerance
-        isoAdvection
+        isoAdvector
         (
             volScalarField& alpha1,
             const surfaceScalarField& phi,
@@ -316,7 +318,7 @@ public:
 
 
     //- Destructor
-    virtual ~isoAdvection() = default;
+    virtual ~isoAdvector() = default;
 
 
     // Member functions
@@ -402,12 +404,13 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+} // End namespace isoAdvection
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository
-#   include "isoAdvectionTemplates.C"
+#   include "isoAdvectorTemplates.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

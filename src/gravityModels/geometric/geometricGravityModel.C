@@ -35,6 +35,8 @@ License
 #include "processorPolyPatch.H"
 #include "syncTools.H"
 
+using namespace Foam::isoAdvection;
+
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 

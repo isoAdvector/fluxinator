@@ -32,12 +32,12 @@ License
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
-int Foam::cutCell::debug = 0;
+int Foam::isoAdvection::cutCell::debug = 0;
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::cutCell::cutCell
+Foam::isoAdvection::cutCell::cutCell
 (
     const fvMesh& mesh
 )
@@ -52,7 +52,7 @@ Foam::cutCell::cutCell
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-void Foam::cutCell::calcCellData
+void Foam::isoAdvection::cutCell::calcCellData
 (
     const DynamicList<point>& cutFaceCentres,
     const DynamicList<vector>& cutFaceAreas,
@@ -91,7 +91,7 @@ void Foam::cutCell::calcCellData
 }
 
 
-void Foam::cutCell::calcGeomDataCutFace
+void Foam::isoAdvection::cutCell::calcGeomDataCutFace
 (
     const DynamicList<DynamicList<point>>& faceEdges,
     const vector& subCellCentre,
@@ -161,7 +161,7 @@ void Foam::cutCell::calcGeomDataCutFace
 }
 
 
-void Foam::cutCell::calcIsoFacePointsFromEdges
+void Foam::isoAdvection::cutCell::calcIsoFacePointsFromEdges
 (
     const vector& faceArea,
     const vector& faceCentre,

@@ -31,7 +31,7 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::cutCellPLIC::cutCellPLIC(const fvMesh& mesh)
+Foam::isoAdvection::cutCellPLIC::cutCellPLIC(const fvMesh& mesh)
 :
     cutCell(mesh),
     mesh_(mesh),
@@ -56,7 +56,7 @@ Foam::cutCellPLIC::cutCellPLIC(const fvMesh& mesh)
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::label Foam::cutCellPLIC::calcSubCell
+Foam::label Foam::isoAdvection::cutCellPLIC::calcSubCell
 (
     const label celli,
     const scalar cutValue,
@@ -172,7 +172,7 @@ Foam::label Foam::cutCellPLIC::calcSubCell
 }
 
 
-const Foam::DynamicList<Foam::point>& Foam::cutCellPLIC::facePoints()
+const Foam::DynamicList<Foam::point>& Foam::isoAdvection::cutCellPLIC::facePoints()
 {
     if (facePoints_.empty())
     {
@@ -190,7 +190,7 @@ const Foam::DynamicList<Foam::point>& Foam::cutCellPLIC::facePoints()
 }
 
 
-void Foam::cutCellPLIC::clearStorage()
+void Foam::isoAdvection::cutCellPLIC::clearStorage()
 {
     cellI_ = -1;
     cutValue_ = 0;

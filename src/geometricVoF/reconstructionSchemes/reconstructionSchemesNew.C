@@ -30,8 +30,8 @@ License
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-Foam::autoPtr<Foam::reconstructionSchemes>
-Foam::reconstructionSchemes::New
+Foam::autoPtr<Foam::isoAdvection::reconstructionSchemes>
+Foam::isoAdvection::reconstructionSchemes::New
 (
     volScalarField& alpha1,
     const surfaceScalarField& phi,

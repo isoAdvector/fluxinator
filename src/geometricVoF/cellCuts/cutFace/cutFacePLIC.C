@@ -31,7 +31,7 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::cutFacePLIC::cutFacePLIC(const fvMesh& mesh)
+Foam::isoAdvection::cutFacePLIC::cutFacePLIC(const fvMesh& mesh)
 :
     cutFace(mesh),
     mesh_(mesh),
@@ -49,7 +49,7 @@ Foam::cutFacePLIC::cutFacePLIC(const fvMesh& mesh)
 
 // * * * * * * * * * * * Public Member Functions  * * * * * * * * * * * * * //
 
-Foam::label Foam::cutFacePLIC::calcSubFace
+Foam::label Foam::isoAdvection::cutFacePLIC::calcSubFace
 (
     const label faceI,
     const vector& normal,
@@ -115,7 +115,7 @@ Foam::label Foam::cutFacePLIC::calcSubFace
 }
 
 
-void Foam::cutFacePLIC::clearStorage()
+void Foam::isoAdvection::cutFacePLIC::clearStorage()
 {
     subFaceCentre_ = Zero;
     subFaceArea_ = Zero;

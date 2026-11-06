@@ -30,7 +30,7 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::surfaceIteratorPLIC::surfaceIteratorPLIC
+Foam::isoAdvection::surfaceIteratorPLIC::surfaceIteratorPLIC
 (
     const fvMesh& mesh,
     const scalar tol
@@ -44,7 +44,7 @@ Foam::surfaceIteratorPLIC::surfaceIteratorPLIC
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::label Foam::surfaceIteratorPLIC::vofCutCell
+Foam::label Foam::isoAdvection::surfaceIteratorPLIC::vofCutCell
 (
     const label celli,
     const scalar alpha1,
