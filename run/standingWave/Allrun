@@ -1,0 +1,10 @@
+#!/bin/bash
+# Runs the standing-wave studies of Part I, Section 5 and Appendix A.
+# Figure and table: papers/part1/fig_standingWaveSnapshots, tab_standingWave.
+cd "${0%/*}" || exit 1
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2512 environment first" >&2; exit 1; }
+./makeBaseMeshes.sh
+./paperScan.sh
+./snapshots.sh
+./paperScan_ddtCorrOff.sh
+./snapshots_ddtCorrOff.sh

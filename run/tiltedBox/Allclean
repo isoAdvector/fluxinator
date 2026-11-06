@@ -14,7 +14,7 @@ rm -f log.writeData
 if [ "$1" = "-scans" ]
 then
     rm -rf gravityModels_1step gravityModels_100steps gravityModels_1000steps \
-        meshTimeStep_1step airDensity_1000steps nLayers_1000steps
+        meshTimeStep_1step airDensity_1000steps nLayers_1000steps baseCaseNLayers
 else
     echo "Study directories kept; use ./Allclean -scans to delete them as well"
 fi

@@ -18,13 +18,14 @@ Part I (parmScanner, parameter file <study>.csv):
                             Courant limit, maxCo 0.5, 0.2, 0.1, 0.05 on each mesh
   solvers_fixedDt           the same with fixed time steps dt0, dt0/2, dt0/4, dt0/8,
                             dt0 = 0.02 s on 95x20, halved with each mesh refinement
-  nLayers_maxCo             interIsoGoam with nLayers 1 and 2
+  nLayers_maxCo             interIsoGoam with nLayers 1 and 2; every other study uses the
+                            default, 2
   solvers_*_ddtCorrOff      the solver studies with PIMPLE ddtCorr no (Appendix A;
                             stock solvers as interFoamDdtCorr, interIsoFoamDdtCorr;
-                            run/common/runStoredDdtCorrOff.sh)
+                            run/common/runDdtCorrOffStudy.sh)
 Part II:
-  finalSolver_maxCo,        fluxinator of Part II (interIsoGoam, explicit
-  finalSolver_fixedDt       convection, laxWendroff + interfaceUpwind, ddtCorr no) on
+  finalSolver_maxCo,        fluxinator with laxWendroff + interfaceUpwind and its
+  finalSolver_fixedDt       default explicit convection and ddtCorr off, on
                             the interIsoGoam cases of solvers_* (same case numbers;
                             finalSolver_buildMatrix.sh, finalSolver_runMatrix.py,
                             finalSolver_checkMatrix.py)

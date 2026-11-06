@@ -11,8 +11,7 @@ non-orthogonal corrector loops unless stated. Exact solution U = 0.
 `baseCaseHydrostatic` is identical except that the `setHydrostaticPressure`
 utility (`../../applications/utilities/setHydrostaticPressure`) sets a hydrostatic initial
 p_rgh = -rho (g & x_I) after `setAlphaField`. Both base
-cases contain `nLayers 1;` in `constant/gravityProperties` so that the studies can
-set it.
+cases use the default `nLayers`.
 
 ## Studies
 
@@ -44,7 +43,7 @@ set it.
   corrected snGrad(rho) is non-zero on 128 faces (76 uncorrected), but all their
   cells lie in rings 0 and 1, because opposite cell faces are parallel and the
   correction vector is orthogonal to the face normal.
-- nLayers 2 gives the same results as nLayers 1 on this mesh.
+- nLayers 2, the default used here, gives the same results as nLayers 1 on this mesh.
 
 ## Running
 

@@ -1,5 +1,5 @@
 scanName                  nLayers_maxCo
-baseCase                  baseCase
+baseCase                  baseCaseNLayers
 application               nx                      nz                      maxCo                   nLayers                     numberOfSubdomains         method
 system/controlDict.run    system/blockMeshDict    system/blockMeshDict    system/controlDict.run  constant/gravityProperties  system/decomposeParDict    system/decomposeParDict
 interIsoGoam              760                     160                     0.05                    1                           4                          scotch

@@ -38,7 +38,7 @@ def r4(a):
 
 
 def clock(d):
-    for f in sorted(glob.glob(os.path.join(d, "log.inter*"))):
+    for f in sorted(glob.glob(os.path.join(d, "log.inter*")) + glob.glob(os.path.join(d, "log.fluxinator"))):
         ex = re.findall(r"^ExecutionTime = (\S+)", open(f, errors="ignore").read(), re.M)
         if ex:
             return float(ex[-1])

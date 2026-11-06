@@ -28,13 +28,14 @@ for scan, f in [("finalSolver_fixedDt", "solvers_fixedDt.csv"), ("finalSolver_ma
 
 
 def finished(case):
-    for app in ("interIsoGoam", "interIsoGoamExt"):  # interIsoGoamExt: runs before the solver merge
+    for app in ("fluxinator", "interIsoGoam", "interIsoGoamExt"):  # the last two: runs before fluxinator
         lg = os.path.join(HERE, case, "log." + app)
         if os.path.exists(lg):
             return "\nEnd\n" in open(lg, errors="ignore").read()
     return False
 
 
+cost = {c: v for c, v in cost.items() if os.path.isdir(os.path.join(HERE, c))}
 jobs = sorted([c for c in cost if not finished(c)], key=lambda c: cost[c][0])
 log(f"start: {len(jobs)} cases to run, {len(cost) - len(jobs)} already finished")
 running = {}

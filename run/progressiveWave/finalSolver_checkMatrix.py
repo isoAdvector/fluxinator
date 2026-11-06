@@ -26,10 +26,10 @@ lines = [f"{'case':18s} {'mesh':>8s} {'dt/maxCo':>9s} {'Co':>5s} | {'dH':>6s} {'
 flags_all = []
 for key in sorted(old, key=lambda k: (k.split('/')[0], int(old[k]['nx']), -float(old[k].get('deltaT') or old[k].get('maxCo')))):
     d = os.path.join(HERE, key)
-    lg = os.path.join(d, "log.interIsoGoam")
-    if not os.path.exists(lg):
-        lg = os.path.join(d, "log.interIsoGoamExt")  # runs before the solver merge
-    if not os.path.exists(lg):
+    # log.interIsoGoam*: runs made before fluxinator
+    lg = next((p for p in (os.path.join(d, "log." + a) for a in ("fluxinator", "interIsoGoam", "interIsoGoamExt"))
+               if os.path.exists(p)), None)
+    if lg is None:
         continue
     txt = open(lg, errors="ignore").read()
     o = old[key]

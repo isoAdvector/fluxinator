@@ -35,6 +35,11 @@ for scan in schemesRotatedMesh_10steps nonOrthCorrectors_10steps hydrostaticStar
 do
     parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
 done
+# The same studies with ddtCorr off (Part I, Appendix A)
+for scan in schemes_10steps schemesRotatedMesh_10steps nonOrthCorrectors_10steps hydrostaticStart_10steps
+do
+    ../common/runDdtCorrOffStudy.sh "$scan"
+done
 
 # Numbers behind the paper (tracked in git): one summary per scan
 mkdir -p data

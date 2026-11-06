@@ -31,12 +31,6 @@ for d in system/controlDict system/controlDict.run; do
     esac
 done
 foamDictionary -entry PIMPLE.ddtCorr -set ${DDTCORR:-no} system/fvSolution > /dev/null
-# The stored cases ran with the former nLayers default of 1 (default 2 since 2026-10-28)
-if grep -qE "^\s*gravityModel\s+geometric\s*;" constant/gravityProperties 2>/dev/null \
-   && ! grep -qE "^\s*nLayers" constant/gravityProperties
-then
-    foamDictionary -entry nLayers -set 1 constant/gravityProperties > /dev/null
-fi
 echo "stored: $1  change: PIMPLE.ddtCorr ${DDTCORR:-no}  nProcs: $np" > ddtCorrOff.info
 if [ "$np" -gt 1 ]; then
     cp $(dirname $(readlink -f "$0"))/../progressiveWave/baseCase_fixedDt/AllrunParallel .

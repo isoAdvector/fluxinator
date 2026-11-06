@@ -15,7 +15,7 @@
 
 Every case has a README. A study directory holds the runs of one parameter
 scan or set of variants; `<study>_ddtCorrOff` repeats a Part I study with
-PIMPLE `ddtCorr no` (Part I, Appendix A; `common/runStoredDdtCorrOff.sh`).
+PIMPLE `ddtCorr no` (Part I, Appendix A; `common/runDdtCorrOffStudy.sh`).
 The figures and tables of the papers are made in `../papers`.
 
 Runs are not tracked by git, only their set-ups and the summaries in `data/`;

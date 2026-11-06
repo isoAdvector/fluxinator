@@ -51,9 +51,9 @@ for case, (nx, co) in CASES.items():
 L += ["", "Fixed time step 0.02 s, 190x40 (max Courant number 0.65-0.83): time reached of 10 s"]
 for v, d in [("LW + interfaceUpwind", os.path.join(CONV, "explicitLWIU_190x40_dt0.02")),
              ("interfaceUpwind", os.path.join(FIN, "finalSolverNoLW", "f1_190x40_dt0.02"))]:
-    lg = os.path.join(d, "log.interIsoGoam")
-    if not os.path.exists(lg):
-        lg = os.path.join(d, "log.interIsoGoamExt")  # runs made before the solver merge
+    # the older runs have log.interIsoGoam or log.interIsoGoamExt
+    lg = next((p for p in (os.path.join(d, "log." + a) for a in ("fluxinator", "interIsoGoam", "interIsoGoamExt"))
+               if os.path.exists(p)), os.path.join(d, "log.fluxinator"))
     t = [float(l.split()[2]) for l in open(lg, errors="ignore") if l.startswith("Time = ")] if os.path.exists(lg) else [0]
     end = "\nEnd\n" in open(lg, errors="ignore").read() if os.path.exists(lg) else False
     L.append(f"  {v:22s} last time {t[-1]:6.2f} s  {'finished' if end else 'stopped (diverged or running)'}")

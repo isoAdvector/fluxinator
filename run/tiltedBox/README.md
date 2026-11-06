@@ -16,8 +16,8 @@ spurious current. Fixed time step 0.01 s, OpenFOAM v2512.
 | `nLayers_1000steps` | interIsoGoam, geometric with nLayers 0, 1 and 2, and constantHeight, 1000 time steps |
 | `<study>_ddtCorrOff` | the same runs with PIMPLE `ddtCorr no` (Part I, Appendix A); stock interFoam and interIsoFoam run as interFoamDdtCorr and interIsoFoamDdtCorr |
 
-The base case `constant/gravityProperties` contains `nLayers 1;` so that the
-studies can set it.
+The base case uses the default `nLayers`. `nLayers_1000steps` varies it and starts from
+`baseCaseNLayers`, the base case with the entry added (`../common/makeNLayersBase.sh`).
 
 ## Findings
 

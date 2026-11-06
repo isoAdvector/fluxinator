@@ -18,6 +18,7 @@ command -v pvpython > /dev/null || echo "Warning: pvpython not found; case image
 source "$cfdTools"
 maxJobs=${MAXJOBS:-$(nproc)}
 
+../common/makeNLayersBase.sh baseCase baseCaseNLayers
 for study in \
     gravityModels_1step \
     gravityModels_100steps \
@@ -27,6 +28,7 @@ for study in \
     nLayers_1000steps
 do
     parmScanner -file "$study.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
+    ../common/runDdtCorrOffStudy.sh "$study"    # Part I, Appendix A
 done
 
 python3 writeData.py > log.writeData 2>&1

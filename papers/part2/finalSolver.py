@@ -1,5 +1,5 @@
-"""fluxinator (interIsoGoam, explicit convection, Gauss laxWendroff ... interfaceUpwind,
-ddtCorr no; run/progressiveWave/finalSolver_*) against the Part 1 solvers rerun with ddtCorr off
+"""fluxinator (explicit convection, Gauss laxWendroff ... interfaceUpwind, ddtCorr off;
+run/progressiveWave/finalSolver_*) against the Part 1 solvers rerun with ddtCorr off
 (run/progressiveWave/solvers_*_ddtCorrOff), on the progressive wave of Part 1 (H 0.125 m, T 2 s,
 d 0.4 m, one wavelength, periodic, 30 s = 15 periods). Same case numbers in both sets.
 Only finished runs are used (Part 1 reruns of the 760x160 mesh are partly still running).

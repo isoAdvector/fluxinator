@@ -10,3 +10,4 @@ python3 finalSolver_runMatrix.py        # at most 16 cores, see the script
 ../common/runCases.sh log.interIsoGoam convection/*/ momentumFlux/*/
 bash finalSolverNoLW/runAll.sh
 bash timing_maxCo0.1_noGauge/runAll.sh  # time per step; at most 8 runs at a time, nothing else running
+python3 timing_maxCo0.1_noGauge/analyse.py

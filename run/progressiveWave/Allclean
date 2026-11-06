@@ -8,6 +8,6 @@ rm -rf __pycache__
 rm -f log.analyseScan_* log.writeData
 if [ "$1" = "-scans" ]
 then
-    rm -rf solvers_maxCo solvers_fixedDt nLayers_maxCo
+    rm -rf solvers_maxCo solvers_fixedDt nLayers_maxCo baseCaseNLayers
 fi
 #------------------------------------------------------------------------------

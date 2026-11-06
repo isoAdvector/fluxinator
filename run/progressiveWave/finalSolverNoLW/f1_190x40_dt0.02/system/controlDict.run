@@ -15,7 +15,7 @@ FoamFile
     object          controlDict;
 }
 
-application     interIsoGoam;
+application     fluxinator;
 
 startFrom       latestTime;
 
@@ -80,7 +80,6 @@ functions
     }
 }
 
-libs            ( interfaceSchemes );
 
 
 // ************************************************************************* //

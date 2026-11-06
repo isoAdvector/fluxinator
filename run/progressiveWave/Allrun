@@ -30,10 +30,14 @@ then
     [ -n "$WM_PROJECT_DIR" ] || { echo "Source the OpenFOAM environment first" >&2; exit 1; }
     source "$cfdTools"
 
+    ../common/makeNLayersBase.sh baseCase baseCaseNLayers
     for study in solvers_maxCo solvers_fixedDt nLayers_maxCo
     do
         parmScanner -file "$study.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
     done
+    # The solver studies again with ddtCorr off (Part I, Appendix A; used in Part II)
+    ../common/runDdtCorrOffStudy.sh solvers_maxCo
+    ../common/runDdtCorrOffStudy.sh solvers_fixedDt
 fi
 
 # Accuracy and efficiency metrics per run, and the derived numbers quoted in Part I
