@@ -21,7 +21,7 @@ ROWS = {
                             ("schemesRotatedMesh_10steps", "0004")],
     "interIsoGoam, constantHeight": [("nonOrthCorrectors_10steps", "0007"), ("nonOrthCorrectors_10steps", "0008"),
                                      ("hydrostaticStart_10steps", "0002"), ("schemes_10steps", "0006"), None],
-    "interIsoGoam, geometric, nL = 1": [("schemes_10steps", "0002"), ("nonOrthCorrectors_10steps", "0002"),
+    "interIsoGoam, geometric, nL = 2": [("schemes_10steps", "0002"), ("nonOrthCorrectors_10steps", "0002"),
                                         ("hydrostaticStart_10steps", "0000"), ("schemes_10steps", "0005"),
                                         ("schemesRotatedMesh_10steps", "0005")],
 }
