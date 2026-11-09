@@ -1,11 +1,19 @@
-# geometricGravity
+# fluxinator
+
+Developed and maintained by Johan Roenby, [STROMNING](https://stromning.com).
 
 Code and test cases for the paper series *Consistent interfacial flow numerics*:
-Part I, the gravity force term, and Part II, the momentum convection term. The
-papers are the submodules `paper/` (Part I,
-[isoAdvector/GravityFormulationPaper](https://github.com/isoAdvector/GravityFormulationPaper))
-and `paper2/` (Part II,
-[isoAdvector/interfaceConvectionPaper](https://github.com/isoAdvector/interfaceConvectionPaper)).
+
+- J. Roenby, K. Missios, K. Møller, S. Aliyar and H. Scheufler (2026). Consistent
+  interfacial flow numerics – Part I: The gravity force term.
+  [arXiv:XXXX.XXXXX](https://arxiv.org/abs/XXXX.XXXXX)
+- J. Roenby (2026). Consistent interfacial flow numerics – Part II: The momentum
+  convection term. [arXiv:YYYY.YYYYY](https://arxiv.org/abs/YYYY.YYYYY)
+
+Please cite the papers when you use the code.
+
+STROMNING offers consulting, custom development, training and support for interfacial
+and multiphase flow simulation with OpenFOAM. Contact: johan@stromning.com.
 
 ## The solver
 
@@ -63,8 +71,6 @@ with function objects (for example `convectiveMomentumFlux` in
 | `applications/utilities/` | `setHydrostaticPressure`; `surfacePosition` (submodule) |
 | `run/` | the test cases, one directory per case (`run/README.md`) |
 | `papers/part1/`, `papers/part2/` | one directory per figure and table of each paper (below) |
-| `paper/` | the Part I paper (submodule) |
-| `paper2/` | the Part II paper (submodule) |
 
 ## Test cases, figures and tables
 
@@ -103,8 +109,7 @@ source <OpenFOAM-v2606>/etc/bashrc
 ```
 
 After cloning, get `surfacePosition` with
-`git submodule update --init applications/utilities/surfacePosition`; the papers are
-not needed to build or run. The wave cases need `streamFunFoam` and `calcStreamFunctionWave`
+`git submodule update --init applications/utilities/surfacePosition`. The wave cases need `streamFunFoam` and `calcStreamFunctionWave`
 from [InterFlowers/streamFunctionWave](https://github.com/InterFlowers/streamFunctionWave),
 and the scans use `parmScanner` from
 [isoAdvector/cfdTools](https://github.com/isoAdvector/cfdTools). The figure
