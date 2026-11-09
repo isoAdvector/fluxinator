@@ -27,7 +27,7 @@ gradSchemes
 
 divSchemes
 {
-    div(rhoPhi,U)   Gauss laxWendroff U phi limitedLinearV 1;
+    div(rhoPhi,U)   Gauss laxWendroff limitedLinearV 1;
     div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
 }
 

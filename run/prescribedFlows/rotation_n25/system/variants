@@ -7,8 +7,8 @@ variants
     implBackward_new { convection implicit; ddt backward; div "Gauss limitedLinearV 1"; force new; }
     explLinear_new  { convection explicit; ddt Euler;    div "Gauss linear"; force new; }
     explUpwind_new  { convection explicit; ddt Euler;    div "Gauss upwind"; force new; }
-    explIU_new      { convection explicit; ddt Euler;    div "Gauss interfaceUpwind alpha.water 1e-6 limitedLinearV 1"; force new; }
-    implIU_new      { convection implicit; ddt Euler;    div "Gauss interfaceUpwind alpha.water 1e-6 limitedLinearV 1"; force new; }
-    explLW_new      { convection explicit; ddt Euler;    div "Gauss laxWendroff U phi limitedLinearV 1"; force new; }
-    explLWIU_new    { convection explicit; ddt Euler;    div "Gauss laxWendroff U phi interfaceUpwind alpha.water 1e-6 limitedLinearV 1"; force new; }
+    explIU_new      { convection explicit; ddt Euler;    div "Gauss interfaceUpwind limitedLinearV 1"; force new; }
+    implIU_new      { convection implicit; ddt Euler;    div "Gauss interfaceUpwind limitedLinearV 1"; force new; }
+    explLW_new      { convection explicit; ddt Euler;    div "Gauss laxWendroff limitedLinearV 1"; force new; }
+    explLWIU_new    { convection explicit; ddt Euler;    div "Gauss laxWendroff interfaceUpwind limitedLinearV 1"; force new; }
 }

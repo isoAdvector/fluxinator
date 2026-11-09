@@ -13,7 +13,7 @@ for c in 0032 0029 0026 0020 0017 0014; do
     mkdir -p $c/constant
     cp -r ../finalSolver_maxCo/$c/{0.orig,system,Allrun,parmScannerParms} $c/
     for f in $(ls ../finalSolver_maxCo/$c/constant | grep -v polyMesh); do cp -r ../finalSolver_maxCo/$c/constant/$f $c/constant/; done
-    sed -i 's/Gauss laxWendroff U phi interfaceUpwind/Gauss interfaceUpwind/' $c/system/fvSchemes
+    sed -i 's/Gauss laxWendroff interfaceUpwind/Gauss interfaceUpwind/' $c/system/fvSchemes
 done
 for c in 0032 0029 0026 0020 0017 0014 f1_190x40_dt0.02; do
     (cd $c && ./Allrun > log.Allrun 2>&1; echo "$(date +%T) $c $(tail -1 log.fluxinator 2>/dev/null)" >> ../log.runAll) &

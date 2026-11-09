@@ -43,8 +43,14 @@ Description
 
     Usage, e.g. for the momentum convection of a VoF solver:
     \verbatim
-        div(rhoPhi,U)   Gauss interfaceUpwind alpha.water 1e-6 limitedLinearV 1;
+        div(rhoPhi,U)   Gauss interfaceUpwind limitedLinearV 1;
     \endverbatim
+    The volume fraction field and tol may be given before the underlying
+    scheme, e.g. interfaceUpwind alpha.water 1e-6 limitedLinearV 1. By
+    default they are alpha1 (alpha.<first phase> of transportProperties) and
+    surfCellTol of its solver dictionary, so that the interface cells are
+    those of isoAdvector. The phase makes no difference: the test is the
+    same for alpha and 1 - alpha.
     fluxinator links the library; other solvers need libs (interfaceSchemes)
     in controlDict. Needs the face flux; the underlying scheme must not be a
     corrected scheme.
@@ -59,6 +65,7 @@ SourceFiles
 
 #include "surfaceInterpolationScheme.H"
 #include "volFields.H"
+#include "interfaceSchemeArgs.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -87,6 +94,31 @@ class interfaceUpwind
 
     // Private Member Functions
 
+        //- The volume fraction field named in the scheme, or alpha1
+        static word readAlphaName(const fvMesh& mesh, Istream& is)
+        {
+            const word name
+            (
+                interfaceSchemeArgs::fieldName<volScalarField>(mesh, is)
+            );
+            return name.empty() ? interfaceSchemeArgs::alpha1Name(mesh) : name;
+        }
+
+        //- The tolerance given in the scheme, or surfCellTol of alphaName
+        static scalar readTol
+        (
+            const fvMesh& mesh,
+            const word& alphaName,
+            Istream& is
+        )
+        {
+            scalar tol = 0;
+            return
+                interfaceSchemeArgs::readNumber(is, tol)
+              ? tol
+              : interfaceSchemeArgs::surfCellTol(mesh, alphaName);
+        }
+
         void checkUncorrected() const
         {
             if (tScheme_().corrected())
@@ -110,8 +142,8 @@ public:
         interfaceUpwind(const fvMesh& mesh, Istream& is)
         :
             surfaceInterpolationScheme<Type>(mesh),
-            alphaName_(is),
-            tol_(readScalar(is)),
+            alphaName_(readAlphaName(mesh, is)),
+            tol_(readTol(mesh, alphaName_, is)),
             faceFlux_
             (
                 mesh.lookupObject<surfaceScalarField>(word(is))
@@ -130,8 +162,8 @@ public:
         )
         :
             surfaceInterpolationScheme<Type>(mesh),
-            alphaName_(is),
-            tol_(readScalar(is)),
+            alphaName_(readAlphaName(mesh, is)),
+            tol_(readTol(mesh, alphaName_, is)),
             faceFlux_(faceFlux),
             tScheme_(surfaceInterpolationScheme<Type>::New(mesh, faceFlux, is))
         {

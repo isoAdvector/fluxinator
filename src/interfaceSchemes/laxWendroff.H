@@ -53,8 +53,11 @@ Description
     Usage, for explicit momentum convection in interIsoGoam
     (PIMPLE explicitConvection yes, convected field U.oldTime()):
     \verbatim
-        div(rhoPhi,U)   Gauss laxWendroff U phi limitedLinearV 1;
+        div(rhoPhi,U)   Gauss laxWendroff interfaceUpwind limitedLinearV 1;
     \endverbatim
+    The velocity and the volumetric flux may be named before the underlying
+    scheme, e.g. laxWendroff U phi limitedLinearV 1; the defaults are U and
+    phi.
     fluxinator links the library; other solvers need libs (interfaceSchemes)
     in controlDict.
 
@@ -68,6 +71,7 @@ SourceFiles
 
 #include "surfaceInterpolationScheme.H"
 #include "volFields.H"
+#include "interfaceSchemeArgs.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -81,10 +85,10 @@ class laxWendroff
 {
     // Private Data
 
-        //- Name of the velocity field (its oldTime() is used)
+        //- Name of the velocity field (its oldTime() is used; default U)
         const word UName_;
 
-        //- Name of the volumetric face flux
+        //- Name of the volumetric face flux (default phi)
         const word phiName_;
 
         //- Face flux of the underlying scheme (upwind direction)
@@ -122,8 +126,11 @@ public:
         laxWendroff(const fvMesh& mesh, Istream& is)
         :
             surfaceInterpolationScheme<Type>(mesh),
-            UName_(is),
-            phiName_(is),
+            UName_(interfaceSchemeArgs::fieldName<volVectorField>(mesh, is, "U")),
+            phiName_
+            (
+                interfaceSchemeArgs::fieldName<surfaceScalarField>(mesh, is, "phi")
+            ),
             faceFlux_(mesh.lookupObject<surfaceScalarField>(phiName_)),
             tScheme_
             (
@@ -147,8 +154,11 @@ public:
         )
         :
             surfaceInterpolationScheme<Type>(mesh),
-            UName_(is),
-            phiName_(is),
+            UName_(interfaceSchemeArgs::fieldName<volVectorField>(mesh, is, "U")),
+            phiName_
+            (
+                interfaceSchemeArgs::fieldName<surfaceScalarField>(mesh, is, "phi")
+            ),
             faceFlux_(faceFlux),
             tScheme_(surfaceInterpolationScheme<Type>::New(mesh, faceFlux, is))
         {

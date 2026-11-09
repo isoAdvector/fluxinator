@@ -44,8 +44,7 @@ Description
     system/fvSchemes, as in any solver. Explicit convection requires the
     interfaceUpwind scheme, and the solver warns without it. For waves use
 
-        div(rhoPhi,U) Gauss laxWendroff U phi
-                      interfaceUpwind alpha.water 1e-6 limitedLinearV 1;
+        div(rhoPhi,U) Gauss laxWendroff interfaceUpwind limitedLinearV 1;
 
 \*---------------------------------------------------------------------------*/
 

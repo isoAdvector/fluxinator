@@ -99,8 +99,8 @@ const scalar gravityTheta =
                 << "Explicit convection without the interfaceUpwind scheme in"
                 << " div(rhoPhi,U): velocity differences are amplified in"
                 << " interface cells. Use, for example," << nl
-                << "    div(rhoPhi,U) Gauss laxWendroff U phi interfaceUpwind"
-                << " alpha.water 1e-6 limitedLinearV 1;" << nl << endl;
+                << "    div(rhoPhi,U) Gauss laxWendroff interfaceUpwind"
+                << " limitedLinearV 1;" << nl << endl;
         }
     }
 }

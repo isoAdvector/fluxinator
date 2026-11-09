@@ -5,7 +5,7 @@
 # (solvers_fixedDt and solvers_maxCo), keeping the case numbers.
 # Changes relative to the Part 1 case: application fluxinator, whose defaults are explicit
 # convection, ddtCorr off and the geometric gravity model;
-# div(rhoPhi,U) Gauss laxWendroff U phi interfaceUpwind alpha.water 1e-6 limitedLinearV 1;
+# div(rhoPhi,U) Gauss laxWendroff interfaceUpwind limitedLinearV 1;
 # fields written every 0.2 s; the 760x160 cases decomposed into 4 subdomains.
 # Usage: ./finalSolver_buildMatrix.sh   (creates finalSolver_fixedDt/ and finalSolver_maxCo/)
 set -e
@@ -27,7 +27,7 @@ for pair in "solvers_fixedDt:finalSolver_fixedDt" "solvers_maxCo:finalSolver_max
         sed -i 's/^application .*/application     fluxinator;/' system/controlDict system/controlDict.run
         foamDictionary -entry writeControl -set adjustable system/controlDict.run > /dev/null
         foamDictionary -entry writeInterval -set 0.2 system/controlDict.run > /dev/null
-        foamDictionary -entry 'divSchemes.div(rhoPhi,U)' -set 'Gauss laxWendroff U phi interfaceUpwind alpha.water 1e-6 limitedLinearV 1' system/fvSchemes > /dev/null
+        foamDictionary -entry 'divSchemes.div(rhoPhi,U)' -set 'Gauss laxWendroff interfaceUpwind limitedLinearV 1' system/fvSchemes > /dev/null
         if grep -q "nx: 760" parmScannerParms; then
             foamDictionary -entry numberOfSubdomains -set 4 system/decomposeParDict > /dev/null
             foamDictionary -entry method -set simple system/decomposeParDict > /dev/null

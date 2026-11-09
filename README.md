@@ -27,7 +27,7 @@ an entry in the case overrides them. The convection scheme is set in `system/fvS
 and explicit convection requires `interfaceUpwind` (the solver warns without it):
 
 ```
-div(rhoPhi,U) Gauss laxWendroff U phi interfaceUpwind alpha.water 1e-6 limitedLinearV 1;
+div(rhoPhi,U) Gauss laxWendroff interfaceUpwind limitedLinearV 1;
 ```
 
 Keep the maximum Courant number at about 0.1 or less for accurate wave propagation.
@@ -42,7 +42,7 @@ defaults, reproduce the results of the papers. It has these run-time options:
 |---|---|
 | defaults, one outer corrector | interIsoFoam |
 | `gravityModel geometric` (constant/gravityProperties) | the solver of Part I |
-| also PIMPLE `explicitConvection yes` and `div(rhoPhi,U) Gauss laxWendroff U phi interfaceUpwind alpha.water 1e-6 limitedLinearV 1` | fluxinator of Part II |
+| also PIMPLE `explicitConvection yes` and `div(rhoPhi,U) Gauss laxWendroff interfaceUpwind limitedLinearV 1` | fluxinator of Part II |
 | `nOuterCorrectors` > 1 | time-centred step (not interIsoFoam, see below) |
 
 The geometric gravity model takes the height in the gravity term at the
