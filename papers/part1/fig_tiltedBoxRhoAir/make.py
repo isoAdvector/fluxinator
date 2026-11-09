@@ -81,7 +81,7 @@ for key, (label, colour, marker) in STYLE.items():
         # Diverged runs: cross kept just inside the top of the axis
         ax.loglog([p[0] for p in bad], [min(max(p[1], Y_RANGE[0]), 0.3*Y_RANGE[1]) for p in bad], "x",
                   color=colour, markersize=8, markeredgewidth=1.8)
-ax.set_xlabel(r"$\rho_{air}$ [kg/m$^3$] ($\rho_{water} = 1000$ kg/m$^3$)")
+ax.set_xlabel(r"$\rho_{\mathrm{light}}$ [kg/m$^3$] ($\rho_{\mathrm{heavy}} = 1000$ kg/m$^3$)")
 ax.set_ylabel(r"max$|\mathbf{U}|$ at $t = %g$ s [m/s]" % END_TIME)
 ax.set_ylim(*Y_RANGE)
 ax.grid(True, which="major", linewidth=0.4, alpha=0.6)
