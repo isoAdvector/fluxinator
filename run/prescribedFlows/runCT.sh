@@ -5,13 +5,18 @@
 # REF=massCentroid sets the reference point (default cellCentre, see convectionTest.C)
 # e.g. runCT.sh rot reset "0.5 0 0.75" 1 "Omega 2; rotationCentre (0.5 0 0.5);"
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
+type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 out=$1; mode=$2; origin=$3; tEnd=$4; flow=$5
 BASE=$(readlink -f "$(dirname "$0")/baseCase")
 rm -rf "$out"; mkdir -p "$out"; cp -r $BASE/* "$out"/; cd "$out" || exit 1
-[ -n "$N" ] && sed -i "s/^n 50;/n $N;/" system/blockMeshDict
-[ -n "$DT" ] && sed -i "s/deltaT 0.005;/deltaT $DT;/" system/controlDict
-sed -i "s/origin (0.5 0 0.75)/origin ($origin)/" system/setAlphaFieldDict
-sed -i "s/endTime 1;/endTime $tEnd;/" system/controlDict
+set -e   # stop if dictator fails (a missing file or an ambiguous entry)
+{
+[ -n "$N" ] && dictator system/blockMeshDict n $N
+[ -n "$DT" ] && dictator system/controlDict deltaT $DT
+dictator system/setAlphaFieldDict origin "($origin)"
+dictator system/controlDict endTime $tEnd
+} > log.dictator
+set +e
 cat > system/convectionTestDict <<EOD
 FoamFile { version 2.0; format ascii; class dictionary; object convectionTestDict; }
 mode $mode;

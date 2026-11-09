@@ -86,7 +86,7 @@ def amp(case):
     for d in ts:
         U = foamio.read_vol(os.path.join(case, d, "U")).reshape(n, n, 3)
         t.append(float(d)); a.append(2*np.mean((U[:, :, 0].mean(1) - U0)*np.cos(2*zc)))
-    dt = float(re.search(r"^deltaT\s+(\S+);", open(os.path.join(case, "system/controlDict")).read(), re.M).group(1))
+    dt = float(foamio.entry(os.path.join(case, "system/controlDict"), "deltaT"))
     return np.array(t), np.array(a), dt
 
 

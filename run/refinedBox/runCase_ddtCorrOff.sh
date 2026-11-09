@@ -5,19 +5,31 @@
 # One untilted refined-box case in ${SCANDIR:-waterLevel_10steps_ddtCorrOff}/<name>_z<zw>, 10 steps of 0.01 s, with
 # PIMPLE ddtCorr ${DDTCORR:-no}; interFoam runs as interFoamDdtCorr (applications/ddtCorrSwitch).
 [ -n "$WM_PROJECT_DIR" ] || { echo "Source the OpenFOAM environment first" >&2; exit 1; }
+type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 H=$(dirname "$(readlink -f "$0")"); name=$1; zw=$2; app=$3; gm=$4; nL=$5; sch=$6; start=$7; nc=$8
 c=$H/${SCANDIR:-waterLevel_10steps_ddtCorrOff}/${name}_z$zw; rm -rf $c; mkdir -p $H/${SCANDIR:-waterLevel_10steps_ddtCorrOff}; cp -r $H/baseCase $c; cd $c
-foamDictionary -entry origin -set "(0 0 $zw)" system/setAlphaFieldDict > /dev/null 2>&1
-foamDictionary -entry gravityModel -set $gm constant/gravityProperties > /dev/null 2>&1
-foamDictionary -entry nLayers -set $nL constant/gravityProperties > /dev/null 2>&1
+set -e   # stop if dictator fails (a missing file or an ambiguous entry)
+{
+dictator system/setAlphaFieldDict origin "(0 0 $zw)"
+dictator constant/gravityProperties gravityModel $gm
+dictator constant/gravityProperties nLayers $nL
 run=$app; [ $app = interFoam ] && run=interFoamDdtCorr
-foamDictionary -entry application -set $run system/controlDict > /dev/null 2>&1
-foamDictionary -entry PIMPLE.ddtCorr -set ${DDTCORR:-no} system/fvSolution > /dev/null 2>&1
-foamDictionary -entry endTime -set 0.1 system/controlDict > /dev/null 2>&1
-foamDictionary -entry writeInterval -set 1 system/controlDict > /dev/null 2>&1
-foamDictionary -entry PIMPLE.nNonOrthogonalCorrectors -set $nc system/fvSolution > /dev/null 2>&1
-if [ $sch = uncorr ]; then foamDictionary -entry laplacianSchemes.default -set "Gauss linear uncorrected" system/fvSchemes > /dev/null 2>&1
-  foamDictionary -entry snGradSchemes.default -set uncorrected system/fvSchemes > /dev/null 2>&1; fi
-[ $app = interFoam ] && for f in $(foamDictionary -keywords -entry functions system/controlDict); do [ "$(foamDictionary -entry functions.$f.type -value system/controlDict)" = surfaces ] && foamDictionary -entry functions.$f -remove system/controlDict > /dev/null; done
+dictator system/controlDict application $run
+dictator system/fvSolution PIMPLE.ddtCorr ${DDTCORR:-no}
+dictator system/controlDict endTime 0.1
+dictator system/controlDict writeInterval 1
+dictator system/fvSolution PIMPLE.nNonOrthogonalCorrectors $nc
+if [ $sch = uncorr ]; then dictator system/fvSchemes laplacianSchemes.default "Gauss linear uncorrected"
+  dictator system/fvSchemes snGradSchemes.default uncorrected; fi
+# interFoam does not reconstruct the interface, which the reconstructedInterface surface needs:
+# disable the surfaces function objects
+if [ $app = interFoam ]; then
+  for e in $(listDictEntries system/controlDict); do
+    f=${e#functions.}; f=${f%.type}
+    [ "$e" = "functions.$f.type" ] && [ "$(dictator system/controlDict $e)" = surfaces ] && dictator system/controlDict functions.$f.enabled false
+  done
+fi
+} > log.dictator
+set +e
 [ $start = hydro ] && export HYDRO=1
 ./Allrun > /dev/null 2>&1; grep -q "^End" log.$run || echo "FAILED $c"

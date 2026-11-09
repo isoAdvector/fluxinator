@@ -113,7 +113,13 @@ source <OpenFOAM-v2606>/etc/bashrc
 ```
 
 After cloning, get `surfacePosition` with
-`git submodule update --init applications/utilities/surfacePosition`. The wave cases
+`git submodule update --init applications/utilities/surfacePosition`.
+
+The cases are set up and changed with
+[dictator](https://github.com/isoAdvector/dictator), which rewrites only the value it
+sets and keeps the comments, layout and full precision of the dictionary. Source it
+(`source dictator/dictator`, for example in `~/.bashrc`) before running the cases;
+the scripts inherit it from the shell they are started from. The wave cases
 need `streamFunFoam` and `calcStreamFunctionWave` from [InterFlowers/streamFunctionWave](https://github.com/InterFlowers/streamFunctionWave),
 and the scans use `parmScanner` from
 [isoAdvector/cfdTools](https://github.com/isoAdvector/cfdTools). The figure
@@ -126,7 +132,9 @@ for the ParaView figures.
 fluxinator on the accelerated disc and on one period of the wave, and prints the results
 next to the expected values. Each case in `run/` has an `Allrun` for its studies
 (`run/README.md`); `MAXJOBS` limits the number of simultaneous runs. All scripts use
-the OpenFOAM environment of the shell they are started from.
+the OpenFOAM environment and dictator of the shell they are started from. A case made by a
+script in `run/` lists the entries the script changed in `log.dictator` (a parmScanner case
+in `parmScannerParms`).
 
 ## Names in old logs
 

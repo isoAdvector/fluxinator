@@ -11,8 +11,12 @@
 
 import os
 import re
+import sys
 
 import numpy as np
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'common'))
+import foamio  # noqa: E402
 
 
 def _body(path):
@@ -56,26 +60,13 @@ def cellCentres(case, N=25):
     return 0.25*(V[:-1, :-1] + V[:-1, 1:] + V[1:, :-1] + V[1:, 1:])
 
 
-def _entry(path, key):
-    if not os.path.isfile(path):
-        return None
-    m = re.search(rf'\b{key}\s+([^;]+);', _body(path))
-    return m.group(1).strip() if m else None
-
-
 def tiltAngle(case):
-    v = _entry(os.path.join(case, 'rotAngleDict'), 'rotAngle')
-    if v is None:
-        raise RuntimeError('no rotAngle in ' + case)
-    return float(v)
+    return float(foamio.entry(os.path.join(case, 'rotAngleDict'), 'rotAngle'))
 
 
 def waterLevel(case):
     """z of the plane setAlphaField was given (setAlphaFieldDict origin)."""
-    v = _entry(os.path.join(case, 'system', 'setAlphaFieldDict'), 'origin')
-    if v is None:
-        raise RuntimeError('no origin in ' + case)
-    return float(v.strip('()').split()[2])
+    return foamio.entry_list(os.path.join(case, 'system', 'setAlphaFieldDict'), 'origin')[2]
 
 
 def cases(scanDir):

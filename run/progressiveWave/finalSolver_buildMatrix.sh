@@ -10,6 +10,7 @@
 # Usage: ./finalSolver_buildMatrix.sh   (creates finalSolver_fixedDt/ and finalSolver_maxCo/)
 set -e
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
+type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 here=$(pwd)
 for pair in "solvers_fixedDt:finalSolver_fixedDt" "solvers_maxCo:finalSolver_maxCo"; do
     src=${pair%%:*}; dst=${pair##*:}
@@ -24,15 +25,18 @@ for pair in "solvers_fixedDt:finalSolver_fixedDt" "solvers_maxCo:finalSolver_max
         sed "s|$src/$c|$dst/$c|; s/application: interIsoGoam/application: fluxinator/" \
             $src/$c/parmScannerParms > $d/parmScannerParms
         cd $d
-        sed -i 's/^application .*/application     fluxinator;/' system/controlDict system/controlDict.run
-        foamDictionary -entry writeControl -set adjustable system/controlDict.run > /dev/null
-        foamDictionary -entry writeInterval -set 0.2 system/controlDict.run > /dev/null
-        foamDictionary -entry 'divSchemes.div(rhoPhi,U)' -set 'Gauss laxWendroff interfaceUpwind limitedLinearV 1' system/fvSchemes > /dev/null
+        {
+        dictator system/controlDict application fluxinator
+        dictator system/controlDict.run application fluxinator
+        dictator system/controlDict.run writeControl adjustable
+        dictator system/controlDict.run writeInterval 0.2
+        dictator system/fvSchemes 'divSchemes.div(rhoPhi,U)' 'Gauss laxWendroff interfaceUpwind limitedLinearV 1'
         if grep -q "nx: 760" parmScannerParms; then
-            foamDictionary -entry numberOfSubdomains -set 4 system/decomposeParDict > /dev/null
-            foamDictionary -entry method -set simple system/decomposeParDict > /dev/null
-            foamDictionary -entry simpleCoeffs.n -set "(4 1 1)" system/decomposeParDict > /dev/null
+            dictator system/decomposeParDict numberOfSubdomains 4
+            dictator system/decomposeParDict method simple
+            dictator system/decomposeParDict simpleCoeffs.n "(4 1 1)"
         fi
+        } > log.dictator
         cd $here
     done
 done

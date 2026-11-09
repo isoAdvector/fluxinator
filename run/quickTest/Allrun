@@ -7,15 +7,20 @@
 #   wave: one period of the progressive wave, 190x40, fixed dt 0.01 s (needs streamFunFoam)
 cd "${0%/*}" || exit 1
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
+type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 # Copies a stored case without results, to run with fluxinator and its defaults
 copyCase() {
     mkdir "$2" && cp -r "$1"/{0.orig,constant,system,Allrun} "$2"/
     rm -rf "${2:?}"/constant/polyMesh
-    sed -i '/explicitConvection/d;/ddtCorr/d' "$2"/system/fvSolution
+    {
+    dictator "$2"/system/fvSolution PIMPLE.explicitConvection -delete &&
+    dictator "$2"/system/fvSolution PIMPLE.ddtCorr -delete &&
     for f in "$2"/system/controlDict "$2"/system/controlDict.run
     do
-        [ -f "$f" ] && sed -i 's/^application .*/application     fluxinator;/' "$f"
+        [ -f "$f" ] || continue
+        dictator "$f" application fluxinator || exit 1
     done
+    } > "$2"/log.dictator || exit 1
 }
 
 rm -rf disc wave
@@ -24,7 +29,7 @@ disc/Allrun > disc/log.Allrun 2>&1
 if type streamFunFoam > /dev/null 2>&1
 then
     copyCase ../progressiveWave/convection/explicitLWIU_190x40_dt0.01 wave
-    sed -i 's/^endTime .*/endTime         2;/' wave/system/controlDict.run
+    dictator wave/system/controlDict.run endTime 2 >> wave/log.dictator || exit 1
     wave/Allrun > wave/log.Allrun 2>&1
 else
     echo "streamFunFoam not found: wave case skipped"

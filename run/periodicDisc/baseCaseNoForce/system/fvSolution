@@ -68,6 +68,7 @@ PIMPLE
     ddtCorr         no;
     pRefCell        0;
     pRefValue       0;
+    explicitConvection no;
 }
 
 

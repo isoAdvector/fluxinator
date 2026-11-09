@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 cd "${0%/*}" || exit                                # Run from this directory
 . ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 #------------------------------------------------------------------------------
 
 restore0Dir
@@ -10,7 +11,8 @@ touch ${caseName}.foam
 
 runApplication blockMesh
 
-runApplication transformPoints -centre '(.5 0 .5)' -rotate-y $(foamDictionary -entry rotAngle rotAngleDict -value)
+angle=$(dictator rotAngleDict rotAngle) || exit 1
+runApplication transformPoints -centre '(.5 0 .5)' -rotate-y $angle
 
 runApplication setAlphaField
 

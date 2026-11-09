@@ -11,6 +11,7 @@
 # (pvpython) is skipped. With nProcs > 1 the wave case runs with AllrunParallel
 # on nProcs subdomains and is reconstructed afterwards.
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
+type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 S=$(readlink -f "$1"); out=$2; np=${3:-1}
 rm -rf "$out"; mkdir -p "$out"
 for f in $S/*; do
@@ -24,25 +25,33 @@ done
 rm -rf "$out"/constant/polyMesh
 cd "$out" || exit 1
 sed -i 's/^\( *\)pvpython/\1: pvpython/' Allrun
+set -e   # stop if dictator fails (a missing file or an ambiguous entry)
+{
 for d in system/controlDict system/controlDict.run; do
     [ -f $d ] || continue
-    app=$(foamDictionary -entry application -value $d)
+    app=$(dictator $d application)
     case $app in
-        interFoam)    foamDictionary -entry application -set interFoamDdtCorr $d > /dev/null;;
-        interIsoFoam) foamDictionary -entry application -set interIsoFoamDdtCorr $d > /dev/null;;
+        interFoam)    dictator $d application interFoamDdtCorr;;
+        interIsoFoam) dictator $d application interIsoFoamDdtCorr;;
     esac
 done
-foamDictionary -entry PIMPLE.ddtCorr -set ${DDTCORR:-no} system/fvSolution > /dev/null
+dictator system/fvSolution PIMPLE.ddtCorr ${DDTCORR:-no}
+} > log.dictator
+set +e
 echo "stored: $1  change: PIMPLE.ddtCorr ${DDTCORR:-no}  nProcs: $np" > ddtCorrOff.info
 if [ "$np" -gt 1 ]; then
     cp $(dirname $(readlink -f "$0"))/../progressiveWave/baseCase_fixedDt/AllrunParallel .
-    foamDictionary -entry numberOfSubdomains -set $np system/decomposeParDict > /dev/null
-    foamDictionary -entry method -set simple system/decomposeParDict > /dev/null
-    foamDictionary -entry simpleCoeffs.n -set "($np 1 1)" system/decomposeParDict > /dev/null
+    set -e
+    {
+    dictator system/decomposeParDict numberOfSubdomains $np
+    dictator system/decomposeParDict method simple
+    dictator system/decomposeParDict simpleCoeffs.n "($np 1 1)"
+    } >> log.dictator
+    set +e
     ./AllrunParallel > log.Allrun 2>&1
     reconstructPar > log.reconstructPar 2>&1 && rm -rf processor*
 else
     ./Allrun > log.Allrun 2>&1
 fi
-app=$(foamDictionary -entry application -value system/controlDict)
+app=$(dictator system/controlDict application)
 grep -q "^End" log.$app || echo "FAILED $out"

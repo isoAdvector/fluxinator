@@ -9,15 +9,16 @@ Celerity: least-squares slope of the unwrapped crest position over all snapshots
 t > 2 s (first period excluded), relative to the exact celerity of the initial wave (dc)
 and of the stream-function wave with the run's mean height over that time (dcH).
 Usage: python3 hmatch.py <case> ... [--win t0,t1 ...] [--cel]"""
-import os, re, sys, subprocess, tempfile, numpy as np
+import os, shutil, sys, subprocess, tempfile, numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import foamio
 import kinematics as K
 TMP = tempfile.mkdtemp(prefix='hmatch_')
 
 def wave_of_height(case, H):
     d = os.path.join(TMP, f'{abs(hash((case, round(H, 7))))}'); os.makedirs(d + '/constant', exist_ok=True)
-    wp = re.sub(r'\n\s*H\s+[^;]*;', f'\n    H {H:.7f};', open(case + '/constant/waveProperties').read())
-    open(d + '/constant/waveProperties', 'w').write(wp)
+    shutil.copy(case + '/constant/waveProperties', d + '/constant/waveProperties')
+    foamio.dictator(d + '/constant/waveProperties', 'H', f'{H:.7f}')
     env = ""
     subprocess.run(['bash', '-c', env + f'calcStreamFunctionWave {d}/constant/waveProperties {d}/constant/out'], capture_output=True)
     return K.Wave(d)

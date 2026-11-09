@@ -68,6 +68,9 @@ https://github.com/InterFlowers/streamFunctionWave
 Running studies with parmScanner:
 https://github.com/isoAdvector/cfdTools
 
+Setting case entries (also used by parmScanner): dictator
+https://github.com/isoAdvector/dictator
+
 Post-processing: python3 with numpy, scipy and matplotlib.
 
 Logs of some Part II runs name the solver interIsoGoamExt, now interIsoGoam.

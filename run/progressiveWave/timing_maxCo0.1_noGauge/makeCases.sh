@@ -4,6 +4,7 @@
 # Builds the timing cases: three repeats per solver and mesh, from the finished set-ups of
 # solvers_maxCo_ddtCorrOff and finalSolver_maxCo, with endTime 6 and the wave gauge off.
 cd "${0%/*}" || exit 1
+type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 wave=..
 make1() {   # make1 <source case> <name>
     for r in 1 2 3; do
@@ -11,8 +12,10 @@ make1() {   # make1 <source case> <name>
         mkdir -p "$d/constant"
         cp -r "$1"/{0.orig,system,Allrun} "$d"/
         for f in $(ls "$1/constant" | grep -v polyMesh); do cp -r "$1/constant/$f" "$d/constant/"; done
-        sed -i 's/^endTime .*/endTime         6;/' "$d/system/controlDict.run"
-        sed -i '/^ *interfaceHeight1/,/{/ s/{/{\n        enabled         false;/' "$d/system/controlDict.run"
+        {
+        dictator "$d/system/controlDict.run" endTime 6 &&
+        dictator "$d/system/controlDict.run" functions.interfaceHeight1.enabled false
+        } > "$d/log.dictator" || exit 1
     done
 }
 off=$wave/solvers_maxCo_ddtCorrOff; fin=$wave/finalSolver_maxCo

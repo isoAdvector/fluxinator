@@ -11,7 +11,6 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 import os
-import re
 import numpy as np
 from common import WAVE, K, plt, save, write, HALF, COL
 
@@ -30,7 +29,7 @@ def profile(case):
     own = K.foamio.read_labels(f"{pm}/owner"); nei = K.foamio.read_labels(f"{pm}/neighbour")
     nI = nei.size; own = own[:nI]
     hf = np.where(nei - own == nx)[0]; ko = own[hf]//nx
-    dt = float(re.search(r"^deltaT\s+([0-9.eE+-]+);", open(f"{case}/system/controlDict").read(), re.M).group(1))
+    dt = float(K.foamio.entry(f"{case}/system/controlDict", "deltaT"))
     S, n = np.zeros(nz), 0
     for t in K.times(case):
         if not 2 < float(t) <= 10 + 1e-9:
