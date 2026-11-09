@@ -17,9 +17,11 @@ and multiphase flow simulation with OpenFOAM. Contact: johan@stromning.com.
 
 ## The solver
 
-**Use `fluxinator`.** It is the two-phase Volume-of-Fluid solver with geometric
-interface advection (isoAdvector) and a consistent gravity force and momentum
-convection. Its defaults are the geometric gravity model, explicit convection
+**`fluxinator`** is a two-phase Volume-of-Fluid solver derived from OpenFOAM's
+interIsoFoam. It keeps the geometric interface advection of interIsoFoam (isoAdvector)
+and adds a consistent gravity force (Part I) and momentum convection (Part II). It is
+built from the source of interIsoGoam (below), with other defaults
+(`applications/solvers/interIsoGoam/solverDefaults.H`): the geometric gravity model, explicit convection
 (PIMPLE `explicitConvection yes`) and the `ddtCorr` term off (PIMPLE `ddtCorr no`);
 an entry in the case overrides them. The convection scheme is set in `system/fvSchemes`,
 and explicit convection requires `interfaceUpwind` (the solver warns without it):
@@ -30,10 +32,11 @@ div(rhoPhi,U) Gauss laxWendroff U phi interfaceUpwind alpha.water 1e-6 limitedLi
 
 Keep the maximum Courant number at about 0.1 or less for accurate wave propagation.
 
-`interIsoGoam` is built from the same source (`applications/solvers/interIsoGoam`) with the
-defaults of interIsoFoam, and gives the same results as `fluxinator` with the same settings.
-It is the solver of Part I and is kept so that the stored cases, which rely on its defaults,
-reproduce the results of the papers. It has these run-time options:
+`interIsoGoam` (`applications/solvers/interIsoGoam`) is interIsoFoam with the additions
+of Parts I and II, all selected at run time; with the defaults of interIsoFoam and one outer
+corrector it is interIsoFoam. It gives the same results as `fluxinator` with the same
+settings. It is the solver of Part I and is kept so that the cases, which rely on its
+defaults, reproduce the results of the papers. It has these run-time options:
 
 | Settings | Behaves as |
 |---|---|
@@ -61,14 +64,15 @@ with function objects (for example `convectiveMomentumFlux` in
 
 | Directory | Contents |
 |---|---|
-| `src/geometricVoF/` | isoAdvector and interface reconstruction used by interIsoGoam (library `newGeometricVoF`) |
+| `src/geometricVoF/` | isoAdvector and interface reconstruction: a modified copy of OpenFOAM's geometricVoF, in namespace `Foam::isoAdvection` so that both can be loaded together (library `newGeometricVoF`; sampled surface `reconstructedInterface`) |
 | `src/gravityModels/` | gravity models: `basic` (as in OpenFOAM), `geometric` (Part I) and `constantHeight` (the exact height of a flat interface) |
-| `src/interfaceSchemes/` | the interfaceUpwind and laxWendroff interpolation schemes (Part II); `libs (interfaceSchemes);` in controlDict |
+| `src/interfaceSchemes/` | the interfaceUpwind and laxWendroff interpolation schemes (Part II); fluxinator links the library, other solvers need `libs (interfaceSchemes);` in controlDict |
 | `src/functionObjects/` | the function object `convectiveMomentumFlux`, the face momentum flux of the convection term (Part II); `libs (interfaceFunctionObjects);` |
-| `applications/solvers/interIsoGoam/` | the solver |
+| `applications/solvers/fluxinator/` | fluxinator: the source of interIsoGoam with the defaults of `solverDefaults.H` |
+| `applications/solvers/interIsoGoam/` | interIsoGoam, and the source of both solvers |
 | `applications/test/convectionTest/` | prescribed-flow test of the momentum convection (Part II) |
 | `applications/test/ddtCorrSwitch/` | stock interFoam and interIsoFoam with a PIMPLE `ddtCorr` switch (Part I, Appendix A) |
-| `applications/utilities/` | `setHydrostaticPressure`; `surfacePosition` (submodule) |
+| `applications/utilities/` | `setHydrostaticPressure` (hydrostatic `p_rgh` of a flat interface at rest); `surfacePosition` (submodule; function object for the interface height, a geometric alternative to `interfaceHeight`) |
 | `run/` | the test cases, one directory per case (`run/README.md`) |
 | `papers/part1/`, `papers/part2/` | one directory per figure and table of each paper (below) |
 
@@ -109,8 +113,8 @@ source <OpenFOAM-v2606>/etc/bashrc
 ```
 
 After cloning, get `surfacePosition` with
-`git submodule update --init applications/utilities/surfacePosition`. The wave cases need `streamFunFoam` and `calcStreamFunctionWave`
-from [InterFlowers/streamFunctionWave](https://github.com/InterFlowers/streamFunctionWave),
+`git submodule update --init applications/utilities/surfacePosition`. The wave cases
+need `streamFunFoam` and `calcStreamFunctionWave` from [InterFlowers/streamFunctionWave](https://github.com/InterFlowers/streamFunctionWave),
 and the scans use `parmScanner` from
 [isoAdvector/cfdTools](https://github.com/isoAdvector/cfdTools). The figure
 scripts need python3 with numpy, scipy and matplotlib, and ParaView (pvbatch)
@@ -118,8 +122,8 @@ for the ParaView figures.
 
 ## Running
 
-`run/quickTest/Allrun` builds nothing and takes about a minute: it runs the final
-solver on the accelerated disc and on one period of the wave, and prints the results
+`run/quickTest/Allrun` builds nothing and takes about a minute: it runs
+fluxinator on the accelerated disc and on one period of the wave, and prints the results
 next to the expected values. Each case in `run/` has an `Allrun` for its studies
 (`run/README.md`); `MAXJOBS` limits the number of simultaneous runs. All scripts use
 the OpenFOAM environment of the shell they are started from.
