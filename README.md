@@ -126,6 +126,14 @@ interIsoGoam that gives bitwise identical results with the same settings. The
 `budget_*` fields in `run/progressiveWave/convection` were written by a diagnostic
 that is now the function object `convectiveMomentumFlux`.
 
+## Use of generative AI
+
+The author used Claude Code with Anthropic's Claude Opus models extensively in the
+development of this repository, including the solver, libraries and utilities, the case
+setups, and the scripts for running, post-processing and making the figures and tables.
+All code, cases and scripts produced with the tool have been thoroughly reviewed by the
+author, who takes full responsibility for them.
+
 ## Licence
 
 The code is released under the GNU General Public License v3 (`LICENSE`), as OpenFOAM.
