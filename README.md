@@ -1,4 +1,4 @@
-# fluxinator
+# fluxinator\*
 
 Developed and maintained by Johan Roenby, [STROMNING](https://stromning.com).
 
@@ -146,3 +146,8 @@ author, who takes full responsibility for them.
 ## Licence
 
 The code is released under the GNU General Public License v3 (`LICENSE`), as OpenFOAM.
+
+---
+
+\* Not affiliated with or endorsed by Dr. Heinz Doofenshmirtz or Doofenshmirtz Evil
+Incorporated.
