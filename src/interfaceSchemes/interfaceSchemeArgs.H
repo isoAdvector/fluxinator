@@ -30,7 +30,9 @@ Description
     Optional arguments of the interfaceUpwind and laxWendroff schemes. A word
     is taken as a field name only if it names a registered field of the
     expected type, and a number only if the next token is a number; otherwise
-    the token is left for the underlying scheme and the default is used.
+    the token is left for the underlying scheme and the default is used. The
+    next token is peeked at, not read: reading the last token of the stream
+    would set end-of-file and the underlying scheme could not be read.
 
 \*---------------------------------------------------------------------------*/
 
@@ -39,6 +41,7 @@ Description
 
 #include "fvMesh.H"
 #include "IOdictionary.H"
+#include "ITstream.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -47,7 +50,23 @@ namespace Foam
 namespace interfaceSchemeArgs
 {
 
-//- The next word if it names a registered FieldType, otherwise defaultName
+//- The next token, without consuming it (scheme data is an ITstream; other
+//  streams read the token and put it back)
+inline token peek(Istream& is)
+{
+    const ITstream* tsPtr = dynamic_cast<const ITstream*>(&is);
+    if (tsPtr)
+    {
+        return tsPtr->peek();
+    }
+    token tok(is);
+    is.putBack(tok);
+    return tok;
+}
+
+
+//- Read the next word if it names a registered FieldType, otherwise
+//  return defaultName and leave the token in the stream
 template<class FieldType>
 inline word fieldName
 (
@@ -56,26 +75,28 @@ inline word fieldName
     const word& defaultName = word::null
 )
 {
-    token tok(is);
-    if (tok.isWord() && mesh.foundObject<FieldType>(tok.wordToken()))
+    const token next(peek(is));
+    if (next.isWord() && mesh.foundObject<FieldType>(next.wordToken()))
     {
+        token tok;
+        is.read(tok);
         return tok.wordToken();
     }
-    is.putBack(tok);
     return defaultName;
 }
 
 
-//- Read the next token into value if it is a number
+//- Read the next token into value if it is a number, otherwise leave it
+//  in the stream
 inline bool readNumber(Istream& is, scalar& value)
 {
-    token tok(is);
-    if (tok.isNumber())
+    if (peek(is).isNumber())
     {
+        token tok;
+        is.read(tok);
         value = tok.number();
         return true;
     }
-    is.putBack(tok);
     return false;
 }
 
