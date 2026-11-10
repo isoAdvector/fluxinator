@@ -9,6 +9,7 @@ cd "${0%/*}" || exit 1
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source an OpenFOAM environment first" >&2; exit 1; }
 type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 # Copies a stored case without results, to run with fluxinator and its defaults
+# and without the wave gauge, which needs surfacePosition and is not checked here
 copyCase() {
     mkdir "$2" && cp -r "$1"/{0.orig,constant,system,Allrun} "$2"/
     rm -rf "${2:?}"/constant/polyMesh
@@ -19,6 +20,10 @@ copyCase() {
     do
         [ -f "$f" ] || continue
         dictator "$f" application fluxinator || exit 1
+        if grep -q surfacePosition1 "$f"
+        then
+            dictator "$f" functions.surfacePosition1.enabled false || exit 1
+        fi
     done
     } > "$2"/log.dictator || exit 1
 }

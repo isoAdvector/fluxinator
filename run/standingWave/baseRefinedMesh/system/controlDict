@@ -59,6 +59,7 @@ functions
     {
         type            surfacePosition;
         libs            ( surfacePosition );
+        errors          strict;      // stop if the library is not installed
         locations       ( ( 0.001 0 0.5001 ) );
         alpha           alpha.water;
         direction       ( 0 0 -1 );

@@ -63,7 +63,10 @@ Requirements
 ------------
 
 Stream function wave solution (streamFunFoam):
-https://github.com/InterFlowers/streamFunctionWave
+https://github.com/isoAdvector/streamFunctionWave
+
+Wave gauge (function object surfacePosition, entry surfacePosition1 of the cases):
+https://github.com/isoAdvector/surfacePosition
 
 Running studies with parmScanner:
 https://github.com/isoAdvector/cfdTools

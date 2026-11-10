@@ -211,8 +211,7 @@ listCode()
 {
     (
         cd "$1" && find src applications \
-            \( -name lnInclude -o -name .git -o -path '*/Make/*' -type d \
-               -o -path applications/utilities/surfacePosition/test \) -prune \
+            \( -name lnInclude -o -name .git -o -path '*/Make/*' -type d \) -prune \
             -o \( -type f -o -type l \) ! -name '*.o' ! -name '*.dep' -print
     ) | sort
 }

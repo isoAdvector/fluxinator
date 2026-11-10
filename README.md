@@ -72,7 +72,7 @@ with function objects (for example `convectiveMomentumFlux` in
 | `applications/solvers/interIsoGoam/` | interIsoGoam, and the source of both solvers |
 | `applications/test/convectionTest/` | prescribed-flow test of the momentum convection (Part II) |
 | `applications/test/ddtCorrSwitch/` | stock interFoam and interIsoFoam with a PIMPLE `ddtCorr` switch (Part I, Appendix A) |
-| `applications/utilities/` | `setHydrostaticPressure` (hydrostatic `p_rgh` of a flat interface at rest); `surfacePosition` (submodule; function object for the interface height, the wave gauge of the cases, a geometric alternative to `interfaceHeight`) |
+| `applications/utilities/` | `setHydrostaticPressure` (hydrostatic `p_rgh` of a flat interface at rest) |
 | `run/` | the test cases, one directory per case (`run/README.md`) |
 | `papers/part1/`, `papers/part2/` | one directory per figure and table of each paper (below) |
 
@@ -112,9 +112,6 @@ source <OpenFOAM-v2606>/etc/bashrc
 ./Allwmake
 ```
 
-After cloning, get `surfacePosition` with
-`git submodule update --init applications/utilities/surfacePosition`.
-
 The code is written for OpenFOAM.com v2606 and builds with v2306 and later. With
 any version, edit the code in `src` and `applications` and build with `Allwmake`.
 With a version that lacks some of the newer API, `Allwmake` builds a copy of the
@@ -130,9 +127,20 @@ The cases are set up and changed with
 [dictator](https://github.com/isoAdvector/dictator), which rewrites only the value it
 sets and keeps the comments, layout and full precision of the dictionary. Source it
 (`source dictator/dictator`, for example in `~/.bashrc`) before running the cases;
-the scripts inherit it from the shell they are started from. The wave cases
-need `streamFunFoam` and `calcStreamFunctionWave` from [InterFlowers/streamFunctionWave](https://github.com/InterFlowers/streamFunctionWave),
-and the scans use `parmScanner` from
+the scripts inherit it from the shell they are started from. Two tools are
+installed separately, each with its own `Allwmake`:
+
+- [isoAdvector/streamFunctionWave](https://github.com/isoAdvector/streamFunctionWave):
+  `streamFunFoam` and `calcStreamFunctionWave`, which make the initial and exact
+  wave of the progressive wave cases (`run/progressiveWave`).
+- [isoAdvector/surfacePosition](https://github.com/isoAdvector/surfacePosition):
+  the function object `surfacePosition`, the wave gauge (`surfacePosition1`) of the
+  progressive and standing wave cases (`run/progressiveWave`, `run/standingWave`).
+  It reports the interface height like OpenFOAM's `interfaceHeight`, from the same
+  entries, at a fraction of the cost. A case with the gauge stops at the start if
+  the library is not installed (`errors strict`).
+
+The scans use `parmScanner` from
 [isoAdvector/cfdTools](https://github.com/isoAdvector/cfdTools). The figure
 scripts need python3 with numpy, scipy and matplotlib, and ParaView (pvbatch)
 for the ParaView figures.

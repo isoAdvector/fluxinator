@@ -60,6 +60,7 @@ functions
         // Mandatory entries (unmodifiable)
         type            surfacePosition;
         libs            (surfacePosition);
+        errors          strict;      // stop if the library is not installed
 
         // Mandatory entries (runtime modifiable)
         locations       (

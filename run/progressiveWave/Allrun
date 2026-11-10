@@ -14,7 +14,7 @@
 # nLayers_maxCo. The other studies have their own scripts (README).
 #
 # Requirements: OpenFOAM v2606 environment with interIsoGoam and libgravityModels
-# built (../../Allwmake), streamFunFoam (see README), cfdTools, python3 with
+# built (../../Allwmake), streamFunFoam and surfacePosition (README), cfdTools, python3 with
 # numpy, scipy and matplotlib. Environment variables: CFDTOOLS (path to
 # cfdTools/cfdTools), MAXJOBS (number of simultaneous cases, default nproc).
 #
