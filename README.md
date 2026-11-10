@@ -115,6 +115,17 @@ source <OpenFOAM-v2606>/etc/bashrc
 After cloning, get `surfacePosition` with
 `git submodule update --init applications/utilities/surfacePosition`.
 
+The code is written for OpenFOAM.com v2606 and builds with v2306 and later. With
+any version, edit the code in `src` and `applications` and build with `Allwmake`.
+With a version that lacks some of the newer API, `Allwmake` builds a copy of the
+code adjusted to it, `build/OpenFOAM-<version>`; `bin/adjustCodeToLoadedOFVersion -list`
+lists the adjustments. The copy links to the files of the code, except a few
+adjusted copies, listed in its `README`, which `Allwmake` remakes on each run;
+`wmake` in a directory of the code builds it unadjusted, which fails with the older
+version. Before v2506, interface positions are not transformed across
+cyclic patches in plicRDF, so plicRDF stops on meshes with cyclic patches; the
+periodic disc (`run/periodicDisc`) then needs v2506 or later.
+
 The cases are set up and changed with
 [dictator](https://github.com/isoAdvector/dictator), which rewrites only the value it
 sets and keeps the comments, layout and full precision of the dictionary. Source it

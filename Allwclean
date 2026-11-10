@@ -3,13 +3,21 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 cd ${0%/*} || exit 1
 
-wclean libso src/geometricVoF
-wclean libso src/gravityModels
-wclean libso src/interfaceSchemes
-wclean libso src/functionObjects/convectiveMomentumFlux
-wclean applications/solvers/interIsoGoam
-wclean applications/solvers/fluxinator
-wclean applications/test/convectionTest
-wclean applications/utilities/setHydrostaticPressure
-wclean applications/test/ddtCorrSwitch/interFoamDdtCorr
-wclean applications/test/ddtCorrSwitch/interIsoFoamDdtCorr
+# The code, and its copy adjusted to the loaded OpenFOAM version (Allwmake)
+for dir in . build/OpenFOAM-$WM_PROJECT_VERSION
+do
+    [ -d "$dir/src" ] || continue
+    (
+    cd "$dir" || exit 1
+    wclean libso src/geometricVoF
+    wclean libso src/gravityModels
+    wclean libso src/interfaceSchemes
+    wclean libso src/functionObjects/convectiveMomentumFlux
+    wclean applications/solvers/interIsoGoam
+    wclean applications/solvers/fluxinator
+    wclean applications/test/convectionTest
+    wclean applications/utilities/setHydrostaticPressure
+    wclean applications/test/ddtCorrSwitch/interFoamDdtCorr
+    wclean applications/test/ddtCorrSwitch/interIsoFoamDdtCorr
+    )
+done

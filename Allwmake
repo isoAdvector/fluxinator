@@ -3,6 +3,18 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 cd ${0%/*} || exit 1
 
+# The code is written for the newest OpenFOAM.com release. With an older
+# release (back to v2306), it is built in a copy adjusted to that release,
+# build/OpenFOAM-<version>, made by bin/adjustCodeToLoadedOFVersion.
+# Edit the code here, not in the copy: the copy is remade on each run.
+adjustments=$(bin/adjustCodeToLoadedOFVersion -list) || exit 1
+if [ -n "$adjustments" ]
+then
+    dest=build/OpenFOAM-$WM_PROJECT_VERSION
+    bin/adjustCodeToLoadedOFVersion "$dest" || exit 1
+    cd "$dest" || exit 1    # the wmake commands below build the copy
+fi
+
 wmake "$@" libso src/geometricVoF
 wmake "$@" libso src/gravityModels
 wmake "$@" libso src/interfaceSchemes

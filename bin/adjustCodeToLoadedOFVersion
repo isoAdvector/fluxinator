@@ -1,0 +1,363 @@
+#!/bin/bash
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
+#------------------------------------------------------------------------------
+# Adjust a copy of the code to the loaded OpenFOAM version
+#
+# The code is written for the newest OpenFOAM.com release. The older releases
+# supported (back to v2306) differ from it by a few small API changes. Each
+# rule below tests whether the loaded OpenFOAM ($FOAM_SRC) lacks a newer API
+# that the code uses, and if so rewrites the code to the older API. The
+# repository itself is never changed: the code is copied and the copy is
+# adjusted. Allwmake does this when a rule applies and builds the copy,
+# build/OpenFOAM-<version>.
+#
+# The copy of src and applications is a tree of links to the files of the
+# code, except the files a rule rewrites, which are adjusted copies. Changes
+# to the code thus reach the copy at once, and the adjusted files are remade
+# on each run. A run stops if files in the copy were changed since the last
+# run, so that changes made in the copy by mistake are not lost.
+#
+# Usage:
+#   adjustCodeToLoadedOFVersion -list    list the rules that apply to the
+#                                        loaded version (none for the newest)
+#   adjustCodeToLoadedOFVersion <dir>    copy the code to <dir> and adjust it
+#
+# A rule that finds nothing to rewrite stops the script: the code has changed
+# and the rule must be updated. Remove the rules of versions no longer
+# supported.
+#------------------------------------------------------------------------------
+
+root=$(cd "${0%/*}/.." && pwd)
+
+if [ -z "$FOAM_SRC" ] || [ ! -d "$FOAM_SRC" ]
+then
+    echo "${0##*/}: load OpenFOAM first" >&2
+    exit 2
+fi
+
+# True if the file $FOAM_SRC/$1 matches the perl regex $2
+foamHas()
+{
+    perl -0ne "exit !/$2/" "$FOAM_SRC/$1"
+}
+
+# True if a source file in $code matches the perl regex $1 (whole files, so
+# the regex may span lines; (?m) for ^ and $ at lines)
+codeHas()
+{
+    grep -RlqzP --include='*.[CH]' --exclude-dir=lnInclude "$1" \
+        "$code"/src "$code"/applications
+}
+
+# Apply the perl substitution $2 to the source files in $code that match the
+# perl regex $1 (as in codeHas), replacing links to the code by copies first;
+# stop if the first substitution of $2 changes nothing
+rewrite()
+{
+    local files f
+    files=$(grep -RlzP --include='*.[CH]' --exclude-dir=lnInclude "$1" \
+        "$code"/src "$code"/applications)
+    for f in $files
+    do
+        [ -L "$f" ] && { cp --remove-destination "$(readlink -f "$f")" "$f" || exit 1; }
+    done
+    if [ -z "$files" ] || ! perl -0pi -e "\$n += $2; END { exit !\$n }" $files
+    then
+        echo "${0##*/}: rule '$rule' found nothing to rewrite for '$1'" >&2
+        exit 1
+    fi
+}
+
+
+#- Rules: applies_<rule> tests whether the rule applies, adjust_<rule> applies
+#  it to the code in $code
+
+rules="cyclicPosition boundaryConsistency newIOobject newTmpNoRegister singleTime
+       solveByName solversDict"
+
+
+# v2506: zoneDistribute transforms positions across cyclic patches
+# (getPosition, getCyclicPatches). Before, plicRDF does not transform them,
+# which gives wrong normals next to cyclic patches. The positions are taken
+# untransformed and plicRDF refuses meshes with cyclic patches.
+applies_cyclicPosition()
+{
+    ! foamHas finiteVolume/fvMesh/zoneDistribute/zoneDistribute.H getCyclicPatches \
+ && codeHas getCyclicPatches
+}
+adjust_cyclicPosition()
+{
+    local par='(?<par>\((?:[^()]++|(?&par))*\))'
+    local arg='(?<arg>(?:[^,()]++|(?&par))+)'
+    rewrite 'getPosition' \
+        "s{(\w+)\.getPosition\s*\(\s*((?&arg)),\s*((?&arg)),\s*((?&arg)),\s*\1\.getCyclicPatches\s*(?&par)\s*\)(?(DEFINE)$par$arg)}{\$1.getValue(\$2, \$3, \$4)}g"
+
+    local guard='
+    // Added by bin\/adjustCodeToLoadedOFVersion
+    for (const polyPatch& pp : mesh_.boundaryMesh())
+    {
+        if (isA<cyclicPolyPatch>(pp))
+        {
+            FatalErrorInFunction
+                << "plicRDF needs OpenFOAM v2506 or later on meshes with"
+                << " cyclic patches (here " << pp.name() << "): before v2506"
+                << " interface positions are not transformed across them"
+                << exit(FatalError);
+        }
+    }
+'
+    rewrite '(?m)^Foam::isoAdvection::plicRDF::plicRDF$' \
+        "s{^(Foam::isoAdvection::plicRDF::plicRDF\n\(.*?\n\{\n)}{\$1$guard\n}ms"
+    rewrite '#include "plicRDF.H"' \
+        's{(#include "plicRDF.H"\n)}{$1#include "cyclicPolyPatch.H"\n}'
+}
+
+
+# v2506: FieldBase::localBoundaryConsistency, before
+# volVectorField::Boundary::localConsistency (from v2312), before nothing
+applies_boundaryConsistency()
+{
+    ! foamHas OpenFOAM/fields/Fields/Field/Field.H localBoundaryConsistency \
+ && codeHas 'FieldBase::localBoundaryConsistency'
+}
+adjust_boundaryConsistency()
+{
+    if foamHas OpenFOAM/fields/GeometricFields/GeometricField/GeometricBoundaryField.H localConsistency
+    then
+        rewrite 'FieldBase::localBoundaryConsistency' \
+            's{const auto (\w+) = FieldBase::localBoundaryConsistency\(0\);}{const int $1 = volVectorField::Boundary::localConsistency;\n    volVectorField::Boundary::localConsistency = 0;}g;
+             s{FieldBase::localBoundaryConsistency\((\w+)\);}{volVectorField::Boundary::localConsistency = $1;}g'
+    else
+        rewrite 'FieldBase::localBoundaryConsistency' \
+            's{^[ \t]*(const auto \w+ = )?FieldBase::localBoundaryConsistency\(\w+\);\n}{}mg'
+    fi
+}
+
+
+# v2406: objectRegistry::newIOobject (not registered), before IOobject
+applies_newIOobject()
+{
+    ! foamHas OpenFOAM/db/objectRegistry/objectRegistry.H newIOobject \
+ && codeHas '\.newIOobject\('
+}
+adjust_newIOobject()
+{
+    rewrite '\.newIOobject\(' \
+        's{(\w+)\.newIOobject\(\s*("[^"]*")\s*\)}{IOobject\n        (\n            $2,\n            $1.time().timeName(),\n            $1,\n            IOobject::NO_READ,\n            IOobject::NO_WRITE,\n            false\n        )}g'
+}
+
+
+# v2406: GeometricField::New(name, registerOption, tmp), before New(name, tmp)
+applies_newTmpNoRegister()
+{
+    ! foamHas OpenFOAM/fields/GeometricFields/GeometricField/GeometricField.H 'registerOption regOpt,\s*const tmp<' \
+ && codeHas '::New\s*\(\s*"[^"]*"\s*,\s*IOobject::NO_REGISTER,\s*\('
+}
+adjust_newTmpNoRegister()
+{
+    rewrite '::New\s*\(\s*"[^"]*"\s*,\s*IOobject::NO_REGISTER,\s*\(' \
+        's{(::New\s*\(\s*"[^"]*"\s*,)\s*IOobject::NO_REGISTER,(?=\s*\()}{$1}g'
+}
+
+
+# v2406: timeSelector::addOptions_singleTime and setTimeIfPresent, before
+# addTimeOptions.H and checkTimeOptions.H
+applies_singleTime()
+{
+    ! foamHas OpenFOAM/db/Time/timeSelector.H addOptions_singleTime \
+ && codeHas 'addOptions_singleTime'
+}
+adjust_singleTime()
+{
+    rewrite 'addOptions_singleTime' \
+        's{timeSelector::addOptions_singleTime\(\);[^\n]*}{#include "addTimeOptions.H"}g;
+         s{^([ \t]*)timeSelector::setTimeIfPresent\(runTime, args\);}{${1}if (args.found("constant") || args.found("latestTime") || args.found("time"))\n${1}\{\n${1}    instantList Times = runTime.times();\n${1}    #include "checkTimeOptions.H"\n${1}    runTime.setTime(Times[startTime], startTime);\n${1}\}}mg'
+}
+
+
+# v2312: fvMatrix::solve(const word&), before solve(mesh.solver(name))
+applies_solveByName()
+{
+    ! foamHas finiteVolume/fvMatrices/fvMatrix/fvMatrix.H 'solve\(const word& name\)' \
+ && codeHas '\.solve\(\w+\.select\('
+}
+adjust_solveByName()
+{
+    rewrite '\.solve\(\w+\.select\(' \
+        's{\.solve\((\w+\.select\(\w+\.\w+\(\)\))\)}{.solve(mesh.solver($1))}g'
+}
+
+
+# v2312: solution::solversDict, before the solvers sub-dictionary of
+# solutionDict
+applies_solversDict()
+{
+    ! foamHas OpenFOAM/matrices/solution/solution.H solversDict \
+ && codeHas '\.solversDict\(\)'
+}
+adjust_solversDict()
+{
+    rewrite '\.solversDict\(\)' \
+        's{\.solversDict\(\)}{.solutionDict().subDict("solvers")}g'
+}
+
+
+#------------------------------------------------------------------------------
+
+# The files of src and applications in the directory $1, without those made by
+# wmake
+listCode()
+{
+    (
+        cd "$1" && find src applications \
+            \( -name lnInclude -o -name .git -o -path '*/Make/*' -type d \
+               -o -path applications/utilities/surfacePosition/test \) -prune \
+            -o \( -type f -o -type l \) ! -name '*.o' ! -name '*.dep' -print
+    ) | sort
+}
+
+# A line per file of the copy of the code in $1: the target of a link, the
+# checksum of an adjusted copy
+listState()
+{
+    listCode "$1" | while IFS= read -r f
+    do
+        if [ -L "$1/$f" ]
+        then
+            printf '%s\tlink %s\n' "$f" "$(readlink "$1/$f")"
+        else
+            printf '%s\tcopy %s\n' "$f" "$(sha1sum < "$1/$f")"
+        fi
+    done
+}
+
+# The files in the copy that were changed since the last run: new files, and
+# files that differ from what the last run left, unless they are the same as
+# the code (a copy tool may have replaced the links by the files)
+changedFiles()
+{
+    local -A was
+    local f s
+    while IFS=$'\t' read -r f s
+    do
+        was[$f]=$s
+    done < "$state"
+    listState "$copy" | while IFS=$'\t' read -r f s
+    do
+        [ "$s" = "${was[$f]}" ] && continue
+        [ "${was[$f]%% *}" = link ] && [ ! -L "$copy/$f" ] \
+     && cmp -s "$copy/$f" "$root/$f" && continue
+        echo "    $f"
+    done
+}
+
+# Link the file $1 of the code in the staging directory, relative to where it
+# will be in the copy, so that the links hold if the code is moved
+linkCode()
+{
+    mkdir -p "$stage/${1%/*}" \
+ && ln -sfn "$(realpath -m --relative-to="$copy/${1%/*}" "$root/$1")" "$stage/$1"
+}
+
+#------------------------------------------------------------------------------
+
+if [ "$1" = -list ]
+then
+    code=$root
+    for rule in $rules
+    do
+        applies_$rule && echo "$rule"
+    done
+    exit 0
+fi
+
+if [ $# -ne 1 ]
+then
+    echo "Usage: ${0##*/} -list | <dir>" >&2
+    exit 2
+fi
+
+# Which rules apply is decided on the repository, before copying
+code=$root
+apply=""
+for rule in $rules
+do
+    applies_$rule && apply="$apply $rule"
+done
+
+dest=$1
+copy=$(mkdir -p "$dest" && cd "$dest" && pwd) || exit 1
+state=$copy/.adjustedCode
+
+# One run at a time on a copy, for builds of the same version with different
+# compilers or options started together
+exec 9> "${copy%/*}/.${copy##*/}.lock" || exit 1
+flock -n 9 || { echo "Waiting for another run on $dest"; flock 9; }
+
+# Stop if files in the copy were changed since the last run
+if [ -f "$state" ]
+then
+    changed=$(changedFiles)
+    if [ -n "$changed" ]
+    then
+        cat >&2 <<EOF
+${0##*/}: files in $dest were changed:
+$changed
+Allwmake remakes the copy from the code, which would undo these changes.
+Make them in the code itself, in src and applications, then remove
+$dest and run Allwmake again.
+EOF
+        exit 1
+    fi
+elif [ -n "$(ls -A "$copy")" ]
+then
+    echo "${0##*/}: $dest is not empty and was not made by ${0##*/}" >&2
+    exit 1
+fi
+
+# Make the adjusted copy in a staging directory next to the copy: links to
+# the files of the code, the rules replace those they rewrite by adjusted
+# copies
+stage=$(mktemp -d "${copy%/*}/.${copy##*/}.XXXXXX") || exit 1
+trap 'rm -rf "$stage"' EXIT
+
+listCode "$root" | while IFS= read -r f
+do
+    linkCode "$f" || exit 1
+done || exit 1
+
+code=$stage
+for rule in $apply
+do
+    adjust_$rule
+done
+
+# Links again for the files that a rule copied but left as they were
+listCode "$stage" | while IFS= read -r f
+do
+    [ -L "$stage/$f" ] || ! cmp -s "$stage/$f" "$root/$f" || linkCode "$f"
+done
+
+# Update the copy, keeping what wmake made in it and the times of the files
+# that are unchanged, so that wmake rebuilds only what changed
+rsync -rlc --delete \
+    --exclude='Make/*/' --exclude=lnInclude --exclude='*.o' --exclude='*.dep' \
+    "$stage"/src "$stage"/applications "$copy"/ || exit 1
+listState "$copy" > "$state"
+
+adjusted=$(listState "$copy" | grep -P "\tcopy " | cut -f1 | sed 's/^/    /')
+cat > "$copy/README" <<EOF
+Edit the code itself, in src and applications, and build with Allwmake.
+
+This is the code adjusted to OpenFOAM $WM_PROJECT_VERSION by
+bin/adjustCodeToLoadedOFVersion, which Allwmake runs before building it here.
+The files are links to the code, except these adjusted copies, which are
+remade from the code on each run of Allwmake:
+$adjusted
+With wmake in a directory of this copy, changes to the code reach the
+adjusted copies only after a run of Allwmake.
+EOF
+echo "Code adjusted to OpenFOAM $WM_PROJECT_VERSION (rules:$apply) in $dest, see $dest/README"
+
+#------------------------------------------------------------------------------

@@ -34,7 +34,11 @@ if finished("disc"):
     exact = np.array([0.1 + 0.5*float(os.path.basename(t)), 0, 0.05])
     print(f"disc: t = {os.path.basename(t)} s, max|U - U0 - a t| = {np.abs(U - exact).max():.1e} m/s (expected below 1e-8)")
 else:
-    print("disc: did not finish, see disc/log.*")
+    # Before OpenFOAM v2506 plicRDF stops on the cyclic patches of the disc
+    # (bin/adjustCodeToLoadedOFVersion)
+    need = [l.strip() for f in glob.glob(os.path.join(HERE, "disc", "log.*")) for l in open(f, errors="replace")
+            if "needs OpenFOAM v2506" in l]
+    print(f"disc: stopped: {need[0]}" if need else "disc: did not finish, see disc/log.*")
 if os.path.isdir(os.path.join(HERE, "wave")):
     if finished("wave"):
         t = latest("wave")

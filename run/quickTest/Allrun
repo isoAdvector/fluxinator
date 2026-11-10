@@ -6,7 +6,7 @@
 #   disc: the accelerated disc of Part II, Section 4 (needs only ../../Allwmake)
 #   wave: one period of the progressive wave, 190x40, fixed dt 0.01 s (needs streamFunFoam)
 cd "${0%/*}" || exit 1
-[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
+[ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source an OpenFOAM environment first" >&2; exit 1; }
 type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 # Copies a stored case without results, to run with fluxinator and its defaults
 copyCase() {
