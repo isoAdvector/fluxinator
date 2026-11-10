@@ -1,8 +1,9 @@
 #!/bin/sh
 # Copyright (C) 2026 Johan Roenby
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Timing study at max Co 0.1 without the interfaceHeight gauge (enabled false in
-# controlDict.run; it rebuilds a mesh search tree every step). 36 runs to t = 6 s,
+# Timing study at max Co 0.1 without the wave gauge (surfacePosition1 enabled false in
+# controlDict.run; made when the gauge was interfaceHeight, which rebuilds a mesh search
+# tree every step). 36 runs to t = 6 s,
 # at most 8 at a time (./Allrun, unpinned), largest meshes first, on an otherwise idle
 # machine. Needs the OpenFOAM v2606 environment.
 cd "${0%/*}" || exit

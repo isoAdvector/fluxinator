@@ -59,7 +59,7 @@ PERIOD = 2.0                # Wave period [s]
 
 def load(scanDir, case):
     caseDir = os.path.join(scanDir, case)
-    t, h = np.loadtxt(os.path.join(caseDir, 'postProcessing/interfaceHeight1/0/height.dat'),
+    t, h = np.loadtxt(os.path.join(caseDir, 'postProcessing/surfacePosition1/0/height.dat'),
                       comments='#', unpack=True, usecols=(0, 2))
     threshold = 0.1*(h.max() - h.min())
     crests = find_extrema(t, h, +1, threshold)

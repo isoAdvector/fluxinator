@@ -80,7 +80,7 @@ def reference_wave():
     txt = open(os.path.join(FIXED_DIR, REF, "constant", "out")).read()
     val = {k: float(re.search(rf"^{k}\s+(\S+);", txt, re.M).group(1))
            for k in ("H", "d", "T", "lambda", "k", "h_crest", "h_trough", "u_crest")}
-    t, h = np.loadtxt(os.path.join(FIXED_DIR, REF, "postProcessing", "interfaceHeight1", "0",
+    t, h = np.loadtxt(os.path.join(FIXED_DIR, REF, "postProcessing", "surfacePosition1", "0",
                                    "height.dat"), comments="#", usecols=(0, 2), unpack=True)
     return val, h.max(), h.min()
 

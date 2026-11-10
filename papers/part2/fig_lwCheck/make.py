@@ -24,7 +24,7 @@ KEYS = [("dH", "{:+6.1f}"), ("dc", "{:+6.2f}"), ("Umax", "{:5.2f}"), ("Uair", "{
 
 
 def last_time(d):
-    f = os.path.join(d, "postProcessing", "interfaceHeight1", "0", "height.dat")
+    f = os.path.join(d, "postProcessing", "surfacePosition1", "0", "height.dat")
     if not os.path.exists(f):
         return 0.0
     return float(open(f, "rb").read()[-300:].decode(errors="ignore").strip().splitlines()[-1].split()[0])

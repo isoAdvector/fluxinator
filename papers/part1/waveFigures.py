@@ -89,7 +89,7 @@ def runs(rows, app, nz):
 
 
 def eta(scanDir, case):
-    return np.loadtxt(os.path.join(scanDir, case, "postProcessing/interfaceHeight1/0/height.dat"),
+    return np.loadtxt(os.path.join(scanDir, case, "postProcessing/surfacePosition1/0/height.dat"),
                       comments="#", unpack=True, usecols=(0, 2))
 
 

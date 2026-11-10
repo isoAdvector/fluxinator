@@ -65,7 +65,7 @@ def cases():
 
 def finished(d):
     """height.dat reaches 30 s; logs of three reruns were lost, so the log is not used."""
-    f = os.path.join(d, "postProcessing", "interfaceHeight1", "0", "height.dat")
+    f = os.path.join(d, "postProcessing", "surfacePosition1", "0", "height.dat")
     if not os.path.exists(f):
         return False
     last = open(f, "rb").read()[-300:].decode(errors="ignore").strip().splitlines()[-1].split()

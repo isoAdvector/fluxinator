@@ -1,8 +1,9 @@
 Timing of interFoam, interIsoFoam, interIsoGoam (ddtCorr off) and fluxinator at max Co 0.1
-on 95x20, 190x40 and 380x80, three repeats, to t = 6 s, without the interfaceHeight function
-object (it rebuilds a mesh search tree every step, about half of the step time).
+on 95x20, 190x40 and 380x80, three repeats, to t = 6 s, without the wave gauge (made when the
+gauge was interfaceHeight, which rebuilds a mesh search tree every step, about half of the step
+time; the gauge is now surfacePosition, whose cost is negligible).
 Set-ups: solvers_maxCo_ddtCorrOff 0006-0008 (95x20), 0018-0020 (190x40), 0030-0032 (380x80) and
-finalSolver_maxCo 0008, 0020, 0032, with endTime 6 and functions.interfaceHeight1.enabled false in
+finalSolver_maxCo 0008, 0020, 0032, with endTime 6 and functions.surfacePosition1.enabled false in
 system/controlDict.run (makeCases.sh).
 ./runAll.sh: at most 8 concurrent unpinned runs, nothing else on the machine.
 python3 analyse.py writes ../data/timing_maxCo0.1.csv (time per step over 2 <= t <= 6 s).

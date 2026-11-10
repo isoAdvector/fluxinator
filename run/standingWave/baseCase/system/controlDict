@@ -55,11 +55,11 @@ maxDeltaT       1e6;
 
 functions
 {
-    interfaceHeight1
+    surfacePosition1
     {
         // Mandatory entries (unmodifiable)
-        type            interfaceHeight;
-        libs            (fieldFunctionObjects);
+        type            surfacePosition;
+        libs            (surfacePosition);
 
         // Mandatory entries (runtime modifiable)
         locations       (
@@ -69,7 +69,7 @@ functions
 
         // Optional entries (runtime modifiable)
         alpha           alpha.water;
-        direction       (0 0 1);
+        direction       (0 0 -1);
 
         writeControl    timeStep;
         writeInterval   1;

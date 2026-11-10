@@ -5,7 +5,7 @@
 # Plots relative crest and trough heights, (h - h1)/h1, as functions of time,
 # where h1 is the height of the first crest (or trough). Heights are taken
 # from the hL column (elevation relative to the wave gauge location) in
-# postProcessing/interfaceHeight1/0/height.dat.
+# postProcessing/surfacePosition1/0/height.dat.
 #
 # Crests and troughs are shown in separate panels sharing the time axis.
 # Optionally (--waveHeight) a third panel shows the relative wave height,
@@ -195,7 +195,7 @@ def load_cases(args, caseNames):
     cases = []
     for caseName in caseNames:
         caseDir = os.path.join(args.scanDir, caseName)
-        t, h = np.loadtxt(os.path.join(caseDir, 'postProcessing/interfaceHeight1/0/height.dat'),
+        t, h = np.loadtxt(os.path.join(caseDir, 'postProcessing/surfacePosition1/0/height.dat'),
                           comments="#", unpack=True, usecols=(0, args.column))
         mask = (t >= args.tMin) & (t <= args.tMax)
         t, h = t[mask], h[mask]

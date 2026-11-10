@@ -72,7 +72,7 @@ with function objects (for example `convectiveMomentumFlux` in
 | `applications/solvers/interIsoGoam/` | interIsoGoam, and the source of both solvers |
 | `applications/test/convectionTest/` | prescribed-flow test of the momentum convection (Part II) |
 | `applications/test/ddtCorrSwitch/` | stock interFoam and interIsoFoam with a PIMPLE `ddtCorr` switch (Part I, Appendix A) |
-| `applications/utilities/` | `setHydrostaticPressure` (hydrostatic `p_rgh` of a flat interface at rest); `surfacePosition` (submodule; function object for the interface height, a geometric alternative to `interfaceHeight`) |
+| `applications/utilities/` | `setHydrostaticPressure` (hydrostatic `p_rgh` of a flat interface at rest); `surfacePosition` (submodule; function object for the interface height, the wave gauge of the cases, a geometric alternative to `interfaceHeight`) |
 | `run/` | the test cases, one directory per case (`run/README.md`) |
 | `papers/part1/`, `papers/part2/` | one directory per figure and table of each paper (below) |
 

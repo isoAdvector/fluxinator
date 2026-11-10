@@ -14,7 +14,7 @@ make1() {   # make1 <source case> <name>
         for f in $(ls "$1/constant" | grep -v polyMesh); do cp -r "$1/constant/$f" "$d/constant/"; done
         {
         dictator "$d/system/controlDict.run" endTime 6 &&
-        dictator "$d/system/controlDict.run" functions.interfaceHeight1.enabled false
+        dictator "$d/system/controlDict.run" functions.surfacePosition1.enabled false
         } > "$d/log.dictator" || exit 1
     done
 }

@@ -58,13 +58,13 @@ maxDeltaT       0.2;
 
 functions
 {
-    interfaceHeight1
+    surfacePosition1
     {
-        type            interfaceHeight;
-        libs            ( fieldFunctionObjects );
+        type            surfacePosition;
+        libs            ( surfacePosition );
         locations       ( ( 1.0001 0.0001 0.0001 ) );
         alpha           alpha.water;
-        direction       ( 0 0 1 );
+        direction       ( 0 0 -1 );
         writeControl    timeStep;
         writeInterval   1;
     }
