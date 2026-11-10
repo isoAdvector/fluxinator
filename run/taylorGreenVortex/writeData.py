@@ -24,7 +24,7 @@ L = [f"{'case':26s} {'theta':>5s} {'dt':>7s} {'a(10) meas':>11s} {'a(10) pred':>
 for case in sys.argv[1:]:
     U0 = float(open(os.path.join(case, "U0")).read())
     th = float(open(os.path.join(case, "theta")).read())
-    dt = float(foamio.entry(os.path.join(case, "system/controlDict"), "deltaT"))
+    dt = float(re.search(r"^deltaT\s+(\S+);", open(os.path.join(case, "system/controlDict")).read(), re.M).group(1))
     ts = sorted((d for d in os.listdir(case) if re.fullmatch(r"\d+(\.\d+)?", d)), key=float)
     t, a, m = [], [], []
     for d in ts:

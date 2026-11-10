@@ -1,38 +1,18 @@
 # Copyright (C) 2026 Johan Roenby
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Minimal OpenFOAM ASCII reader: points, faces, owner, neighbour, vol fields; dictionary
-entries with dictator."""
+"""Minimal OpenFOAM ASCII reader: points, faces, owner, neighbour, vol fields; dictator for
+setting dictionary entries."""
 import re, subprocess, sys, numpy as np
 
 def dictator(*args):
-    """Run dictator (inherited from the shell that started this script) and return its output:
-    dictator(file, entry) reads an entry, dictator(file, entry, value) sets one."""
+    """Run dictator (inherited from the shell that started this script) and return its output,
+    for example dictator(file, entry, value) to set an entry. Reading entries this way costs
+    about 10 ms each (a shell and an awk scan), so the readers here parse the files directly."""
     r = subprocess.run(['bash', '-c', 'dictator "$@"', 'dictator', *args], capture_output=True, text=True)
     if r.returncode:
         sys.exit(f'dictator {" ".join(args)}: ' + (r.stderr.strip()
                  or 'failed; source dictator first (github.com/isoAdvector/dictator)'))
     return r.stdout.strip()
-
-def entries(path, *names):
-    """The values of several entries of one dictionary, as strings, read in one shell."""
-    r = subprocess.run(['bash', '-c', 'f=$1; shift; for e; do dictator "$f" "$e" || exit 1; printf "\\0"; done',
-                        'dictator', path, *names], capture_output=True, text=True)
-    if r.returncode:
-        sys.exit(f'dictator {path}: ' + (r.stderr.strip()
-                 or 'failed; source dictator first (github.com/isoAdvector/dictator)'))
-    return [v.strip() for v in r.stdout.split('\0')[:-1]]
-
-def entry(path, name):
-    """The value of a dictionary entry, as a string."""
-    return dictator(path, name)
-
-def as_array(v):
-    """A list value such as "35 (...)" or "(4 1 1)" as a numpy array."""
-    return np.array(v[v.index('(') + 1:v.rindex(')')].split(), dtype=float)
-
-def entry_list(path, name):
-    """A list entry as a numpy array."""
-    return as_array(entry(path, name))
 
 def _body(path):
     txt = open(path).read()

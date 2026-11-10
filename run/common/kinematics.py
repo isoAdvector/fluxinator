@@ -30,12 +30,20 @@ import foamio
 
 G = 9.81
 
+def _scalar(txt, key):
+    m = re.search(r'^\s*' + key + r'\s+([-+0-9.eE]+)\s*;', txt, re.M)
+    return float(m.group(1))
+
+def _list(txt, key):
+    m = re.search(r'^\s*' + key + r'\s+\d+\s*\(([^)]*)\)', txt, re.M)
+    return np.array(m.group(1).split(), dtype=float)
+
 class Wave:
     def __init__(self, case):
-        *v, B, E = foamio.entries(f'{case}/constant/out', 'H', 'd', 'k', 'omega', 'uBar', 'B', 'E')
-        self.H, self.d, self.k, self.omega, self.uBar = map(float, v)
-        self.c = self.omega/self.k; self.L = 2*np.pi/self.k
-        self.B, self.E = foamio.as_array(B), foamio.as_array(E)
+        t = open(f'{case}/constant/out').read()
+        self.H, self.d, self.k, self.omega = (_scalar(t, k) for k in ('H', 'd', 'k', 'omega'))
+        self.uBar = _scalar(t, 'uBar'); self.c = self.omega/self.k; self.L = 2*np.pi/self.k
+        self.B, self.E = _list(t, 'B'), _list(t, 'E')
         self.j = np.arange(1, self.B.size + 1)
 
     def eta(self, theta):        # elevation above the bed
@@ -52,9 +60,9 @@ class Wave:
 
 class Mesh:
     def __init__(self, case):
-        v = foamio.entries(f'{case}/system/blockMeshDict', 'L', 'z1', 'z2', 'nx', 'nz')
-        self.L, self.z1, self.z2 = map(float, v[:3])
-        self.nx, self.nz = int(v[3]), int(v[4])
+        t = open(f'{case}/system/blockMeshDict').read()
+        self.L, self.z1, self.z2 = (_scalar(t, k) for k in ('L', 'z1', 'z2'))
+        self.nx, self.nz = int(_scalar(t, 'nx')), int(_scalar(t, 'nz'))
         self.dx, self.dz = self.L/self.nx, (self.z2 - self.z1)/self.nz
 
 def _parab(h, i, sign):
