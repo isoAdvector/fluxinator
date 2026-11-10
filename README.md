@@ -15,7 +15,19 @@ Please cite the papers when you use the code.
 STROMNING offers consulting, custom development, training and support for interfacial
 and multiphase flow simulation with OpenFOAM. Contact: johan@stromning.com.
 
-## The solver
+## The solvers
+
+The code has two solvers, built from the same source, that differ only in their
+defaults:
+
+| Solver | Defaults | Paper |
+|---|---|---|
+| **`fluxinator`** | the geometric gravity force and explicit momentum convection: the recommended settings | Part II |
+| `interIsoGoam` | those of OpenFOAM's interIsoFoam; the additions are switched on in the case | Part I, and the steps of Part II |
+
+Use `fluxinator`. `interIsoGoam` is maintained alongside it: with the geometric gravity
+model it is the solver of Part I, and the cases of both papers use it to switch the
+additions on one at a time.
 
 **`fluxinator`** is a two-phase Volume-of-Fluid solver derived from OpenFOAM's
 interIsoFoam. It keeps the geometric interface advection of interIsoFoam (isoAdvector)
@@ -35,8 +47,8 @@ Keep the maximum Courant number at about 0.1 or less for accurate wave propagati
 `interIsoGoam` (`applications/solvers/interIsoGoam`) is interIsoFoam with the additions
 of Parts I and II, all selected at run time; with the defaults of interIsoFoam and one outer
 corrector it is interIsoFoam. It gives the same results as `fluxinator` with the same
-settings. It is the solver of Part I and is kept so that the cases, which rely on its
-defaults, reproduce the results of the papers. It has these run-time options:
+settings. The cases of the papers rely on its defaults, so they reproduce the published
+results unchanged. It has these run-time options:
 
 | Settings | Behaves as |
 |---|---|
