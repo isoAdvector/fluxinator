@@ -41,7 +41,7 @@ cases use the default `nLayers`.
   step, 2.1e-8 m/s with 2 correctors).
 - The diagnostic `../common/snGradRhoReach` shows why nLayers 1 suffices here: the
   corrected snGrad(rho) is non-zero on 128 faces (76 uncorrected), but all their
-  cells lie in rings 0 and 1, because opposite cell faces are parallel and the
+  cells lie in layers 0 and 1, because opposite cell faces are parallel and the
   correction vector is orthogonal to the face normal.
 - nLayers 2, the default used here, gives the same results as nLayers 1 on this mesh.
 

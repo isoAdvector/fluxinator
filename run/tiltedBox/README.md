@@ -14,6 +14,7 @@ spurious current. Fixed time step 0.01 s, OpenFOAM v2606.
 | `meshTimeStep_1step` | first time step only, dt = 1e-4 ... 1 s on 25^2, 50^2, 100^2 and 200^2 cells, interFoam and interIsoFoam |
 | `airDensity_1000steps` | air density 1e-4 ... 1e3 kg/m3, 1000 time steps, interFoam, interIsoFoam and interIsoGoam (geometric) |
 | `nLayers_1000steps` | interIsoGoam, geometric with nLayers 0, 1 and 2, and constantHeight, 1000 time steps |
+| `reconstruction_1000steps` | interIsoGoam, geometric with plicRDF and isoAlpha reconstruction, and constantHeight with isoAlpha, 1000 time steps (why the rest cases use plicRDF) |
 | `<study>_ddtCorrOff` | the same runs with PIMPLE `ddtCorr no` (Part I, Appendix A); stock interFoam and interIsoFoam run as interFoamDdtCorr and interIsoFoamDdtCorr |
 
 The base case uses the default `nLayers`. `nLayers_1000steps` varies it and starts from
@@ -33,7 +34,7 @@ The base case uses the default `nLayers`. `nLayers_1000steps` varies it and star
 - The spurious currents of the standard gravity term are concentrated in a few
   cells, and which cells those are follows in closed form from the tilt and the
   water level (closed-form theory in the archive, see below).
-- The first ring of cells around the interface must get interface heights:
+- The first layer of cells around the interface must get interface heights:
   with nLayers 0 (heights in interface cells only) the geometric model reaches
   0.53 m/s after the first step and 5.2 m/s after 10 s, worse than the standard
   gravity term. nLayers 1 and 2 stay below 2.5e-9 m/s, like constantHeight.

@@ -37,3 +37,25 @@ def write_table(here, name, lines):
     """Write the table file <name>.txt in the table directory and print it."""
     open(os.path.join(here, name + ".txt"), "w").write("\n".join(lines) + "\n")
     print("\n".join(lines))
+
+
+def paper_style(size=8, scale=1.0):
+    """Computer Modern text and maths, as in the paper, printed at size pt. scale is the
+    printed width over the drawn width of the figure (the paper's text width is
+    30 pc = 5.0 in). Figures are saved cropped to their content, so that no white margin
+    adds to the space between the figure and its caption."""
+    import matplotlib.pyplot as plt
+    size = size/scale
+    plt.rcParams.update({
+        "font.family": "serif",
+        "font.serif": ["cmr10"],
+        "mathtext.fontset": "cm",
+        "axes.formatter.use_mathtext": True,
+        "font.size": size,
+        "axes.titlesize": size,
+        "legend.fontsize": size,
+        "figure.titlesize": size,  # also the size of supxlabel
+        "pdf.fonttype": 42,
+        "savefig.bbox": "tight",
+        "savefig.pad_inches": 0.02,
+    })

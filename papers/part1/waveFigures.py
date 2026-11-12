@@ -21,6 +21,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 WAVE = os.path.join(HERE, "..", "..", "run", "progressiveWave")
 sys.path.insert(0, WAVE)
 from plotCrestHeight import find_extrema, wave_heights  # noqa: E402
+from common import paper_style  # noqa: E402
 
 OUT = HERE  # set by the calling make.py
 FIXED_DIR = os.path.join(WAVE, "solvers_fixedDt")
@@ -35,24 +36,22 @@ WAVELENGTH = 3.7873860376294 # m, the domain length (one wavelength, cyclic)
 PERIOD = 2.0                 # s
 C_EXACT = WAVELENGTH/PERIOD  # m/s, the exact celerity
 SOLVERS = ["interFoam", "interIsoFoam", "interIsoGoam"]
-COLOUR = {"interFoam": "#2a78d6", "interIsoFoam": "#eb6834", "interIsoGoam": "#1baf7a"}
+COLOUR = {"interFoam": "#DDAA33", "interIsoFoam": "#BB5566", "interIsoGoam": "#004488"}  # Paul Tol high-contrast
 MARKER = {"interFoam": "o", "interIsoFoam": "s", "interIsoGoam": "D"}
 NZ = [20, 40, 80, 160]
 NX = {20: 95, 40: 190, 80: 380, 160: 760}
 
 plt.rcParams.update({
-    "font.family": "serif",
-    "font.size": 9,
     "axes.linewidth": 0.7,
     "lines.linewidth": 1.2,
     "lines.markersize": 4,
-    "legend.fontsize": 8,
     "legend.frameon": False,
     "axes.grid": True,
     "grid.linewidth": 0.4,
     "grid.alpha": 0.5,
 })
 FULL, HALF = 7.0, 3.4  # figure widths [in]
+paper_style(scale=5.0/FULL)  # FULL is printed at the text width
 
 
 # ---------------------------------------------------------------- data access
@@ -140,7 +139,7 @@ def fig_eta():
             if row == 1:
                 ax.set_xlabel(r"$t$ [s]")
             ax.set_title(f"({'abcd'[2*row+col]}) {label}, " + ("first" if col == 0 else "last") + " 4 s",
-                         fontsize=9, loc="left")
+                         loc="left")
     handles, labels = axes[0, 1].get_legend_handles_labels()
     fig.legend(handles, labels, loc="upper center", ncol=4, bbox_to_anchor=(0.5, 1.0))
     fig.tight_layout(rect=(0, 0, 1, 0.94))
@@ -166,7 +165,7 @@ def fig_crests():
             ax.plot(tw, np.interp(tc + tw, t, h)*1e3, color=COLOUR[s], lw=0.9, alpha=0.3 + 0.7*j/n)
         ax.plot(tw, ref_profile, "k--", lw=1.0)
         r = next(x for x in FIX if x["case"] == c)
-        ax.set_title(f"{s} ({r['crestPeaks']:.1f} peaks/crest)", fontsize=9)
+        ax.set_title(f"{s}: {r['crestPeaks']:.1f} peaks")
         ax.set_xlabel(r"$t - t_{crest}$ [s]")
         ax.set_xlim(-0.3, 0.3)
     axes[0].set_ylabel(r"$\eta$ [mm]")
@@ -203,7 +202,7 @@ def fig_umax():
     ax.set_ylim(0.9, 2.2)
     ax.set_xlabel(r"$t$ [s]")
     ax.set_ylabel(r"max$|\mathbf{U}|/u_{crest}$ (max per 0.1 s)")
-    ax.set_title(r"$380\times80$, $\Delta t_0/8$", fontsize=9, loc="left")
+    ax.set_title(r"$380\times80$, $\Delta t_0/8$", loc="left")
     ax.legend(loc="upper left", ncol=2)
     fig.tight_layout()
     save(fig, "spurious")

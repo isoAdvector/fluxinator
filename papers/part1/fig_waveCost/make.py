@@ -25,7 +25,7 @@ def col(other, nx):
 
 
 by = {(r["application"], r["nx"], float(r["maxCo"])): r for r in limit}
-fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.7), sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(7.0, 3.1), sharey=True)
 for ax, key, title in [(axes[0], "steps", "(a) number of time steps"),
                        (axes[1], "clockTime", "(b) wall-clock time")]:
     for nx, label in MESHES:
@@ -42,12 +42,12 @@ for ax, key, title in [(axes[0], "steps", "(a) number of time steps"),
     ax.minorticks_off()
     ax.grid(True, lw=0.4, alpha=0.5)
     ax.set_xlabel("maximum Courant number (limit)")
-    ax.set_title(title, fontsize=9, loc="left")
+    ax.set_title(title, loc="left")
 axes[0].set_ylabel("change, interIsoGoam vs other [%]")
 h = [plt.Line2D([], [], color="#5c5c5a", ls="none", marker=MARK[n], label=l) for n, l in MESHES]
 h += [plt.Line2D([], [], color=COLOUR["interFoam"], ls="-", label="vs interFoam"),
       plt.Line2D([], [], color=COLOUR["interIsoFoam"], ls="--", label="vs interIsoFoam (open)")]
-fig.legend(handles=h, loc="upper center", ncol=6, bbox_to_anchor=(0.5, 1.0))
-fig.tight_layout(rect=(0, 0, 1, 0.9))
+fig.legend(handles=h, loc="upper center", ncol=3, bbox_to_anchor=(0.5, 1.0))
+fig.tight_layout(rect=(0, 0, 1, 0.83))
 fig.savefig(os.path.join(HERE, "waveCost.pdf"))
 fig.savefig(os.path.join(HERE, "waveCost.png"), dpi=150)

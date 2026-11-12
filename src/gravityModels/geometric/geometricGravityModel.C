@@ -127,8 +127,8 @@ Foam::geometricGravityModel::geometricGravityModel
 
 // Sets g*h from the reconstructed interface: (1) collect the interface centres
 // and normals, adding faces that are themselves the interface, (2) mark the
-// interface cells and the rings around them, (3) assign g*h in the interface
-// cells and the first ring, (4) then in each further ring, (5) interpolate to
+// interface cells and the layers around them, (3) assign g*h in the interface
+// cells and the first layer, (4) then in each further layer, (5) interpolate to
 // the faces.
 void Foam::geometricGravityModel::calculateGhf()
 {
@@ -242,8 +242,8 @@ void Foam::geometricGravityModel::calculateGhf()
             }
         }
 
-        // Interface cells and nLayers rings of point neighbours, with the
-        // ring number of each cell (0 for interface cells, -1 outside)
+        // Interface cells and nLayers layers of point neighbours, with the
+        // layer number of each cell (0 for interface cells, -1 outside)
         boolList nearInterface(mesh.nCells(), false);
         volScalarField cellDistLevel
         (
@@ -299,7 +299,7 @@ void Foam::geometricGravityModel::calculateGhf()
             dimensionedScalar(dimless, Zero)
         );
 
-        // Interface cells and the first ring
+        // Interface cells and the first layer
         forAll(interfaceCell,celli)
         {
             if(mag(faceNormal[celli]) != 0)
@@ -359,8 +359,8 @@ void Foam::geometricGravityModel::calculateGhf()
             }
         }
 
-        // Further rings: average of the values already assigned to the
-        // neighbours. Each ring is one pass with its own parallel exchange,
+        // Further layers: average of the values already assigned to the
+        // neighbours. Each layer is one pass with its own parallel exchange,
         // and the new values only take effect after the pass.
         for (label layer = 2; layer <= nLayers_; ++layer)
         {

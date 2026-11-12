@@ -33,19 +33,19 @@ Description
 
     g*h is set from the reconstructed interface in the interface cells and in
     nLayers rings of point neighbours around them; elsewhere it is g*h at the
-    cell centre. The first ring uses a weighted average of the neighbouring
-    interface centres. Each further ring uses the average of the values
+    cell centre. The first layer uses a weighted average of the neighbouring
+    interface centres. Each further layer uses the average of the values
     already assigned to its neighbours.
 
     An interface lying exactly on mesh faces (volume fractions of exactly 0
     and 1, no interface cells) is handled by treating every face between two
     non-interface cells with densities on either side of the mean as an
     interface segment: both cells get the face centre and normal and count as
-    interface cells before the rings are formed.
+    interface cells before the layers are formed.
 
     With uncorrected snGrad schemes one layer is sufficient. With corrected
     (non-orthogonal) schemes, fvc::snGrad(rho) also reaches the faces between
-    the first and second ring, so two layers are needed for an exact
+    the first and second layer, so two layers are needed for an exact
     hydrostatic balance of a flat interface on non-orthogonal meshes.
 
 Usage
@@ -97,7 +97,7 @@ class geometricGravityModel
         //- Height reference field
         uniformDimensionedScalarField hRef_;
 
-        //- Number of rings of cells around the interface cells that get the
+        //- Number of layers of cells around the interface cells that get the
         //  interface-based g*h
         label nLayers_;
 
@@ -144,7 +144,7 @@ public:
     //- Return gh
     tmp<volScalarField> gh() const;
 
-    //- Number of rings around the interface cells with an interface-based gh
+    //- Number of layers around the interface cells with an interface-based gh
     label nLayers() const
     {
         return nLayers_;

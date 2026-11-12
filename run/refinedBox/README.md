@@ -29,11 +29,13 @@ the isoAdvector reconstruction and aborts interFoam at the first write.
   1e-14); round-off with uncorrected schemes.
 - geometric, nLayers 1, corrected: 0.2-1 m/s at every level where the interface cuts
   cells, hydrostatic start or not (first residual 6e-5 - 2e-4); maximum in one of the
-  four ring-2 cells of the corrected snGrad(rho) reach. nLayers 2 behaves like
-  constantHeight at every level; nLayers 3 gives the same as 2. Uncorrected: nLayers 1
+  four layer-2 cells of the corrected snGrad(rho) reach. nLayers 2 behaves like
+  constantHeight at every level with the hydrostatic start; from a zero start with 2
+  correctors it reaches 3.6e-5 m/s at z_w = 0.50 (constantHeight 2.9e-7); nLayers 3 gives the same as 2. Uncorrected: nLayers 1
   suffices.
-- Interface on mesh faces (z_w = 0.48, 0.50, 0.52): volume fractions are exactly 0 and
-  1 and there are no interface cells. The geometric model assigns the face height to both
+- Interface on coarse cell faces (z_w = 0.48, 0.52): volume fractions are exactly 0 and
+  1 and there are no interface cells. (At z_w = 0.50 the interface lies on fine faces in
+  the refined region but cuts the coarse cells outside it in half.) The geometric model assigns the face height to both
   cells of every face between a full and an empty cell; without that rule it reduces to
   the basic model there (4-5 m/s with corrected schemes, any nLayers). From a zero start
   with 2 correctors the first-step velocity (2e-8 m/s) later perturbs some volume
@@ -51,6 +53,6 @@ the isoAdvector reconstruction and aborts interFoam at the first write.
 max|U| per configuration and level), `snGradRhoReach.txt`, `maxUCell.txt` (`maxUCell.py`)
 and `checkMesh.txt`, and renders the case images of the velocity-field figure
 (`generateFigure.py` in four cases at z_w = 0.49, pvbatch). The paper figures and the
-table are made in `papers/part1/fig_levelScan`, `fig_reach`, `fig_refinedBox` and
-`tab_nonOrthRefined`. `waterLevel_10steps_ddtCorrOff` holds the same runs with PIMPLE
+table are made in `papers/part1/fig_reach`, `fig_refinedBox` and `tab_nonOrthRefined`
+(at z_w = 0.49, with the range over all levels at which the interface cuts cells). `waterLevel_10steps_ddtCorrOff` holds the same runs with PIMPLE
 `ddtCorr no` (Part I, Appendix A; `runCase_ddtCorrOff.sh`).

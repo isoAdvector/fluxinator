@@ -23,8 +23,8 @@ Class
     Foam::markInterfaceRegion
 
 Description
-    Marks the interface cells and a given number of rings of point neighbours
-    around them, with the ring number of each cell.
+    Marks the interface cells and a given number of layers of point neighbours
+    around them, with the layer number of each cell.
 
 Author
     Henning Scheufler, DLR, all rights reserved.

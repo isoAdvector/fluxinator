@@ -16,10 +16,10 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, ".."))
-from common import case  # noqa: E402
+from common import case, paper_style  # noqa: E402
 import kinematics as K  # noqa: E402
 
-plt.rcParams.update({"font.family": "serif", "font.size": 8.5, "axes.titlesize": 8.5})
+paper_style(scale=360/416)  # printed at the text width
 WATER, LINE = "#9cc3ea", "#8a8883"
 
 
@@ -36,8 +36,8 @@ def water(ax, outline, eta, xr):
     ln, = ax.plot(x, eta(x), color="#2a78d6", lw=1.0); ln.set_clip_path(dom)
 
 
-fig = plt.figure(figsize=(7.2, 3.9))
-gs = fig.add_gridspec(2, 4, height_ratios=[1.0, 0.55], hspace=0.25, wspace=0.12)
+fig = plt.figure(figsize=(7.2, 3.3))
+gs = fig.add_gridspec(2, 4, height_ratios=[1.0, 0.55], hspace=0.12, wspace=0.12)
 axes = [fig.add_subplot(gs[0, i]) for i in range(4)] + [fig.add_subplot(gs[1, :])]
 # (a) tilted box
 ax = axes[0]; th = np.radians(5); n = 25
@@ -63,7 +63,7 @@ def refined(ax, n, eta, title):
     for k in range(m):
         v = lo + (k + 0.5)*h
         ax.plot([v, v], [lo, hi], color=LINE, lw=0.25); ax.plot([lo, hi], [v, v], color=LINE, lw=0.25)
-    ax.add_patch(Rectangle((lo, lo), hi - lo, hi - lo, fc="none", ec="#eb6834", lw=0.8))
+    ax.add_patch(Rectangle((lo, lo), hi - lo, hi - lo, fc="none", ec="#BB5566", lw=0.8))
     water(ax, np.array([[0, 0], [1, 0], [1, 1], [0, 1]]), eta, (0, 1)); ax.set_title(title)
 
 

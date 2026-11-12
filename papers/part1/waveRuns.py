@@ -17,11 +17,12 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PD = os.path.join(HERE, "..", "..", "run", "progressiveWave", "data")
-plt.rcParams.update({"font.family": "serif", "font.size": 9, "axes.linewidth": 0.7,
-                     "lines.linewidth": 1.2, "lines.markersize": 4, "legend.fontsize": 8,
+from common import paper_style  # noqa: E402
+paper_style(scale=5.0/7.0)  # the 7 in wide figures are printed at the text width
+plt.rcParams.update({"axes.linewidth": 0.7, "lines.linewidth": 1.2, "lines.markersize": 4,
                      "legend.frameon": False})
 SOLVERS = ["interFoam", "interIsoFoam", "interIsoGoam"]
-COLOUR = {"interFoam": "#2a78d6", "interIsoFoam": "#eb6834", "interIsoGoam": "#1baf7a"}
+COLOUR = {"interFoam": "#DDAA33", "interIsoFoam": "#BB5566", "interIsoGoam": "#004488"}  # Paul Tol high-contrast
 MARKER = {"interFoam": "o", "interIsoFoam": "s", "interIsoGoam": "D"}
 MESHES = [("95", "95$\\times$20"), ("190", "190$\\times$40"), ("380", "380$\\times$80"),
           ("760", "760$\\times$160")]

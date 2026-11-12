@@ -47,10 +47,12 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-plt.rcParams.update({"font.family": "serif", "font.size": 9, "axes.linewidth": 0.7,
-                     "lines.linewidth": 1.2, "lines.markersize": 4, "legend.fontsize": 8,
+sys.path.insert(0, os.path.join(HERE, ".."))
+from common import paper_style  # noqa: E402
+paper_style(scale=5.0/7.0)  # 7 in wide, printed at the text width
+plt.rcParams.update({"axes.linewidth": 0.7, "lines.linewidth": 1.2, "lines.markersize": 4,
                      "legend.frameon": False})
-COLOUR = {"interFoam": "#2a78d6", "interIsoFoam": "#eb6834", "interIsoGoam": "#1baf7a"}
+COLOUR = {"interFoam": "#DDAA33", "interIsoFoam": "#BB5566", "interIsoGoam": "#004488"}  # Paul Tol high-contrast
 MARKER = {"interFoam": "o", "interIsoFoam": "s", "interIsoGoam": "D"}
 CO = [0.5, 0.2, 0.1, 0.05]
 TIMES = r"$\times$"
@@ -63,37 +65,41 @@ for line in open(os.path.join(HERE, "ddtCorr.txt")):
     v = [float(x) for x in w[3:] if x != "/"]
     data[(w[0], w[1], w[2])] = (v[0::2], v[1::2])
 
-fig, axes = plt.subplots(1, 3, figsize=(7.0, 2.7))
+fig, axes = plt.subplots(1, 3, figsize=(7.0, 3.0))
 for ax, mesh, lab in zip(axes[:2], ["190x40", "380x80"], ["(a)", "(b)"]):
     for app in COLOUR:
         on, off = data[(mesh, app, "dHfit")]
         ax.plot(CO, on, "-", color=COLOUR[app], marker=MARKER[app])
         ax.plot(CO, off, "--", color=COLOUR[app], marker=MARKER[app], mfc="white")
     ax.axhline(0, color="#1f1f1e", lw=0.6)
-    ax.set_title(f"{lab} {mesh.replace('x', TIMES)}", fontsize=9, loc="left")
+    ax.set_title(f"{lab} {mesh.replace('x', TIMES)}", loc="left")
     ax.set_ylabel(r"$\Delta H$ after 15 periods [%]")
     ax.set_ylim(-36, 14)
 ax = axes[2]
-for mesh, c, m in [("190x40", "#8fd9bc", "o"), ("380x80", COLOUR["interIsoGoam"], "D")]:
+for mesh, c, m in [("190x40", "#6699CC", "o"), ("380x80", COLOUR["interIsoGoam"], "D")]:
     on, off = data[(mesh, "interIsoGoam", "r0")]
-    ax.plot(CO, on, "-", color=c, marker=m, label=f"{mesh.replace('x', TIMES)}, on")
-    ax.plot(CO, off, "--", color=c, marker=m, mfc="white", label=f"{mesh.replace('x', TIMES)}, off")
+    ax.plot(CO, on, "-", color=c, marker=m, label=mesh.replace('x', TIMES))
+    ax.plot(CO, off, "--", color=c, marker=m, mfc="white")
 ax.axhline(1, color="#1f1f1e", lw=0.6)
-ax.set_title("(c) interIsoGoam, crest", fontsize=9, loc="left")
+ax.set_title("(c) interIsoGoam", loc="left")
 ax.set_ylabel(r"$u/u_{\mathrm{exact}}$, top water cell")
-ax.legend(loc="upper left")
+ax.legend(loc="upper left", handlelength=1.6)
 for ax in axes:
     ax.set_xscale("log")
     ax.set_xticks(CO)
     ax.set_xticklabels([f"{c:g}" for c in CO])
     ax.minorticks_off()
-    ax.set_xlabel("maximum Courant number")
     ax.grid(True, lw=0.4, alpha=0.5)
 # Solver and line-style legend below (a) and (b)
 h = [plt.Line2D([], [], color=COLOUR[a], marker=MARKER[a], label=a) for a in COLOUR]
 h += [plt.Line2D([], [], color="#6b6b6b", ls="-", label="ddtCorr on"),
       plt.Line2D([], [], color="#6b6b6b", ls="--", marker="o", mfc="white", label="ddtCorr off")]
-fig.legend(handles=h, loc="lower left", ncol=5, bbox_to_anchor=(0.06, -0.02))
-fig.tight_layout(rect=(0, 0.08, 1, 1))
+fig.tight_layout(rect=(0, 0.15, 1, 1))
+# Shared x label just below the tick labels, and the legend just below the label
+r = fig.canvas.get_renderer(); toFig = fig.transFigure.inverted()
+y0 = min(ax.get_tightbbox(r).transformed(toFig).y0 for ax in axes)
+t = fig.text(0.5, y0 - 0.01, "maximum Courant number", ha="center", va="top")
+fig.legend(handles=h, loc="upper center", ncol=5, handlelength=1.6, columnspacing=1.0,
+           bbox_to_anchor=(0.5, t.get_window_extent(r).transformed(toFig).y0 - 0.01))
 fig.savefig(os.path.join(HERE, "ddtCorr.pdf"))
 fig.savefig(os.path.join(HERE, "ddtCorr.png"), dpi=150)

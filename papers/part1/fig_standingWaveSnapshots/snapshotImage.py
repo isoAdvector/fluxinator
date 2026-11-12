@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Render the velocity snapshot of one standing-wave case with ParaView.
 #
-# The look reproduces baseCase/state.pvsm: cells with white edges coloured by
+# The look reproduces baseCase/state.pvsm, but with thicker grey cell edges for print: cells coloured by
 # alpha.water (air black, water blue), white arrows oriented and scaled by the
 # cell values of U (placed at the cell centres, no interpolation),
 # and the alpha = 0.5 contour as a white line. The arrows use the same glyph
@@ -53,7 +53,7 @@ view.UseColorPaletteForBackground = 0
 view.OrientationAxesVisibility = 0
 view.ViewTime = args.time
 
-# Cells coloured by alpha.water, white edges (state.pvsm)
+# Cells coloured by alpha.water (state.pvsm), with grey edges thick enough for print
 alphaLUT = GetColorTransferFunction("alpha.water")
 alphaLUT.ColorSpace = "RGB"
 alphaLUT.RGBPoints = [0.0, 0.0, 0.0, 0.0,
@@ -65,9 +65,9 @@ meshDisplay = Show(reader, view)
 meshDisplay.SetRepresentationType("Surface With Edges")
 ColorBy(meshDisplay, ("CELLS", "alpha.water"))
 meshDisplay.LookupTable = alphaLUT
-meshDisplay.EdgeColor = [1.0, 1.0, 1.0]
-meshDisplay.EdgeOpacity = 0.4
-meshDisplay.LineWidth = 1.5
+meshDisplay.EdgeColor = [0.55, 0.55, 0.55]
+meshDisplay.EdgeOpacity = 1.0
+meshDisplay.LineWidth = 3
 meshDisplay.SetScalarBarVisibility(view, False)
 
 # Interface: alpha = 0.5 contour as a white line

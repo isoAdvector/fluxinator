@@ -22,20 +22,19 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, ".."))
-from common import case  # noqa: E402
+from common import case, paper_style  # noqa: E402
 
+paper_style(scale=0.62*360/331)  # printed at 0.62 of the text width
 plt.rcParams.update({
-    "font.family": "serif",
-    "font.size": 10,
     "axes.linewidth": 0.8,
     "lines.linewidth": 1.4,
 })
 
 # (application, gravityModel) -> label, colour, marker
 STYLE = {
-    ("interFoam", "basic"): ("interFoam, basic", "#2a78d6", "o"),
-    ("interIsoGoam", "basic"): ("interIsoFoam, basic", "#eb6834", "s"),
-    ("interIsoGoam", "geometric"): ("interIsoGoam, geometric", "#1baf7a", "D"),
+    ("interFoam", "basic"): ("interFoam, basic", "#DDAA33", "o"),
+    ("interIsoGoam", "basic"): ("interIsoFoam, basic", "#BB5566", "s"),
+    ("interIsoGoam", "geometric"): ("interIsoGoam, geometric", "#004488", "D"),
 }
 RHO_WATER = 1000.0
 Y_RANGE = (1e-12, 1e6)
@@ -85,7 +84,7 @@ ax.set_xlabel(r"$\rho_{\mathrm{light}}$ [kg/m$^3$] ($\rho_{\mathrm{heavy}} = 100
 ax.set_ylabel(r"max$|\mathbf{U}|$ at $t = %g$ s [m/s]" % END_TIME)
 ax.set_ylim(*Y_RANGE)
 ax.grid(True, which="major", linewidth=0.4, alpha=0.6)
-ax.legend(loc="upper right", fontsize=9.5, frameon=False)
+ax.legend(loc="center right", bbox_to_anchor=(1.0, 0.42), frameon=False)
 fig.tight_layout()
 fig.savefig(args.out + ".pdf")
 fig.savefig(args.out + ".png", dpi=200)

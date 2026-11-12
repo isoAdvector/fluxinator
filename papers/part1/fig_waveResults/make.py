@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.join(HERE, ".."))
 from waveRuns import *  # noqa: E402,F401,F403
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-fig, axes = plt.subplots(2, 4, figsize=(7.0, 4.4), sharex=True, sharey="row")
+fig, axes = plt.subplots(2, 4, figsize=(7.0, 4.7), sharex=True, sharey="row")
 for j, (nx, label) in enumerate(MESHES):
     for i, (key, ref) in enumerate([("dHfit", 0.0), ("Umed", 1.0)]):
         ax = axes[i, j]
@@ -26,16 +26,19 @@ for j, (nx, label) in enumerate(MESHES):
         ax.minorticks_off()
         ax.grid(True, lw=0.4, alpha=0.5)
         if i == 0:
-            ax.set_title(label, fontsize=9)
+            ax.set_title(label)
 axes[0, 0].set_ylabel(r"$\Delta H$ after 15 periods [%]")
 axes[1, 0].set_ylabel(r"median $\max|\mathbf{U}|/u_{crest}$")
 axes[0, 0].set_ylim(-60, 15)
-fig.supxlabel("time-averaged maximum Courant number", fontsize=9, y=0.01)
 h = [plt.Line2D([], [], color=COLOUR[a], marker=MARKER[a], label=a) for a in SOLVERS]
 h += [plt.Line2D([], [], color="#6b6b6b", ls="-", marker="o", label=r"fixed $\Delta t$"),
       plt.Line2D([], [], color="#6b6b6b", ls="--", marker="o", mfc="white", label="Courant limit")]
-fig.legend(handles=h, loc="upper center", ncol=5, bbox_to_anchor=(0.5, 1.0))
-fig.tight_layout(rect=(0, 0, 1, 0.94))
+fig.legend(handles=h, loc="upper center", ncol=5, bbox_to_anchor=(0.5, 1.0), handlelength=1.6,
+           columnspacing=1.0)
+fig.tight_layout(rect=(0, 0.04, 1, 0.93))
+# Shared x label just below the tick labels of the bottom row
+bb = axes[1, 0].get_tightbbox(fig.canvas.get_renderer()).transformed(fig.transFigure.inverted())
+fig.text(0.5, bb.y0 - 0.008, "time-averaged maximum Courant number", ha="center", va="top")
 fig.savefig(os.path.join(HERE, "waveResults.pdf"))
 fig.savefig(os.path.join(HERE, "waveResults.png"), dpi=150)
 

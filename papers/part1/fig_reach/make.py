@@ -5,7 +5,7 @@
 # Renders the paper figure panels reach_uncorrected.png and reach_corrected.png
 # for the untilted box with a refined region (z_w = 0.49): cells adjacent to faces with a
 # non-zero uncorrected and corrected snGrad(rho) in the initial field, coloured
-# by ring level around the interface cells (0 amber, 1 green, 2 red with black
+# by layer around the interface cells (0 amber, 1 green, 2 red with black
 # outline), with the alpha = 0.5 contour. Requires the fields written by
 # postProcess -time 0 -dict run/common/snGradRhoReach in
 # run/refinedBox/waterLevel_10steps/g1_zero_z0.4900 (run/refinedBox/Allrun).
@@ -130,7 +130,7 @@ def render(field, outFile):
     view.CameraFocalPoint = [0.5, 0.0, 0.5]
     view.CameraViewUp = [0.0, 0.0, 1.0]
     view.CameraParallelProjection = 1
-    view.CameraParallelScale = 0.23
+    view.CameraParallelScale = 0.17
 
     out = os.path.join(outDir, outFile)
     SaveScreenshot(out, view, ImageResolution=[2*SIZE[0], 2*SIZE[1]], TransparentBackground=0)

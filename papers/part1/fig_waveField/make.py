@@ -13,9 +13,9 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, ".."))
-from common import case  # noqa: E402
+from common import case, paper_style  # noqa: E402
 import kinematics as K  # noqa: E402
-plt.rcParams.update({"font.family": "serif", "font.size": 8})
+paper_style(scale=0.9*360/439)  # printed at 0.9 of the text width
 SCAN = case("progressiveWave", "solvers_maxCo")
 RUNS = [("0027", "(a) interFoam"), ("0028", "(b) interIsoFoam"), ("0029", "(c) interIsoGoam")]
 t = "30"
@@ -34,7 +34,8 @@ for ax, (case, name) in zip(axes, RUNS):
                        shading="flat")
     ax.contour(x, M.z1 + zc, A, [0.5], colors="#1f1f1e", linewidths=0.7)
     ax.set_ylim(-0.4, 0.12); ax.set_ylabel("z [m]")
-    ax.set_title(name, fontsize=8.5, loc="left")
+    ax.set_title(name, loc="left")
 axes[-1].set_xlabel("x [m]")
+fig.subplots_adjust(hspace=0.35)
 fig.colorbar(im, ax=axes, label=r"$u - u_{\mathrm{exact}}$ [m/s]", shrink=0.8, pad=0.02)
 fig.savefig(os.path.join(HERE, "waveField.pdf"), dpi=800, bbox_inches="tight"); fig.savefig(os.path.join(HERE, "waveField.png"), dpi=150, bbox_inches="tight")

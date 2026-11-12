@@ -25,12 +25,14 @@ from hmatch import analyse_input  # noqa: E402
 
 CASES = {s: os.path.join(WAVE, "solvers_maxCo", c) for s, c in
          [("interFoam", "0027"), ("interIsoFoam", "0028"), ("interIsoGoam", "0029")]}
-COLOUR = {"interFoam": "#2a78d6", "interIsoFoam": "#eb6834", "interIsoGoam": "#1baf7a"}
+COLOUR = {"interFoam": "#DDAA33", "interIsoFoam": "#BB5566", "interIsoGoam": "#004488"}  # Paul Tol high-contrast
 MARKER = {"interFoam": "o", "interIsoFoam": "s", "interIsoGoam": "D"}
 WINDOWS = [(8, 10), (18, 20), (28, 30)]
 TIMES = ["10", "30"]
-plt.rcParams.update({"font.family": "serif", "font.size": 9, "axes.linewidth": 0.7,
-                     "lines.linewidth": 1.2, "lines.markersize": 3.5, "legend.fontsize": 8,
+sys.path.insert(0, HERE)
+from common import paper_style  # noqa: E402
+paper_style(scale=5.0/7.0)  # the 7 in wide figures are printed at the text width
+plt.rcParams.update({"axes.linewidth": 0.7, "lines.linewidth": 1.2, "lines.markersize": 3.5,
                      "legend.frameon": False, "axes.grid": True, "grid.linewidth": 0.4,
                      "grid.alpha": 0.5})
 
@@ -64,7 +66,7 @@ def profiles(out):
                     label=f"{s} ($\\Delta H$ {100*(snap['H']/W0.H - 1):+.0f} %)")
         ze = np.linspace(M.z1, M.z1 + W0.eta(0.0)[0], 200)
         ax.plot(W0.uv(0.0, ze - M.z1)[0], ze, "--", color="#1f1f1e", lw=1.0, label="exact (input wave)")
-        ax.set_title(f"t = {t} s", fontsize=9)
+        ax.set_title(f"$t = {t}$ s")
         ax.set_xlabel("horizontal velocity under the crest [m/s]")
         ax.set_ylim(-0.42, 0.11)
         ax.legend(loc="lower right")
