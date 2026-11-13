@@ -3,15 +3,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Part I, Figure fig:standingWaveSnapshots: velocity snapshots of the standing wave at
 # t = T for interFoam, interIsoFoam and interIsoGoam.
-# Inputs: run/standingWave/snapshots/<solver>/1.181817 (run/standingWave/snapshots.sh).
+# Inputs: run/standingWave/snapshots_plicRDF/<solver>/1.181816
+# (RECON=plicRDF run/standingWave/snapshots.sh snapshots_plicRDF).
 # Output: standingWaveSnapshots.pdf (and the panels <solver>.png).
 #
-# Usage:  ./make.sh [time] [scale]     (defaults: 1.181817, 0.1 m per m/s)
+# Usage:  ./make.sh [time] [scale]     (defaults: 1.181816, 0.1 m per m/s)
 set -e
 cd "${0%/*}"
-TIME=${1:-1.181817}
+TIME=${1:-1.181816}
 SCALE=${2:-0.1}
-SNAP=../../../run/standingWave/snapshots
+SNAP=../../../run/standingWave/snapshots_plicRDF
 for app in interFoam interIsoFoam interIsoGoam; do
   ref=""; [ $app = interFoam ] && ref="--reference"
   pvbatch snapshotImage.py $SNAP/$app $TIME $app.png \

@@ -13,18 +13,20 @@
 # Uses the prepared refined base case baseRefinedMesh (mesh built; $SWBASE overrides).
 #
 # Usage:  ./snapshots.sh [outdir]      (default: snapshots)
+#         RECON=plicRDF ./snapshots.sh snapshots_plicRDF   (reconstruction, default isoAlpha)
 set +u
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 HERE=$(cd "${0%/*}" && pwd)
 OUT=${1:-$HERE/snapshots}
 export SWBASE=${SWBASE:-$HERE/baseRefinedMesh}
+RECON=${RECON:-isoAlpha}
 
 T=1.181816
 DT=$(python3 -c "print($T/118)")
 
 mkdir -p "$OUT"
 for app in interFoam interIsoFoam interIsoGoam; do
-  $HERE/runCase.sh "$OUT/$app" app=$app nLayers=2 \
+  $HERE/runCase.sh "$OUT/$app" app=$app nLayers=2 recon=$RECON \
       dt=$DT endTime=$T wint=59 > /dev/null 2>&1
   echo "$app: $(ls -d $OUT/$app/[0-9]* | xargs -n1 basename | tr '\n' ' ')"
 done

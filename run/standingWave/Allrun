@@ -7,6 +7,8 @@ cd "${0%/*}" || exit 1
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 ./makeBaseMeshes.sh
 ./paperScan.sh
+RECON=plicRDF ./paperScan.sh solvers_plicRDF    # the paper uses plicRDF (Section 5)
 ./snapshots.sh
+RECON=plicRDF ./snapshots.sh snapshots_plicRDF  # Fig. standingWaveSnapshots
 ./paperScan_ddtCorrOff.sh
 ./snapshots_ddtCorrOff.sh

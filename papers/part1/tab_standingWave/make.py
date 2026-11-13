@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # Copyright (C) 2026 Johan Roenby
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Part I, Table tab:standingWave: standing wave, max|U| after one time step and its peak
-over the first twenty steps (median over twelve interface offsets), peak and mean of
-max|U| over the first two wave periods on the refined mesh, and the number of cells with
-1e-6 < alpha < 1 - 1e-6 at t = 1.2 s, about one period (history run, middle offset).
-Inputs: run/standingWave/solvers/scan.csv, solvers/history_<solver>.csv and
-solvers/hist_<solver>/1.2/alpha.water (paperScan.sh).
+"""Part I, Table tab:standingWave: standing wave at the still water level z = 0.5 m on the
+uniform and the refined mesh: max|U| after one time step, its peak over the first twenty
+steps, its peak and mean over the first two wave periods, and the number of cells with
+1e-6 < alpha < 1 - 1e-6 at t = 1.2 s, about one period.
+Inputs (run/standingWave/paperScan.sh): <dir>/history[Uniform]_<solver>.csv and
+<dir>/hist[Uniform]_<solver>/1.2/alpha.water, with <dir> = solvers_plicRDF (the table) and
+solvers (isoAlpha: largest relative change of each velocity, printed below the table).
 Output: tab_standingWave.txt. Usage: python3 make.py"""
-import csv
 import os
 import re
 import sys
@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.join(HERE, ".."))
 from common import case, write_table  # noqa: E402
 
 SOLVERS = ["interFoam", "interIsoFoam", "interIsoGoam"]
-rows = list(csv.DictReader(open(case("standingWave", "solvers", "scan.csv"))))
+TAG = {"uniform": "Uniform", "refined": ""}
 
 
 def alpha_band(path):
@@ -30,17 +30,23 @@ def alpha_band(path):
     return int(((a > 1e-6) & (a < 1 - 1e-6)).sum())
 
 
-out = ["Standing wave (median over interface offsets; history: refined mesh, two periods)",
+def velocities(d, mesh, app):
+    """max|U| after step 1, peak over 20 steps, peak and mean over the two periods"""
+    t, u = np.loadtxt(case("standingWave", d, f"history{TAG[mesh]}_{app}.csv"),
+                      delimiter=",", unpack=True)
+    return np.array([u[0], u[:20].max(), u.max(), u.mean()])
+
+
+out = ["Standing wave at z = 0.5 m (plicRDF): max|U| [m/s] and interface band",
        f"{'mesh':8s} {'solver':13s} {'1 step':>9s} {'peak20':>9s} {'2T peak':>9s} {'2T mean':>9s} {'band':>6s}"]
-for mesh in ["uniform", "refined"]:
+change = np.zeros(4)
+for mesh in TAG:
     for app in SOLVERS:
-        r = [x for x in rows if x["mesh"] == mesh and x["app"] == app]
-        first = np.median([float(x["first"]) for x in r])
-        peak = np.median([float(x["peak20"]) for x in r])
-        line = f"{mesh:8s} {app:13s} {first:9.3f} {peak:9.3f}"
-        if mesh == "refined":
-            t, u = np.loadtxt(case("standingWave", "solvers", f"history_{app}.csv"), delimiter=",", unpack=True)
-            band = alpha_band(case("standingWave", "solvers", f"hist_{app}", "1.2", "alpha.water"))
-            line += f" {u.max():9.2f} {u.mean():9.2f} {band:6d}"
-        out.append(line)
+        v = velocities("solvers_plicRDF", mesh, app)
+        band = alpha_band(case("standingWave", "solvers_plicRDF", f"hist{TAG[mesh]}_{app}", "1.2", "alpha.water"))
+        out.append(f"{mesh:8s} {app:13s} {v[0]:9.3f} {v[1]:9.3f} {v[2]:9.2f} {v[3]:9.2f} {band:6d}")
+        if app != "interFoam":
+            change = np.maximum(change, np.abs(velocities("solvers", mesh, app)/v - 1))
+out += ["", "isoAlpha instead of plicRDF (interIsoFoam, interIsoGoam): largest relative change [%]",
+        "  1 step %.0f, peak20 %.0f, 2T peak %.0f, 2T mean %.0f" % tuple(100*change)]
 write_table(HERE, "tab_standingWave", out)

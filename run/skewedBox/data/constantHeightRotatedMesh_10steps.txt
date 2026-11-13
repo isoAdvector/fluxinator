@@ -1,0 +1,5 @@
+Scan constantHeightRotatedMesh_10steps
+0000  gravityModel: constantHeight application: interIsoGoam writeInterval: 10 laplacianSchemes.default: Gauss linear uncorrected snGradSchemes.default: uncorrected
+      first p_rgh residual 1  max|U| t=0.01: 5.4151892e-10  t=0.1: 4.5661651e-10  peak: 8.9320352e-10
+0001  gravityModel: constantHeight application: interIsoGoam writeInterval: 10 laplacianSchemes.default: Gauss linear corrected snGradSchemes.default: corrected
+      first p_rgh residual 1  max|U| t=0.01: 1.9827154e-02  t=0.1: 2.1759791e-02  peak: 2.1759791e-02

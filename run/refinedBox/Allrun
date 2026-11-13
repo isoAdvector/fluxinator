@@ -22,6 +22,25 @@ xargs -P "$maxJobs" -L 1 ./runCase.sh < cases.txt 2>&1 | grep -v Aborted
 mkdir -p data
 python3 summarise.py > data/waterLevel_10steps.txt
 
+# Non-orthogonal corrector loops at z_w = 0.49 (2 loops: makeCases.sh): constantHeight, nLayers 2
+for nc in 1 5 10; do
+    echo "cH_nc$nc 0.4900 interIsoGoam constantHeight 1 corr zero $nc"
+    echo "g2_nc$nc 0.4900 interIsoGoam geometric      2 corr zero $nc"
+done | xargs -P "$maxJobs" -L 1 ./runCase.sh
+{
+    echo "max|U| [m/s] after 10 steps, z_w = 0.49, corrected schemes, zero initial p_rgh"
+    printf "%-26s %12s %12s\n" nNonOrthogonalCorrectors constantHeight "nLayers 2"
+    for nc in 0 1 2 5 10; do
+        [ $nc = 0 ] && cH=cH_zero g2=g2_zero || { cH=cH_nc$nc; g2=g2_nc$nc; }
+        printf "%-26s" $nc
+        for c in $cH $g2; do
+            awk '!/^#/ && NF {v=$3} END {printf " %12.2e", v}' \
+                waterLevel_10steps/${c}_z0.4900/postProcessing/fieldMinMax1/0/fieldMinMax.dat
+        done
+        echo
+    done
+} > data/nonOrthCorrectors_z0.49.txt
+
 # Cells adjacent to faces with non-zero uncorrected and corrected snGrad(rho), z_w = 0.49
 postProcess -case waterLevel_10steps/g1_zero_z0.4900 -time 0 -dict "$(pwd)/../common/snGradRhoReach" \
     > log.snGradRhoReach 2>&1

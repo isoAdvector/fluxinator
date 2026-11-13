@@ -33,7 +33,7 @@ else
 fi
 
 # Mesh rotated by 90 degrees, non-orthogonal correctors, hydrostatic start
-for scan in schemesRotatedMesh_10steps nonOrthCorrectors_10steps hydrostaticStart_10steps
+for scan in schemesRotatedMesh_10steps constantHeightRotatedMesh_10steps nonOrthCorrectors_10steps hydrostaticStart_10steps
 do
     parmScanner -file "$scan.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
 done
@@ -45,7 +45,7 @@ done
 
 # Numbers behind the paper (tracked in git): one summary per scan
 mkdir -p data
-for scan in schemes_10steps schemesRotatedMesh_10steps nonOrthCorrectors_10steps hydrostaticStart_10steps
+for scan in schemes_10steps schemesRotatedMesh_10steps constantHeightRotatedMesh_10steps nonOrthCorrectors_10steps hydrostaticStart_10steps
 do
     python3 ../common/summariseScan.py "$scan" > "data/$scan.txt"
 done

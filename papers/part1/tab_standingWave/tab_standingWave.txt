@@ -1,8 +1,11 @@
-Standing wave (median over interface offsets; history: refined mesh, two periods)
+Standing wave at z = 0.5 m (plicRDF): max|U| [m/s] and interface band
 mesh     solver           1 step    peak20   2T peak   2T mean   band
-uniform  interFoam         0.773     0.815
-uniform  interIsoFoam      0.773     1.644
-uniform  interIsoGoam      0.119     0.475
-refined  interFoam         3.719     3.719      2.52      0.84    436
-refined  interIsoFoam      3.719     3.914      4.78      2.37    104
-refined  interIsoGoam      0.680     1.425      1.92      0.88     91
+uniform  interFoam         0.943     0.943      0.94      0.56    135
+uniform  interIsoFoam      0.943     1.575      1.97      1.12     63
+uniform  interIsoGoam      0.199     0.411      0.71      0.36     62
+refined  interFoam         2.519     2.519      2.52      0.84    436
+refined  interIsoFoam      2.519     4.048      4.57      2.41    103
+refined  interIsoGoam      0.323     1.645      1.91      0.84     93
+
+isoAlpha instead of plicRDF (interIsoFoam, interIsoGoam): largest relative change [%]
+  1 step 1, peak20 24, 2T peak 23, 2T mean 8

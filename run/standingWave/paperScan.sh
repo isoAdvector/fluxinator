@@ -12,6 +12,7 @@
 # and the median is reported.
 #
 # Usage:  ./paperScan.sh [outdir]      (default: solvers)
+#         RECON=plicRDF ./paperScan.sh solvers_plicRDF   (reconstruction, default isoAlpha)
 #
 # Writes <outdir>/scan.csv and <outdir>/history_<app>.csv
 set +u
@@ -19,6 +20,7 @@ set +u
 HERE=$(cd "${0%/*}" && pwd)
 OUT=${1:-$HERE/solvers}
 NOFF=${NOFF:-12}
+RECON=${RECON:-isoAlpha}
 DZ=0.02                      # coarse cell height
 RUN=$HERE/runCase.sh
 
@@ -35,7 +37,7 @@ for mesh in uniform refined; do
     for i in $(seq 0 $((NOFF-1))); do
       z=$(python3 -c "print(0.5 + $i*$DZ/$NOFF)")
       d=$OUT/${mesh}_${app}_$i
-      $RUN "$d" app=$app endTime=0.2 wint=20 nLayers=2 \
+      $RUN "$d" app=$app endTime=0.2 wint=20 nLayers=2 recon=$RECON \
            alphaOrigin="(-0.5 0 $z)" > /dev/null 2>&1
       first=$(grep "min/max(mag(U))" $d/log.run | head -1 | awk '{print $NF}')
       peak=$(grep "min/max(mag(U))" $d/log.run | awk '{print $NF}' | sort -g | tail -1)
@@ -44,12 +46,18 @@ for mesh in uniform refined; do
   done
 done
 
-# Time history over two wave periods on the refined mesh, middle offset
-export SWBASE=$HERE/baseRefinedMesh
-for app in interFoam interIsoFoam interIsoGoam; do
-  d=$OUT/hist_$app
-  $RUN "$d" app=$app endTime=2.4 wint=120 nLayers=2 > /dev/null 2>&1
-  awk '/^Time = /{t=$3} /min\/max\(mag\(U\)\)/{print t","$NF}' $d/log.run \
-      > $OUT/history_$app.csv
+# Time history over two wave periods at the still water level of the base case
+# (z = 0.5 m, the first offset above): refined mesh (hist_*) and uniform mesh (histUniform_*)
+for mesh in refined uniform; do
+  case $mesh in
+    uniform) export SWBASE=$HERE/baseUniformMesh; tag=Uniform ;;
+    refined) export SWBASE=$HERE/baseRefinedMesh; tag= ;;
+  esac
+  for app in interFoam interIsoFoam interIsoGoam; do
+    d=$OUT/hist${tag}_$app
+    $RUN "$d" app=$app endTime=2.4 wint=120 nLayers=2 recon=$RECON > /dev/null 2>&1
+    awk '/^Time = /{t=$3} /min\/max\(mag\(U\)\)/{print t","$NF}' $d/log.run \
+        > $OUT/history${tag}_$app.csv
+  done
 done
 echo "wrote $csv and $OUT/history_*.csv"

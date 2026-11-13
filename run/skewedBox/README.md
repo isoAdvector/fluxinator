@@ -19,6 +19,7 @@ cases use the default `nLayers`.
 |---|---|
 | `schemes_10steps` | paper figure: interFoam, interIsoFoam (interIsoGoam with basic) and interIsoGoam (geometric), with corrected and uncorrected laplacian and snGrad schemes |
 | `schemesRotatedMesh_10steps` | the same with the mesh rotated by 90 degrees (rows level) |
+| `constantHeightRotatedMesh_10steps` | constantHeight on the rotated mesh, uncorrected and corrected schemes |
 | `nonOrthCorrectors_10steps` | corrected schemes, nNonOrthogonalCorrectors 0, 1, 2, 5, 10 (geometric), 0, 5 (basic) and 0, 2 (constantHeight) |
 | `hydrostaticStart_10steps` | hydrostatic initial p_rgh: geometric and constantHeight with 0 and 5 correctors, basic with 0 |
 | `<study>_ddtCorrOff` | the same runs with PIMPLE `ddtCorr no` (Part I, Appendix A) |

@@ -25,8 +25,10 @@ the isoAdvector reconstruction and aborts interFoam at the first write.
   is in the empty fine cell at the refinement boundary just above the interface: the
   unbalanced split faces border air.
 - constantHeight: start-up error (0.01-0.5 m/s) from a zero start with corrected
-  schemes, removed by 2 correctors or the hydrostatic start (round-off, first residual
-  1e-14); round-off with uncorrected schemes.
+  schemes, reduced to 1e-8 - 3e-7 m/s by 2 correctors and removed by the hydrostatic start
+  (round-off, first residual 1e-14); round-off with uncorrected schemes. At z_w = 0.49, 5 and
+  10 correctors give the same as 2, also for nLayers 2 (`data/nonOrthCorrectors_z0.49.txt`,
+  cases `{cH,g2}_nc{1,5,10}_z0.4900`, run by `Allrun` after the scan).
 - geometric, nLayers 1, corrected: 0.2-1 m/s at every level where the interface cuts
   cells, hydrostatic start or not (first residual 6e-5 - 2e-4); maximum in one of the
   four layer-2 cells of the corrected snGrad(rho) reach. nLayers 2 behaves like

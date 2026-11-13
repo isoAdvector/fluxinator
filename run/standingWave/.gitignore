@@ -8,20 +8,21 @@ baseCase/[0-9]*/
 log.*
 
 # snapshots.sh: keep only the fields the figure reads
+# (T/2 and T are written as 0.590908 and 1.181816 since 2026-11-11, before as 0.590909 and 1.181817)
 snapshots*/*/*
-!snapshots*/*/0.590909/
-!snapshots*/*/1.181817/
-snapshots*/*/0.590909/*
-snapshots*/*/1.181817/*
-!snapshots*/*/0.590909/U
-!snapshots*/*/0.590909/alpha.water
-!snapshots*/*/1.181817/U
-!snapshots*/*/1.181817/alpha.water
-!snapshots/interIsoGoam/0/
-snapshots/interIsoGoam/0/*
-!snapshots/interIsoGoam/0/Cx
-!snapshots/interIsoGoam/0/Cz
-!snapshots/interIsoGoam/0/V
+!snapshots*/*/0.59090[89]/
+!snapshots*/*/1.18181[67]/
+snapshots*/*/0.59090[89]/*
+snapshots*/*/1.18181[67]/*
+!snapshots*/*/0.59090[89]/U
+!snapshots*/*/0.59090[89]/alpha.water
+!snapshots*/*/1.18181[67]/U
+!snapshots*/*/1.18181[67]/alpha.water
+!snapshots*/interIsoGoam/0/
+snapshots*/interIsoGoam/0/*
+!snapshots*/interIsoGoam/0/Cx
+!snapshots*/interIsoGoam/0/Cz
+!snapshots*/interIsoGoam/0/V
 
 # Meshes are made by Allrun; ParaView state and LaTeX by-products
 */constant/polyMesh/
