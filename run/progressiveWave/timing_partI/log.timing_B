@@ -1,0 +1,118 @@
+2026-11-13 12:05:49 round 3
+2026-11-13 12:05:49 start interFoam_760_Co0.5_r4 on cpus 0-7
+2026-11-13 12:05:49 start interIsoFoam_760_Co0.5_r4 on cpus 8-15
+2026-11-13 12:05:49 start interIsoGoam_760_Co0.5_r4 on cpus 16-23
+2026-11-13 12:08:04 ended interIsoGoam_760_Co0.5_r4
+2026-11-13 12:08:04 stopped interFoam_760_Co0.5_r4
+2026-11-13 12:08:04 stopped interIsoFoam_760_Co0.5_r4
+2026-11-13 12:08:04 round 4
+2026-11-13 12:08:04 start interFoam_760_Co0.2_r4 on cpus 0-7
+2026-11-13 12:08:04 start interIsoFoam_760_Co0.2_r4 on cpus 8-15
+2026-11-13 12:08:04 start interIsoGoam_760_Co0.2_r4 on cpus 16-23
+2026-11-13 12:12:44 ended interIsoGoam_760_Co0.2_r4
+2026-11-13 12:12:44 stopped interFoam_760_Co0.2_r4
+2026-11-13 12:12:44 stopped interIsoFoam_760_Co0.2_r4
+2026-11-13 12:12:44 round 5
+2026-11-13 12:12:44 start interFoam_760_Co0.1_r4 on cpus 0-7
+2026-11-13 12:12:44 start interIsoFoam_760_Co0.1_r4 on cpus 8-15
+2026-11-13 12:12:44 start interIsoGoam_760_Co0.1_r4 on cpus 16-23
+2026-11-13 12:17:04 ended interIsoGoam_760_Co0.1_r4
+2026-11-13 12:17:04 stopped interFoam_760_Co0.1_r4
+2026-11-13 12:17:04 stopped interIsoFoam_760_Co0.1_r4
+2026-11-13 12:17:04 round 6
+2026-11-13 12:17:04 start interFoam_760_Co0.05_r4 on cpus 0-7
+2026-11-13 12:17:04 start interIsoFoam_760_Co0.05_r4 on cpus 8-15
+2026-11-13 12:17:04 start interIsoGoam_760_Co0.05_r4 on cpus 16-23
+2026-11-13 12:25:05 ended interIsoGoam_760_Co0.05_r4
+2026-11-13 12:25:05 stopped interFoam_760_Co0.05_r4
+2026-11-13 12:25:05 stopped interIsoFoam_760_Co0.05_r4
+2026-11-13 12:25:05 round 7
+2026-11-13 12:25:05 start interFoam_760_Co0.5_r5 on cpus 8-15
+2026-11-13 12:25:05 start interIsoFoam_760_Co0.5_r5 on cpus 16-23
+2026-11-13 12:25:05 start interIsoGoam_760_Co0.5_r5 on cpus 0-7
+2026-11-13 12:27:25 ended interIsoGoam_760_Co0.5_r5
+2026-11-13 12:27:25 stopped interFoam_760_Co0.5_r5
+2026-11-13 12:27:25 stopped interIsoFoam_760_Co0.5_r5
+2026-11-13 12:27:25 round 8
+2026-11-13 12:27:25 start interFoam_760_Co0.2_r5 on cpus 8-15
+2026-11-13 12:27:25 start interIsoFoam_760_Co0.2_r5 on cpus 16-23
+2026-11-13 12:27:25 start interIsoGoam_760_Co0.2_r5 on cpus 0-7
+2026-11-13 12:32:05 ended interIsoGoam_760_Co0.2_r5
+2026-11-13 12:32:05 stopped interFoam_760_Co0.2_r5
+2026-11-13 12:32:05 stopped interIsoFoam_760_Co0.2_r5
+2026-11-13 12:32:05 round 9
+2026-11-13 12:32:05 start interFoam_760_Co0.1_r5 on cpus 8-15
+2026-11-13 12:32:05 start interIsoFoam_760_Co0.1_r5 on cpus 16-23
+2026-11-13 12:32:05 start interIsoGoam_760_Co0.1_r5 on cpus 0-7
+2026-11-13 12:36:30 ended interIsoGoam_760_Co0.1_r5
+2026-11-13 12:36:30 stopped interFoam_760_Co0.1_r5
+2026-11-13 12:36:30 stopped interIsoFoam_760_Co0.1_r5
+2026-11-13 12:36:30 round 10
+2026-11-13 12:36:30 start interFoam_760_Co0.05_r5 on cpus 8-15
+2026-11-13 12:36:30 start interIsoFoam_760_Co0.05_r5 on cpus 16-23
+2026-11-13 12:36:30 start interIsoGoam_760_Co0.05_r5 on cpus 0-7
+2026-11-13 12:44:36 ended interIsoGoam_760_Co0.05_r5
+2026-11-13 12:44:36 stopped interFoam_760_Co0.05_r5
+2026-11-13 12:44:36 stopped interIsoFoam_760_Co0.05_r5
+2026-11-13 12:44:36 round 11
+2026-11-13 12:44:36 start interFoam_760_Co0.5_r6 on cpus 16-23
+2026-11-13 12:44:36 start interIsoFoam_760_Co0.5_r6 on cpus 0-7
+2026-11-13 12:44:36 start interIsoGoam_760_Co0.5_r6 on cpus 8-15
+2026-11-13 12:46:51 ended interIsoGoam_760_Co0.5_r6
+2026-11-13 12:46:51 stopped interFoam_760_Co0.5_r6
+2026-11-13 12:46:51 stopped interIsoFoam_760_Co0.5_r6
+2026-11-13 12:46:51 round 12
+2026-11-13 12:46:51 start interFoam_760_Co0.2_r6 on cpus 16-23
+2026-11-13 12:46:51 start interIsoFoam_760_Co0.2_r6 on cpus 0-7
+2026-11-13 12:46:51 start interIsoGoam_760_Co0.2_r6 on cpus 8-15
+2026-11-13 12:51:41 ended interIsoGoam_760_Co0.2_r6
+2026-11-13 12:51:41 stopped interFoam_760_Co0.2_r6
+2026-11-13 12:51:41 stopped interIsoFoam_760_Co0.2_r6
+2026-11-13 12:51:41 round 13
+2026-11-13 12:51:41 start interFoam_760_Co0.1_r6 on cpus 16-23
+2026-11-13 12:51:41 start interIsoFoam_760_Co0.1_r6 on cpus 0-7
+2026-11-13 12:51:41 start interIsoGoam_760_Co0.1_r6 on cpus 8-15
+2026-11-13 12:56:02 ended interIsoGoam_760_Co0.1_r6
+2026-11-13 12:56:02 stopped interFoam_760_Co0.1_r6
+2026-11-13 12:56:02 stopped interIsoFoam_760_Co0.1_r6
+2026-11-13 12:56:02 round 14
+2026-11-13 12:56:02 start interFoam_760_Co0.05_r6 on cpus 16-23
+2026-11-13 12:56:02 start interIsoFoam_760_Co0.05_r6 on cpus 0-7
+2026-11-13 12:56:02 start interIsoGoam_760_Co0.05_r6 on cpus 8-15
+2026-11-13 13:04:07 ended interIsoGoam_760_Co0.05_r6
+2026-11-13 13:04:07 stopped interFoam_760_Co0.05_r6
+2026-11-13 13:04:07 stopped interIsoFoam_760_Co0.05_r6
+2026-11-13 13:04:07 round 15
+2026-11-13 13:04:07 start interIsoGoam_380_Co0.5_r3 on cpus 0
+2026-11-13 13:04:07 start interIsoGoam_nL1_380_Co0.5_r3 on cpus 1
+2026-11-13 13:04:07 start interIsoGoam_380_Co0.2_r3 on cpus 2
+2026-11-13 13:04:07 start interIsoGoam_nL1_380_Co0.2_r3 on cpus 3
+2026-11-13 13:04:07 start interIsoGoam_380_Co0.1_r3 on cpus 4
+2026-11-13 13:04:07 start interIsoGoam_nL1_380_Co0.1_r3 on cpus 5
+2026-11-13 13:04:07 start interIsoGoam_380_Co0.05_r3 on cpus 6
+2026-11-13 13:04:07 start interIsoGoam_nL1_380_Co0.05_r3 on cpus 7
+2026-11-13 13:04:07 start interIsoGoam_nL1_380_Co0.5_r4 on cpus 8
+2026-11-13 13:04:07 start interIsoGoam_380_Co0.5_r4 on cpus 9
+2026-11-13 13:04:07 start interIsoGoam_nL1_380_Co0.2_r4 on cpus 10
+2026-11-13 13:04:07 start interIsoGoam_380_Co0.2_r4 on cpus 11
+2026-11-13 13:04:07 start interIsoGoam_nL1_380_Co0.1_r4 on cpus 12
+2026-11-13 13:04:07 start interIsoGoam_380_Co0.1_r4 on cpus 13
+2026-11-13 13:04:07 start interIsoGoam_nL1_380_Co0.05_r4 on cpus 14
+2026-11-13 13:04:07 start interIsoGoam_380_Co0.05_r4 on cpus 15
+2026-11-13 13:05:27 ended interIsoGoam_nL1_380_Co0.5_r3
+2026-11-13 13:05:27 stopped interIsoGoam_380_Co0.5_r3
+2026-11-13 13:05:32 ended interIsoGoam_nL1_380_Co0.5_r4
+2026-11-13 13:05:32 ended interIsoGoam_380_Co0.5_r4
+2026-11-13 13:06:47 ended interIsoGoam_nL1_380_Co0.2_r3
+2026-11-13 13:06:47 stopped interIsoGoam_380_Co0.2_r3
+2026-11-13 13:06:52 ended interIsoGoam_nL1_380_Co0.2_r4
+2026-11-13 13:06:52 ended interIsoGoam_380_Co0.2_r4
+2026-11-13 13:08:57 ended interIsoGoam_nL1_380_Co0.1_r3
+2026-11-13 13:08:58 stopped interIsoGoam_380_Co0.1_r3
+2026-11-13 13:08:58 ended interIsoGoam_380_Co0.1_r4
+2026-11-13 13:08:58 stopped interIsoGoam_nL1_380_Co0.1_r4
+2026-11-13 13:12:58 ended interIsoGoam_nL1_380_Co0.05_r3
+2026-11-13 13:12:58 stopped interIsoGoam_380_Co0.05_r3
+2026-11-13 13:12:58 ended interIsoGoam_nL1_380_Co0.05_r4
+2026-11-13 13:12:58 stopped interIsoGoam_380_Co0.05_r4
+2026-11-13 13:12:58 all rounds finished

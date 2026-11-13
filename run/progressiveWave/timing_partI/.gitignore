@@ -1,0 +1,16 @@
+# Case directories (16 GB) are not tracked: the time per step of every run is in
+# ../data/timing_partI.csv (timing.py analyse). Tracked: scripts, README, the logs of the
+# driver and the sampler, and the affinities before confining the desktop.
+*
+!.gitignore
+!README.md
+!timing.py
+!sampler.py
+!runB.sh
+!affinity_before.txt
+!log.timing
+!log.timing_r3
+!log.timing_B
+!log.timing_B_failedLaunch
+!log.sampler
+!log.sampler_failedLaunch

@@ -1,0 +1,37 @@
+2026-11-13 11:14:48 round 11
+2026-11-13 11:14:48 start interFoam_760_Co0.5_r3 on cpus 8-15
+2026-11-13 11:14:48 start interIsoFoam_760_Co0.5_r3 on cpus 16-23
+2026-11-13 11:14:48 start interIsoGoam_760_Co0.5_r3 on cpus 24-31
+2026-11-13 11:14:48 start interIsoGoam_nL1_760_Co0.5_r3 on cpus 0-7
+2026-11-13 11:17:38 ended interIsoGoam_760_Co0.5_r3
+2026-11-13 11:17:38 stopped interFoam_760_Co0.5_r3
+2026-11-13 11:17:38 stopped interIsoFoam_760_Co0.5_r3
+2026-11-13 11:17:38 stopped interIsoGoam_nL1_760_Co0.5_r3
+2026-11-13 11:17:38 round 12
+2026-11-13 11:17:38 start interFoam_760_Co0.2_r3 on cpus 8-15
+2026-11-13 11:17:38 start interIsoFoam_760_Co0.2_r3 on cpus 16-23
+2026-11-13 11:17:38 start interIsoGoam_760_Co0.2_r3 on cpus 24-31
+2026-11-13 11:17:38 start interIsoGoam_nL1_760_Co0.2_r3 on cpus 0-7
+2026-11-13 11:22:58 ended interIsoGoam_760_Co0.2_r3
+2026-11-13 11:22:58 ended interIsoGoam_nL1_760_Co0.2_r3
+2026-11-13 11:22:58 stopped interFoam_760_Co0.2_r3
+2026-11-13 11:22:58 stopped interIsoFoam_760_Co0.2_r3
+2026-11-13 11:22:58 round 13
+2026-11-13 11:22:58 start interFoam_760_Co0.1_r3 on cpus 8-15
+2026-11-13 11:22:58 start interIsoFoam_760_Co0.1_r3 on cpus 16-23
+2026-11-13 11:22:58 start interIsoGoam_760_Co0.1_r3 on cpus 24-31
+2026-11-13 11:22:58 start interIsoGoam_nL1_760_Co0.1_r3 on cpus 0-7
+2026-11-13 11:27:58 ended interIsoGoam_760_Co0.1_r3
+2026-11-13 11:27:58 stopped interFoam_760_Co0.1_r3
+2026-11-13 11:27:58 stopped interIsoFoam_760_Co0.1_r3
+2026-11-13 11:27:58 stopped interIsoGoam_nL1_760_Co0.1_r3
+2026-11-13 11:27:58 round 14
+2026-11-13 11:27:58 start interFoam_760_Co0.05_r3 on cpus 8-15
+2026-11-13 11:27:58 start interIsoFoam_760_Co0.05_r3 on cpus 16-23
+2026-11-13 11:27:58 start interIsoGoam_760_Co0.05_r3 on cpus 24-31
+2026-11-13 11:27:58 start interIsoGoam_nL1_760_Co0.05_r3 on cpus 0-7
+2026-11-13 11:37:59 ended interIsoGoam_nL1_760_Co0.05_r3
+2026-11-13 11:37:59 stopped interFoam_760_Co0.05_r3
+2026-11-13 11:37:59 stopped interIsoFoam_760_Co0.05_r3
+2026-11-13 11:37:59 stopped interIsoGoam_760_Co0.05_r3
+2026-11-13 11:37:59 all rounds finished
