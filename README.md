@@ -148,9 +148,9 @@ installed separately, each with its own `Allwmake`:
 - [isoAdvector/surfacePosition](https://github.com/isoAdvector/surfacePosition):
   the function object `surfacePosition`, the wave gauge (`surfacePosition1`) of the
   progressive and standing wave cases (`run/progressiveWave`, `run/standingWave`).
-  It reports the interface height like OpenFOAM's `interfaceHeight`, from the same
-  entries, at a fraction of the cost. A case with the gauge stops at the start if
-  the library is not installed (`errors strict`).
+  It writes the position of the interface at given locations, measured along a given
+  direction (here that of gravity), every time step. A case with the gauge stops at the start if the
+  library is not installed (`errors strict`).
 
 The scans use `parmScanner` from
 [isoAdvector/cfdTools](https://github.com/isoAdvector/cfdTools). The figure

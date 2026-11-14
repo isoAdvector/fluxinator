@@ -3,6 +3,7 @@ schemes_10steps*/
 schemesRotatedMesh_10steps*/
 nonOrthCorrectors_10steps*/
 hydrostaticStart_10steps*/
+constantHeightRotatedMesh_10steps*/
 *.pdf
 *.png
 log.*

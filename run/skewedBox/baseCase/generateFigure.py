@@ -349,7 +349,7 @@ uLUTColorBar.AutomaticAnnotations = 0
 uLUTColorBar.DrawNanAnnotation = 0
 uLUTColorBar.NanAnnotation = 'NaN'
 uLUTColorBar.TextPosition = 'Ticks left/bottom, annotations right/top'
-uLUTColorBar.ScalarBarThickness = 16
+uLUTColorBar.ScalarBarThickness = 24
 uLUTColorBar.ScalarBarLength = 0.33
 
 ##Setting lower limit of colormap to 0##
@@ -372,14 +372,15 @@ uLUTColorBar.ScalarBarLength = 0.4
 
 # Properties modified on uLUTColorBar
 uLUTColorBar.AutoOrient = 0
-uLUTColorBar.Title = '|U| [m/s]'
+# ParaView's scalar-bar text renderer drops '|', so |U| cannot be written here.
+uLUTColorBar.Title = 'mag(U) [m/s]'
 uLUTColorBar.ComponentTitle = ''
 uLUTColorBar.TitleColor = [1, 1, 1]
 uLUTColorBar.TitleFontFamily = 'Times'
-uLUTColorBar.TitleFontSize = 30
+uLUTColorBar.TitleFontSize = 44
 uLUTColorBar.LabelColor = [1, 1, 1]
 uLUTColorBar.LabelFontFamily = 'Times'
-uLUTColorBar.LabelFontSize = 30
+uLUTColorBar.LabelFontSize = 44
 
 
 # current camera placement for renderView1

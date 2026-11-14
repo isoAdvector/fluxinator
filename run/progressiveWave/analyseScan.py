@@ -68,6 +68,9 @@ def load(scanDir, case):
                           comments='#', unpack=True, usecols=(0, 2))
     parms = read_parms(caseDir)
     application = parms.get('application')
+    # The ddtCorrOff studies run the stock solvers as <application>DdtCorr
+    if not os.path.isfile(os.path.join(caseDir, 'log.' + str(application))):
+        application = str(application) + 'DdtCorr'
     clockTime, meanMaxCo = read_log(caseDir, application)
     nSteps = None
     logFile = os.path.join(caseDir, 'log.' + str(application))

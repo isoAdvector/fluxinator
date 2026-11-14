@@ -42,11 +42,16 @@ then
     ../common/runDdtCorrOffStudy.sh solvers_fixedDt
 fi
 
-# Accuracy and efficiency metrics per run, and the derived numbers quoted in Part I
-for study in solvers_maxCo solvers_fixedDt nLayers_maxCo
+# Accuracy and efficiency metrics per run, and the derived numbers quoted in Part I. The
+# studies without a case 0036 take the exact solution from the solver study.
+for study in solvers_maxCo solvers_fixedDt nLayers_maxCo solvers_maxCo_ddtCorrOff solvers_fixedDt_ddtCorrOff
 do
-    python3 analyseScan.py --scanDir "$study" --csv "data/$study.csv" > "log.analyseScan_$study" 2>&1
+    ref=solvers_fixedDt/0036
+    case $study in *maxCo*) ref=solvers_maxCo/0036;; esac
+    python3 analyseScan.py --scanDir "$study" --refCase "$ref" --csv "data/$study.csv" > "log.analyseScan_$study" 2>&1
 done
+cp log.analyseScan_solvers_maxCo_ddtCorrOff data/solvers_maxCo_ddtCorrOff.txt
+cp log.analyseScan_solvers_fixedDt_ddtCorrOff data/solvers_fixedDt_ddtCorrOff.txt
 python3 writeData.py > log.writeData 2>&1
 
 #------------------------------------------------------------------------------

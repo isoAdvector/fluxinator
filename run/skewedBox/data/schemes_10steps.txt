@@ -10,6 +10,6 @@ Scan schemes_10steps
 0004  rotAngle: 0 gravityModel: basic application: interIsoGoam writeInterval: 10 laplacianSchemes.default: Gauss linear uncorrected snGradSchemes.default: uncorrected
       first p_rgh residual 1  max|U| t=0.01: 5.7079377e-01  t=0.1: 1.3089975e+00  peak: 1.3089975e+00
 0005  rotAngle: 0 gravityModel: geometric application: interIsoGoam writeInterval: 10 laplacianSchemes.default: Gauss linear uncorrected snGradSchemes.default: uncorrected
-      first p_rgh residual 1  max|U| t=0.01: 1.8798984e-10  t=0.1: 4.0738130e-11  peak: 2.9235129e-10
+      first p_rgh residual 1  max|U| t=0.01: 1.8798984e-10  t=0.1: 4.0510101e-11  peak: 2.9229406e-10
 0006  rotAngle: 0 gravityModel: constantHeight application: interIsoGoam writeInterval: 10 laplacianSchemes.default: Gauss linear uncorrected snGradSchemes.default: uncorrected
       first p_rgh residual 1  max|U| t=0.01: 1.8762317e-10  t=0.1: 4.0017353e-11  peak: 2.9330672e-10

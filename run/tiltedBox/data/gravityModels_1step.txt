@@ -6,4 +6,4 @@ Scan gravityModels_1step
 0002  gravityModel: constantHeight application: interIsoGoam deltaT: 0.01 endTime: 0.01 writeInterval: 1
       first p_rgh residual 1  max|U| t=0.01: 1.8200702e-10  t=0.01: 1.8200702e-10  peak: 1.8200702e-10
 0003  gravityModel: geometric application: interIsoGoam deltaT: 0.01 endTime: 0.01 writeInterval: 1
-      first p_rgh residual 1  max|U| t=0.01: 4.0219164e-10  t=0.01: 4.0219164e-10  peak: 4.0219164e-10
+      first p_rgh residual 1  max|U| t=0.01: 4.0210318e-10  t=0.01: 4.0210318e-10  peak: 4.0210318e-10

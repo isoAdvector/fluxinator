@@ -4,6 +4,6 @@ emax: max ||U|-|U_exact|| in the crest column [% of exact crest-surface speed];
 exact = the input stream function wave. Script: papers/part1/tab_crest/make.py
 
 solver            8-10 s: dH   r0    emax    18-20 s: dH   r0    emax    28-30 s: dH   r0    emax
-interFoam             -1.4  1.17   34.1 %         -2.5  1.33   49.6 %         -3.8  1.44   61.4 %
-interIsoFoam          -3.7  1.23   40.0 %         -7.3  1.42   57.9 %        -11.1  1.55   53.0 %
-interIsoGoam          +0.5  1.28   28.1 %         +1.4  1.47   46.1 %         +2.0  1.60   60.4 %
+interFoam             -1.4  1.18   33.7 %         -2.5  1.33   49.6 %         -3.8  1.45   61.8 %
+interIsoFoam          -3.7  1.23   39.5 %         -7.4  1.42   57.9 %        -11.1  1.54   52.7 %
+interIsoGoam          +0.5  1.29   28.2 %         +1.3  1.47   46.5 %         +2.1  1.60   59.6 %

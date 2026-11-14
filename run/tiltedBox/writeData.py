@@ -20,7 +20,8 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "data")
 STUDIES = ["gravityModels_1step", "gravityModels_100steps", "gravityModels_1000steps",
-           "meshTimeStep_1step", "airDensity_1000steps", "nLayers_1000steps"]
+           "meshTimeStep_1step", "airDensity_1000steps", "nLayers_1000steps",
+           "reconstruction_1000steps"]
 
 
 def parms(study):

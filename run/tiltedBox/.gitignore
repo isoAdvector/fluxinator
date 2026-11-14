@@ -3,6 +3,7 @@ gravityModels_*/
 meshTimeStep_*/
 airDensity_*/
 nLayers_*/
+reconstruction_*/
 baseCaseNLayers/
 *.pdf
 *.png

@@ -32,18 +32,18 @@ Scan airDensity_1000steps
 0015  gravityModel: basic application: interIsoGoam air.rho: 1e3 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 0.63215900427809  max|U| t=0.01: 1.5943671e-16  t=10: 4.4415914e-16  peak: 9.5368200e-16
 0016  gravityModel: geometric application: interIsoGoam air.rho: 1e-4 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 2.4902346e-06  t=10: 5.6211272e-05  peak: 5.6631209e-05
+      first p_rgh residual 1  max|U| t=0.01: 2.4529106e-06  t=10: 7.3991272e-05  peak: 7.4559035e-05
 0017  gravityModel: geometric application: interIsoGoam air.rho: 1e-3 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 2.7714310e-07  t=10: 3.0391959e-07  peak: 3.3475813e-06
+      first p_rgh residual 1  max|U| t=0.01: 2.7459217e-07  t=10: 1.6277556e-06  peak: 3.2551842e-06
 0018  gravityModel: geometric application: interIsoGoam air.rho: 1e-2 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 2.7493388e-08  t=10: 4.6148412e-08  peak: 3.4867004e-07
+      first p_rgh residual 1  max|U| t=0.01: 2.7468453e-08  t=10: 1.4421719e-07  peak: 3.4048425e-07
 0019  gravityModel: geometric application: interIsoGoam air.rho: 1e-1 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 2.7028197e-09  t=10: 5.3343422e-09  peak: 3.2211039e-08
+      first p_rgh residual 1  max|U| t=0.01: 2.7011184e-09  t=10: 8.9209344e-09  peak: 2.9819542e-08
 0020  gravityModel: geometric application: interIsoGoam air.rho: 1e0 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 4.0219164e-10  t=10: 7.2112425e-10  peak: 2.4750284e-09
+      first p_rgh residual 1  max|U| t=0.01: 4.0210318e-10  t=10: 6.3564430e-10  peak: 2.3618066e-09
 0021  gravityModel: geometric application: interIsoGoam air.rho: 1e1 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 1.0811023e-10  t=10: 6.4397311e-10  peak: 7.2452521e-10
+      first p_rgh residual 1  max|U| t=0.01: 1.0810385e-10  t=10: 1.3086188e-10  peak: 3.7932777e-10
 0022  gravityModel: geometric application: interIsoGoam air.rho: 1e2 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 5.2481896e-11  t=10: 1.2289018e-11  peak: 5.2481896e-11
+      first p_rgh residual 1  max|U| t=0.01: 5.2482595e-11  t=10: 3.2865706e-12  peak: 5.2482595e-11
 0023  gravityModel: geometric application: interIsoGoam air.rho: 1e3 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 0.63130244482405  max|U| t=0.01: 8.6905415e-17  t=10: 2.7652470e-16  peak: 8.6634470e-16

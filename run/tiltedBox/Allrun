@@ -32,6 +32,8 @@ do
     parmScanner -file "$study.csv" -exec Allrun -parallel -maxJobs "$maxJobs"
     ../common/runDdtCorrOffStudy.sh "$study"    # Part I, Appendix A
 done
+# Why the rest cases use plicRDF (Part I, Section 3)
+parmScanner -file reconstruction_1000steps.csv -exec Allrun -parallel -maxJobs "$maxJobs"
 
 python3 writeData.py > log.writeData 2>&1
 
