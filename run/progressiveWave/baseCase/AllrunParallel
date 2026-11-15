@@ -5,13 +5,18 @@ cd "${0%/*}" || exit                                # Run from this directory
 # As Allrun, but the solver runs in parallel on numberOfSubdomains processes
 # (system/decomposeParDict).
 #
-# Several cases can run simultaneously on one machine: each case claims a free
-# NUMA node (a lock directory in ${NUMA_LOCK_DIR:-/tmp/numaSlots-$USER}), binds
-# its processes to one hardware thread per core of that node and allocates its
-# memory on that node only. If no node is free, the case waits. Without memory
-# binding, processes received memory on other NUMA nodes whenever the page
-# cache filled their own node, which made 8 simultaneous 4-process cases about
-# 6 times slower. A lock left behind by a killed case must be removed by hand.
+# Every process is bound to its own physical core, with its memory on the NUMA
+# node of that core (mpirun with a rankfile; mpirun --cpu-set would bind every
+# process to the whole set). Without memory binding, processes received memory
+# on other NUMA nodes whenever the page cache filled their own node, which made
+# 8 simultaneous 4-process cases about 6 times slower.
+#
+# Started under taskset (e.g. by ../runPinned.py), the case uses the cores it
+# was given. Otherwise it claims as many free NUMA nodes as it needs (lock
+# directories in ${NUMA_LOCK_DIR:-/tmp/numaSlots-$USER}), so that several cases
+# can run simultaneously on one machine; if too few nodes are free, it waits.
+# A lock left behind by a killed case must be removed by hand. The case stops
+# with an error if there are fewer cores than processes.
 #------------------------------------------------------------------------------
 
 restore0Dir
@@ -29,42 +34,68 @@ runApplication decomposePar
 application=$(getApplication)
 nProcs=$(getNumberOfProcessors system/decomposeParDict)
 
-# Claim a free NUMA node
-lockDir=${NUMA_LOCK_DIR:-/tmp/numaSlots-$USER}
-mkdir -p "$lockDir"
-nodes=$(ls -d /sys/devices/system/node/node[0-9]* | sed 's/.*node//' | sort -n)
-node=
-while [ -z "$node" ]
-do
-    for n in $nodes
-    do
-        if mkdir "$lockDir/node$n" 2>/dev/null
-        then
-            node=$n
-            break
-        fi
-    done
-    [ -n "$node" ] || sleep 30
-done
-trap 'rmdir "$lockDir/node$node"' EXIT
-trap 'exit 1' INT TERM
+# One hardware thread per physical core among the CPUs of list $1 (e.g. 0-7,12),
+# on NUMA node $2 if given
+coresOf()
+{
+    lscpu -p=CPU,CORE,NODE | awk -F, -v list="$1" -v node="${2:-}" '
+        BEGIN {
+            n = split(list, r, ",")
+            for (i = 1; i <= n; i++) {
+                m = split(r[i], ab, "-")
+                for (c = ab[1] + 0; c <= ab[m] + 0; c++) ok[c] = 1
+            }
+        }
+        !/^#/ && ok[$1] && (node == "" || $3 == node) && !seen[$2]++ {
+            printf "%s%s", sep, $1; sep = ","
+        }'
+}
+count() { echo "$1" | tr ',' '\n' | grep -c .; }
 
-# One hardware thread per physical core of the node
-cpus=$(lscpu -p=CPU,CORE,NODE | awk -F, -v n="$node" \
-    '!/^#/ && $3 == n && !seen[$2]++ {printf "%s%s", sep, $1; sep = ","}')
-nCores=$(echo "$cpus" | tr ',' '\n' | wc -l)
-
-if [ "$nProcs" -le "$nCores" ]
+allowed=$(awk '/^Cpus_allowed_list/ {print $2}' /proc/self/status)
+online=$(cat /sys/devices/system/cpu/online)
+if [ "$allowed" != "$online" ]
 then
-    binding="--cpu-set $cpus --bind-to core --mca hwloc_base_mem_alloc_policy local_only"
+    cpus=$(coresOf "$allowed")
+    where="cpus given by taskset"
 else
-    echo "Warning: $nProcs processes exceed the $nCores cores of NUMA node $node;" \
-        "running without binding" >&2
-    binding="--bind-to none"
+    lockDir=${NUMA_LOCK_DIR:-/tmp/numaSlots-$USER}
+    mkdir -p "$lockDir"
+    nodes=$(ls -d /sys/devices/system/node/node[0-9]* | sed 's/.*node//' | sort -n)
+    release() { for n in $claimed; do rmdir "$lockDir/node$n"; done; }
+    while :
+    do
+        claimed=
+        cpus=
+        for n in $nodes
+        do
+            if mkdir "$lockDir/node$n" 2>/dev/null
+            then
+                claimed="$claimed $n"
+                cpus=$cpus${cpus:+,}$(coresOf "$online" "$n")
+                [ "$(count "$cpus")" -ge "$nProcs" ] && break
+            fi
+        done
+        [ "$(count "$cpus")" -ge "$nProcs" ] && break
+        release
+        sleep 30
+    done
+    trap release EXIT
+    trap 'exit 1' INT TERM
+    where="NUMA node(s)$claimed"
 fi
-echo "$application on $nProcs processes, NUMA node $node, cpus $cpus" > log.numaNode
 
-mpirun $binding -np "$nProcs" "$application" -parallel \
+if [ "$(count "$cpus")" -lt "$nProcs" ]
+then
+    echo "Error: $nProcs processes but only the cores $cpus ($where)" >&2
+    exit 1
+fi
+echo "$cpus" | tr ',' '\n' | head -n "$nProcs" \
+    | awk '{print "rank " NR-1 "=localhost slot=" $1}' > rankfile
+echo "$application on $nProcs processes, $where, cpus $cpus" > log.numaNode
+
+mpirun --rankfile rankfile --mca rmaps_rank_file_physical true \
+    --mca hwloc_base_mem_alloc_policy local_only -np "$nProcs" "$application" -parallel \
     < /dev/null > "log.$application" 2>&1
 
 #------------------------------------------------------------------------------

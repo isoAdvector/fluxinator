@@ -55,7 +55,8 @@ def jobs():
                 cmd = ("dictator system/decomposeParDict numberOfSubdomains 8 > log.dictator && "
                        "dictator system/decomposeParDict method scotch >> log.dictator && "
                        "NUMA_LOCK_DIR=$PWD/.numaLock ./AllrunParallel > log.Allrun 2>&1 && "
-                       "reconstructPar > log.reconstructPar 2>&1 && rm -rf processor*")
+                       "{ reconstructPar > log.reconstructPar 2>&1 || "
+                       "grep -q 'No times selected' log.reconstructPar; } && rm -rf processor*")
                 out.append((d, cmd, 8, cost))
             else:
                 out.append((d, "./Allrun > log.Allrun 2>&1", 1, cost))

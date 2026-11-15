@@ -12,6 +12,7 @@
 # on nProcs subdomains and is reconstructed afterwards.
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
+here=$(dirname "$(readlink -f "$0")")   # before the cd below, which breaks a relative $0
 S=$(readlink -f "$1"); out=$2; np=${3:-1}
 rm -rf "$out"; mkdir -p "$out"
 for f in $S/*; do
@@ -40,7 +41,7 @@ dictator system/fvSolution PIMPLE.ddtCorr ${DDTCORR:-no}
 set +e
 echo "stored: $1  change: PIMPLE.ddtCorr ${DDTCORR:-no}  nProcs: $np" > ddtCorrOff.info
 if [ "$np" -gt 1 ]; then
-    cp $(dirname $(readlink -f "$0"))/../progressiveWave/baseCase_fixedDt/AllrunParallel .
+    cp "$here"/../progressiveWave/baseCase_fixedDt/AllrunParallel .
     set -e
     {
     dictator system/decomposeParDict numberOfSubdomains $np
@@ -49,7 +50,9 @@ if [ "$np" -gt 1 ]; then
     } >> log.dictator
     set +e
     ./AllrunParallel > log.Allrun 2>&1
-    reconstructPar > log.reconstructPar 2>&1 && rm -rf processor*
+    # The fixed-dt cases write no fields, so there is nothing to reconstruct
+    { reconstructPar > log.reconstructPar 2>&1 || grep -q 'No times selected' log.reconstructPar; } \
+        && rm -rf processor*
 else
     ./Allrun > log.Allrun 2>&1
 fi
