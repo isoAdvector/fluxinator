@@ -33,7 +33,7 @@ the isoAdvector reconstruction and aborts interFoam at the first write.
   cells, hydrostatic start or not (first residual 6e-5 - 2e-4); maximum in one of the
   four layer-2 cells of the corrected snGrad(rho) reach. nLayers 2 behaves like
   constantHeight at every level with the hydrostatic start; from a zero start with 2
-  correctors it reaches 3.6e-5 m/s at z_w = 0.50 (constantHeight 2.9e-7); nLayers 3 gives the same as 2. Uncorrected: nLayers 1
+  correctors it reaches 8.7e-5 m/s at z_w = 0.50 (constantHeight 2.6e-7); nLayers 3 gives the same as 2. Uncorrected: nLayers 1
   suffices.
 - Interface on coarse cell faces (z_w = 0.48, 0.52): volume fractions are exactly 0 and
   1 and there are no interface cells. (At z_w = 0.50 the interface lies on fine faces in
