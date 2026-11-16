@@ -2,9 +2,10 @@
 # Copyright (C) 2026 Johan Roenby
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Makes the anonymised code snapshot for double-blind review from the committed state: this
-# repository without the papers and git history, surfacePosition without its large tests,
-# and copies of streamFunctionWave and cfdTools, with names and repository addresses removed.
-# Usage: papers/makeReviewSnapshot.sh <output directory> [<directory with streamFunctionWave and cfdTools>]
+# repository without its git history, and in thirdParty/ copies of the four separately installed
+# tools (streamFunctionWave, surfacePosition without its tests, dictator and cfdTools), with
+# names and repository addresses removed.
+# Usage: papers/makeReviewSnapshot.sh <output directory> [<directory with the four tools>]
 set -eu
 root=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
 out=$(readlink -f "$1")
@@ -15,28 +16,32 @@ rm -rf "$work"; mkdir -p "$work/thirdParty"
 
 git -C "$root" archive HEAD | tar -x -C "$work" --exclude=paper --exclude=paper2 --exclude=.gitmodules --exclude=.github \
     --exclude=papers/makeReviewSnapshot.sh
-git -C "$root/applications/utilities/surfacePosition" archive HEAD | \
-    tar -x -C "$work/applications/utilities/surfacePosition" --exclude=test
-for d in streamFunctionWave cfdTools; do
+for d in streamFunctionWave surfacePosition dictator cfdTools; do
     mkdir "$work/thirdParty/$d"
-    git -C "$deps/$d" archive HEAD | tar -x -C "$work/thirdParty/$d"
+    git -C "$deps/$d" archive HEAD | tar -x -C "$work/thirdParty/$d" --exclude=test --exclude=.github
 done
 
 cat > "$work/README_REVIEW.md" <<'EOD'
 # Code snapshot for review
 
-Solver, test cases and scripts of the two papers. Names and repository addresses are
+Solver, test cases and scripts of the paper series. Names and repository addresses are
 removed for double-blind review (ANONYMISED). `README.md` describes the contents.
-`thirdParty/` holds copies of the two tools it refers to: streamFunctionWave, needed
-for the wave cases, and cfdTools, needed for the parameter scans.
+`thirdParty/` holds copies of the four tools it refers to, which are installed separately:
+streamFunctionWave (initial and exact wave of the wave cases), surfacePosition (wave
+gauge), dictator (sets up the cases) and cfdTools (parameter scans).
 
 ```shell
-source <OpenFOAM-v2606>/etc/bashrc
+source <OpenFOAM-v2606>/etc/bashrc     # or v2306 and later
+source thirdParty/dictator/dictator
 ./Allwmake -j
-thirdParty/streamFunctionWave/Allwmake
+thirdParty/streamFunctionWave/Allwmake -j
+thirdParty/surfacePosition/Allwmake
 export CFDTOOLS=$PWD/thirdParty/cfdTools/cfdTools
-run/quickTest/Allrun
+run/quickTest/Allrun                   # about a minute
 ```
+
+Each case in `run/` has a README and an `Allrun` (`run/README.md`); each figure and
+table of the papers has a directory in `papers/` with the script that makes it.
 EOD
 
 python3 - "$work" <<'EOD'
@@ -49,7 +54,8 @@ WORDS = [(r"github\.com[:/]isoAdvector", "github.com/ANONYMISED"), (r"github\.co
          (r"Henning\s+Scheufler", "ANONYMISED"), (r"Konstantinos\s+Missios", "ANONYMISED"), (r"Sithik\s+Aliyar", "ANONYMISED"),
          (r"Kasper\s+M(ø|oe?)ller", "ANONYMISED"), (r"/home/roenby", "/home/anonymised"), (r"(?i)roenby", "ANONYMISED"),
          (r"(?i)stromning", "ANONYMISED"), (r"Scheufler", "ANONYMISED"), (r"Missios", "ANONYMISED"), (r"Aliyar", "ANONYMISED"),
-         (r"\bDLR\b", "ANONYMISED"), (r"\bJohan\b", "ANONYMISED"), (r"Roskilde", "ANONYMISED")]
+         (r"\bDLR\b", "ANONYMISED"), (r"\bJohan\b", "ANONYMISED"), (r"Roskilde", "ANONYMISED"),
+         (r"M(ø|oe)ller", "ANONYMISED"), (r"\bDHI\b", "ANONYMISED")]
 for top, _, files in os.walk(sys.argv[1]):
     for name in files:
         path = os.path.join(top, name)
@@ -66,6 +72,6 @@ for top, _, files in os.walk(sys.argv[1]):
 EOD
 
 echo "Identifying words left (none expected):"
-grep -r -l -a -i -E 'roenby|stromning|scheufler|missios|aliyar|interflowers|github.com.isoadvector' "$work" || true
+grep -r -l -a -i -E 'roenby|stromning|scheufler|missios|aliyar|m(ø|oe)ller|\bdhi\b|interflowers|github.com.isoadvector|roskilde' "$work" || true
 tar -C "$out" -czf "$out/$name.tar.gz" "$name"
 du -sh "$out/$name.tar.gz"
