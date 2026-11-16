@@ -36,7 +36,7 @@ Description
     The source is that of interIsoGoam, with these defaults instead of those
     of interIsoFoam:
 
-    - gravityModel geometric, when there is no constant/gravityProperties
+    - interfaceForces.gravity.model geometric (system/fvSchemes)
     - PIMPLE explicitConvection yes
     - PIMPLE ddtCorr no
 

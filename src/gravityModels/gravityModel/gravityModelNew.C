@@ -26,6 +26,7 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "gravityModel.H"
+#include "fvSchemes.H"
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -37,49 +38,35 @@ Foam::gravityModel::New
     const word& defaultModel
 )
 {
-    // Create an IOdictionary with default values
-    IOdictionary gravityProperties
+    // interfaceForces.gravity in system/fvSchemes, read as OpenFOAM reads
+    // wallDist there; without it the solver's default model
+    const dictionary dict
     (
-        IOobject
-        (
-            "gravityProperties",
-            mesh.time().constant(),
-            mesh,
-            IOobject::READ_IF_PRESENT,
-            IOobject::NO_WRITE,
-            false  // Not registered
-        )
+        static_cast<const fvSchemes&>(mesh)
+            .subOrEmptyDict("interfaceForces")
+            .subOrEmptyDict("gravity")
     );
 
-    // Add default value if the file wasn't found
-    if (!gravityProperties.headerOk())
-    {
-        gravityProperties.add("gravityModel", defaultModel);
-        Info<< "No gravityProperties file found. Using default values." << endl;
-    }
-    else
-    {
-        Info<< "Reading gravityProperties from constant/gravityProperties"
-            << endl;
-    }
+    const word modelType(dict.getOrDefault<word>("model", defaultModel));
 
-    word gravityModelTypeName = gravityProperties.get<word>("gravityModel");
-    Info<< "Selecting gravityModel: " << gravityModelTypeName << endl;
+    Info<< "Selecting gravity model " << modelType
+        << (dict.found("model") ? " (" : " (default, no ")
+        << "interfaceForces.gravity.model in system/fvSchemes)" << endl;
 
-    auto* ctorPtr = componentsConstructorTable(gravityModelTypeName);
+    auto* ctorPtr = componentsConstructorTable(modelType);
 
     if (!ctorPtr)
     {
         FatalIOErrorInLookup
         (
-            gravityProperties,
-            "gravityModel",
-            gravityModelTypeName,
+            dict,
+            "model",
+            modelType,
             *componentsConstructorTablePtr_
         ) << exit(FatalIOError);
     }
 
-    return autoPtr<gravityModel>(ctorPtr(gravityProperties, mesh));
+    return autoPtr<gravityModel>(ctorPtr(dict, mesh));
 }
 
 

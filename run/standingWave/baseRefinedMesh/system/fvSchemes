@@ -56,5 +56,14 @@ fluxRequired
     alpha.water     ;
 }
 
+interfaceForces
+{
+    gravity
+    {
+        model           geometric;
+        nLayers         2;
+    }
+}
+
 
 // ************************************************************************* //

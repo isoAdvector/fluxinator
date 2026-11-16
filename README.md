@@ -53,7 +53,7 @@ results unchanged. It has these run-time options:
 | Settings | Behaves as |
 |---|---|
 | defaults, one outer corrector | interIsoFoam |
-| `gravityModel geometric` (constant/gravityProperties) | the solver of Part I |
+| `interfaceForces { gravity { model geometric; } }` (system/fvSchemes) | the solver of Part I |
 | also PIMPLE `explicitConvection yes` and `div(rhoPhi,U) Gauss laxWendroff interfaceUpwind limitedLinearV 1` | fluxinator of Part II |
 | `nOuterCorrectors` > 1 | time-centred step (not interIsoFoam, see below) |
 

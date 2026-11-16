@@ -10,8 +10,8 @@ c=$H/waterLevel_10steps/${name}_z$zw; rm -rf $c; mkdir -p $H/waterLevel_10steps;
 set -e   # stop if dictator fails (a missing file or an ambiguous entry)
 {
 dictator system/setAlphaFieldDict origin "(0 0 $zw)"
-dictator constant/gravityProperties gravityModel $gm
-dictator constant/gravityProperties nLayers $nL
+dictator system/fvSchemes interfaceForces.gravity.model $gm
+dictator system/fvSchemes interfaceForces.gravity.nLayers $nL
 dictator system/controlDict application $app
 dictator system/controlDict endTime 0.1
 dictator system/controlDict writeInterval 1

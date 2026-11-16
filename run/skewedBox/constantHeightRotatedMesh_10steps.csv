@@ -1,6 +1,6 @@
 scanName                      constantHeightRotatedMesh_10steps
 baseCase                      baseCase
-gravityModel                  application           writeInterval         laplacianSchemes.default      snGradSchemes.default
-constant/gravityProperties    system/controlDict    system/controlDict    system/fvSchemes              system/fvSchemes
-constantHeight                interIsoGoam          10                    "Gauss linear uncorrected"    uncorrected
-constantHeight                interIsoGoam          10                    "Gauss linear corrected"      corrected
+interfaceForces.gravity.model  application           writeInterval         laplacianSchemes.default      snGradSchemes.default
+system/fvSchemes               system/controlDict    system/controlDict    system/fvSchemes              system/fvSchemes
+constantHeight                 interIsoGoam          10                    "Gauss linear uncorrected"    uncorrected
+constantHeight                 interIsoGoam          10                    "Gauss linear corrected"      corrected

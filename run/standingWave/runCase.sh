@@ -15,8 +15,8 @@ nOrthCorr=2; nCorr=3; amplitude=0.05; endTime=0.2; app=interIsoGoam; alphaOrigin
 for kv in "$@"; do k=${kv%%=*}; v=${kv#*=}; eval "$k=\"\$v\""; done
 set -e   # stop if dictator fails (a missing file or an ambiguous entry)
 {
-dictator constant/gravityProperties gravityModel "$model"
-dictator constant/gravityProperties nLayers "$nLayers"
+dictator system/fvSchemes interfaceForces.gravity.model "$model"
+dictator system/fvSchemes interfaceForces.gravity.nLayers "$nLayers"
 dictator system/fvSchemes 'snGradSchemes.default' "$snGrad"
 dictator system/fvSchemes 'laplacianSchemes.default' "$lap"
 dictator system/fvSolution 'PIMPLE.nNonOrthogonalCorrectors' "$nOrthCorr"

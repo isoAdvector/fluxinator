@@ -150,6 +150,6 @@ mesh.setFluxRequired(alpha1.name());
 isoAdvector advector(alpha1, phi, U);
 
 // Gravity model for calculating gravity force read from
-// constant/gravityProperties or use default (solverDefaults.H).
+// interfaceForces.gravity in system/fvSchemes or use default (solverDefaults.H).
 autoPtr<gravityModel> gravity = gravityModel::New(mesh, defaultGravityModel);
 

@@ -45,9 +45,9 @@ Description
     which has other defaults (solverDefaults.H, ../fluxinator). Additions,
     all selected at run time:
 
-    - Gravity model (constant/gravityProperties, default basic, as in
-      interIsoFoam). The geometric model evaluates the gravity term at the
-      height of the reconstructed interface (Part I).
+    - Gravity model (interfaceForces.gravity.model in system/fvSchemes,
+      default basic, as in interIsoFoam). The geometric model evaluates the
+      gravity term at the height of the reconstructed interface (Part I).
 
     - PIMPLE explicitConvection (default no): with one outer corrector the
       convected velocity of div(rhoPhi, U) is taken at the start of the time

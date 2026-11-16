@@ -89,7 +89,7 @@ def make():
                 cmds += ["dictator system/decomposeParDict numberOfSubdomains 8",
                          "dictator system/decomposeParDict method scotch"]
             if nL == 1:
-                cmds += ["dictator constant/gravityProperties nLayers 1"]
+                cmds += ["dictator system/fvSchemes interfaceForces.gravity.nLayers 1"]
             subprocess.run(["bash", "-c", f"source {DICTATOR} > /dev/null; set -e; " + "; ".join(cmds)],
                            cwd=d, check=True, stdout=subprocess.DEVNULL)
             open(os.path.join(d, "timing.parms"), "w").write(

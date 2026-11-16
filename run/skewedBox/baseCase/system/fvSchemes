@@ -47,5 +47,13 @@ snGradSchemes
     default         corrected;
 }
 
+interfaceForces
+{
+    gravity
+    {
+        model           geometric;
+    }
+}
+
 
 // ************************************************************************* //

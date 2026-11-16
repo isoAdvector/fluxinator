@@ -8,4 +8,4 @@
 type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 rm -rf "${2:?}"
 cp -r "${1:?}" "$2"
-dictator "$2/constant/gravityProperties" nLayers 1 > /dev/null || exit 1
+dictator "$2/system/fvSchemes" interfaceForces.gravity.nLayers 1 > /dev/null || exit 1

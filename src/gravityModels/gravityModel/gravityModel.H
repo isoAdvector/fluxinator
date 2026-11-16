@@ -97,7 +97,8 @@ public:
     // Selectors
 
         //- Return a reference to the selected gravity model: the model of
-        //  constant/gravityProperties, or defaultModel without that file
+        //  interfaceForces.gravity in system/fvSchemes, or defaultModel
+        //  without that entry
         static autoPtr<gravityModel> New
         (
             const fvMesh& mesh,

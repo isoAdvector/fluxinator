@@ -11,8 +11,8 @@ c=$H/${SCANDIR:-waterLevel_10steps_ddtCorrOff}/${name}_z$zw; rm -rf $c; mkdir -p
 set -e   # stop if dictator fails (a missing file or an ambiguous entry)
 {
 dictator system/setAlphaFieldDict origin "(0 0 $zw)"
-dictator constant/gravityProperties gravityModel $gm
-dictator constant/gravityProperties nLayers $nL
+dictator system/fvSchemes interfaceForces.gravity.model $gm
+dictator system/fvSchemes interfaceForces.gravity.nLayers $nL
 run=$app; [ $app = interFoam ] && run=interFoamDdtCorr
 dictator system/controlDict application $run
 dictator system/fvSolution PIMPLE.ddtCorr ${DDTCORR:-no}

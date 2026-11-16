@@ -49,11 +49,17 @@ Description
     hydrostatic balance of a flat interface on non-orthogonal meshes.
 
 Usage
-    In constant/gravityProperties:
+    In system/fvSchemes:
     \verbatim
-    gravityModel    geometric;
-    nLayers         2;      // Optional, default 2
-    nInitReconstructs 3;    // Optional, default 3: reconstructions at start-up
+    interfaceForces
+    {
+        gravity
+        {
+            model               geometric;
+            nLayers             2;  // Optional, default 2
+            nInitReconstructs   3;  // Optional, default 3: reconstructions at start-up
+        }
+    }
     \endverbatim
 
 SourceFiles

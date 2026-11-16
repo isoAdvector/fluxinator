@@ -1,7 +1,7 @@
 scanName                      reconstruction_1000steps
 baseCase                      baseCase
-gravityModel                  solvers."alpha.water.*".reconstructionScheme  application           deltaT              endTime             writeInterval
-constant/gravityProperties    system/fvSolution                             system/controlDict    system/controlDict  system/controlDict  system/controlDict
-geometric                     plicRDF                                       interIsoGoam          0.01                10                  1000
-geometric                     isoAlpha                                      interIsoGoam          0.01                10                  1000
-constantHeight                isoAlpha                                      interIsoGoam          0.01                10                  1000
+interfaceForces.gravity.model  solvers."alpha.water.*".reconstructionScheme  application           deltaT              endTime             writeInterval
+system/fvSchemes               system/fvSolution                             system/controlDict    system/controlDict  system/controlDict  system/controlDict
+geometric                      plicRDF                                       interIsoGoam          0.01                10                  1000
+geometric                      isoAlpha                                      interIsoGoam          0.01                10                  1000
+constantHeight                 isoAlpha                                      interIsoGoam          0.01                10                  1000

@@ -104,12 +104,13 @@ Foam::geometricGravityModel::geometricGravityModel
             << exit(FatalIOError);
     }
 
-    Info<< "geometric gravity model: nLayers = " << nLayers_ << endl;
-
     // Option to specify number of initial reconstruct calls.
     // Observed to be beneficial for plicRDF with high accuracy requirements.
     const label nInitReconstructs =
         dict.getOrDefault<label>("nInitReconstructs", 3);
+
+    Info<< "geometric gravity model: nLayers = " << nLayers_
+        << ", nInitReconstructs = " << nInitReconstructs << endl;
 
     reconstructionSchemes& surf =
         mesh_.lookupObjectRef<reconstructionSchemes>("reconstructionScheme");
