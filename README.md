@@ -5,10 +5,9 @@ Developed and maintained by Johan Roenby, [STROMNING](https://stromning.com).
 Code and test cases for the paper series *Consistent interfacial flow numerics*:
 
 - J. Roenby, K. Missios, K. Møller, S. Aliyar and H. Scheufler (2026). Consistent
-  interfacial flow numerics – Part I: The gravity force term.
-  [arXiv:XXXX.XXXXX](https://arxiv.org/abs/XXXX.XXXXX)
+  interfacial flow numerics – Part I: The gravity force term. arXiv link to follow.
 - J. Roenby (2026). Consistent interfacial flow numerics – Part II: The momentum
-  convection term. [arXiv:YYYY.YYYYY](https://arxiv.org/abs/YYYY.YYYYY)
+  convection term. In preparation.
 
 Please cite the papers when you use the code.
 
@@ -188,5 +187,5 @@ The code is released under the GNU General Public License v3 (`LICENSE`), as Ope
 
 ---
 
-\* Not affiliated with or endorsed by Dr. Heinz Doofenshmirtz or Doofenshmirtz Evil
-Incorporated.
+\* fluxinator is not affiliated with or endorsed by Dr. Heinz Doofenshmirtz or
+Doofenshmirtz Evil Incorporated.
