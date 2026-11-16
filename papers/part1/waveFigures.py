@@ -121,19 +121,40 @@ def fig_eta():
     """Surface elevation at the gauge, first and last 4 s, nz 80, large and small dt."""
     settings = [(["0024", "0025", "0026"], r"$\Delta t = 5$ ms ($Co \approx 0.5$)"),
                 (["0030", "0031", "0032"], r"$\Delta t = 1.25$ ms ($Co \approx 0.09$)")]
+    # Zoom on the crest near t = 28 s in the last 4 s ([t0, t1, eta0, eta1], s and mm),
+    # drawn above the trough at t = 27 s, where all curves stay below 10 mm
+    zoom = [[27.82, 28.06, 66, 75], [27.95, 28.28, 72, 86]]
+    ylim = (-50, 106)  # mm, fixed so that the inset can be placed in data units
+    insetBounds = [26.55, 22, 1.05, 76]  # t, eta, width, height (s, mm)
+    insetBounds = [(insetBounds[0] - 26)/4, (insetBounds[1] - ylim[0])/(ylim[1] - ylim[0]),
+                   insetBounds[2]/4, insetBounds[3]/(ylim[1] - ylim[0])]  # axes fraction
     tr, hr = eta(FIXED_DIR, REF)
     fig, axes = plt.subplots(2, 2, figsize=(FULL, 4.2), sharey=True)
     for row, (cases, label) in enumerate(settings):
         for col, (t0, t1) in enumerate([(0, 4), (26, 30)]):
             ax = axes[row, col]
+            axs = [ax]
+            if col == 1:
+                axs.append(ax.inset_axes(insetBounds))
             m = (tr >= t0) & (tr <= t1)
-            ax.plot(tr[m], hr[m]*1e3, "k--", lw=1.0, label="exact", zorder=5)
+            for a in axs:
+                a.plot(tr[m], hr[m]*1e3, "k--", lw=1.0, label="exact", zorder=5)
             for c in cases:
                 t, h = eta(FIXED_DIR, c)
                 m = (t >= t0) & (t <= t1)
                 s = app_of(FIXED_DIR, c)
-                ax.plot(t[m], h[m]*1e3, color=COLOUR[s], label=s)
+                for a in axs:
+                    a.plot(t[m], h[m]*1e3, color=COLOUR[s], label=s)
+            if col == 1:
+                inset = axs[1]
+                inset.set_xlim(*zoom[row][:2])
+                inset.set_ylim(*zoom[row][2:])
+                inset.set_xticks([])
+                inset.set_yticks([])
+                inset.grid(False)
+                ax.indicate_inset_zoom(inset, edgecolor="0.4")
             ax.set_xlim(t0, t1)
+            ax.set_ylim(*ylim)
             if col == 0:
                 ax.set_ylabel(r"$\eta$ [mm]")
             if row == 1:
