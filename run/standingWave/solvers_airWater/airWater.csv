@@ -1,0 +1,7 @@
+mesh,solver,first_air,first_interface,first_water,peak_air,peak_interface,peak_water,mean_air,mean_interface,mean_water
+uniform,interFoam,0.9426,0.1932,0.01484,0.9426,0.8292,0.2884,0.5418,0.456,0.1857
+uniform,interIsoFoam,0.9426,0.1932,0.01484,1.968,1.256,0.31,1.116,0.5997,0.2027
+uniform,interIsoGoam,0.199,0.02904,0.01508,0.708,0.339,0.2997,0.3578,0.219,0.1932
+refined,interFoam,2.519,0.2228,0.01801,2.519,0.7151,0.406,0.8351,0.5263,0.2347
+refined,interIsoFoam,2.519,0.2228,0.01801,4.573,1.028,0.4411,2.409,0.563,0.2607
+refined,interIsoGoam,0.323,0.03365,0.01532,1.914,0.3533,0.3189,0.8386,0.2339,0.2027

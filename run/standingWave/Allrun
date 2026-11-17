@@ -8,6 +8,7 @@ cd "${0%/*}" || exit 1
 ./makeBaseMeshes.sh
 ./paperScan.sh
 RECON=plicRDF ./paperScan.sh solvers_plicRDF    # the paper uses plicRDF (Section 5)
+./airWater.sh                                   # air and water split of the same runs
 ./snapshots.sh
 RECON=plicRDF ./snapshots.sh snapshots_plicRDF  # Fig. standingWaveSnapshots
 ./paperScan_ddtCorrOff.sh

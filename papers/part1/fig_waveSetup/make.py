@@ -19,8 +19,8 @@
 import argparse
 import os
 
-from paraview.simple import (GetActiveViewOrCreate, GetAnimationScene, GetSources, Hide,
-                             LoadState, SaveScreenshot, GetDisplayProperties)
+from paraview.simple import (GetActiveViewOrCreate, GetAnimationScene, GetColorTransferFunction,
+                             GetSources, Hide, LoadState, SaveScreenshot, GetDisplayProperties)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 READER_IDS = ['10087', '10485', '10755']  # Reader proxy ids in caseIllustration.pvsm, left to right
@@ -50,11 +50,23 @@ for (name, _), source in GetSources().items():
     if name == 'AnnotateTime1':
         Hide(source, view)
 
-# Twice the view size, so twice the line widths
+# Volume fraction as in fig_standingWaveSnapshots (air black, water blue)
+alphaLUT = GetColorTransferFunction('alpha.water')
+alphaLUT.ColorSpace = 'RGB'
+alphaLUT.RGBPoints = [0.0, 0.0, 0.0, 0.0,
+                      0.5, 0.865003, 0.865003, 0.865003,
+                      1.0, 0.0, 0.6666666666666666, 1.0]
+alphaLUT.AutomaticRescaleRangeMode = 'Never'
+
+# Twice the view size, so twice the line widths; no colour bars (the caption gives the colours)
 for source in GetSources().values():
     display = GetDisplayProperties(source, view)
     if hasattr(display, 'LineWidth'):
         display.LineWidth = 2*display.LineWidth
+    if hasattr(display, 'SetScalarBarVisibility'):
+        display.SetScalarBarVisibility(view, False)
+    if getattr(display, 'Representation', None) == 'Surface With Edges':
+        display.EdgeColor = [0.55, 0.55, 0.55]  # visible on black air
 
 SaveScreenshot(args.out, view, ImageResolution=[4200, 2298],
                TransparentBackground=0 if args.opaque else 1)

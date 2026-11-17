@@ -9,3 +9,13 @@ refined  interIsoGoam      0.323     1.645      1.91      0.84     93
 
 isoAlpha instead of plicRDF (interIsoFoam, interIsoGoam): largest relative change [%]
   1 step 1, peak20 24, 2T peak 23, 2T mean 8
+
+max|U| [m/s] in the air (alpha < 0.01), the interface cells and the water (alpha > 0.99)
+(run/standingWave/airWater.sh: the same runs with every time step written)
+mesh     solver         1 step: air  interface    water  2T peak: air  interface    water
+uniform  interFoam            0.943      0.193   0.0148          0.94       0.83    0.288
+uniform  interIsoFoam         0.943      0.193   0.0148          1.97       1.26    0.310
+uniform  interIsoGoam         0.199      0.029   0.0151          0.71       0.34    0.300
+refined  interFoam            2.519      0.223   0.0180          2.52       0.72    0.406
+refined  interIsoFoam         2.519      0.223   0.0180          4.57       1.03    0.441
+refined  interIsoGoam         0.323      0.034   0.0153          1.91       0.35    0.319

@@ -49,4 +49,12 @@ for mesh in TAG:
             change = np.maximum(change, np.abs(velocities("solvers", mesh, app)/v - 1))
 out += ["", "isoAlpha instead of plicRDF (interIsoFoam, interIsoGoam): largest relative change [%]",
         "  1 step %.0f, peak20 %.0f, 2T peak %.0f, 2T mean %.0f" % tuple(100*change)]
+out += ["", "max|U| [m/s] in the air (alpha < 0.01), the interface cells and the water (alpha > 0.99)",
+        "(run/standingWave/airWater.sh: the same runs with every time step written)",
+        f"{'mesh':8s} {'solver':13s} {'1 step: air':>12s} {'interface':>10s} {'water':>8s}"
+        f" {'2T peak: air':>13s} {'interface':>10s} {'water':>8s}"]
+for r in np.genfromtxt(case("standingWave", "solvers_airWater", "airWater.csv"), delimiter=",",
+                       names=True, dtype=None, encoding=None):
+    out.append(f"{r['mesh']:8s} {r['solver']:13s} {r['first_air']:12.3f} {r['first_interface']:10.3f}"
+               f" {r['first_water']:8.4f} {r['peak_air']:13.2f} {r['peak_interface']:10.2f} {r['peak_water']:8.3f}")
 write_table(HERE, "tab_standingWave", out)
