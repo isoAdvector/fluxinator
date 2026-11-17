@@ -159,6 +159,72 @@ The scans use `parmScanner` from
 scripts need python3 with numpy, scipy and matplotlib, and ParaView (pvbatch)
 for the ParaView figures.
 
+## Reproducing the papers
+
+The runs of both papers were made with OpenFOAM v2512. Every figure, table and number of
+the papers comes from a script in this repository. The summaries the scripts read
+(`run/*/data/`) and the numbers of every table (`papers/part*/tab_*/*.txt`) are tracked
+in git, so after a rerun `git status` and `git diff` show what changed. The full run data
+take about 150 GB.
+
+1. Install OpenFOAM v2512, this repository (`./Allwmake`), streamFunctionWave and
+   surfacePosition (each with its own `./Allwmake`), dictator and cfdTools (Building),
+   python3 with numpy, scipy and matplotlib, and ParaView (pvbatch).
+   `run/quickTest/Allrun` checks the installation in about a minute.
+
+2. Part I. Run the studies, each from `run/`:
+
+   ```shell
+   tiltedBox/Allrun
+   skewedBox/Allrun
+   refinedBox/Allrun
+   standingWave/Allrun
+   progressiveWave/Allrun        # several days on 32 cores
+   ```
+
+   `progressiveWave/Allrun` also runs the studies with `ddtCorr` off (Appendix A). The
+   wall-clock times of the progressive wave come from separate timing runs on an
+   otherwise idle machine: `python3 timing.py make`, `run` and `analyse` in
+   `progressiveWave/timing_partI`, whose README gives the conditions.
+
+3. Part II. Its fluxinator cases are made from the progressive-wave cases of Part I, so
+   `progressiveWave/Allrun` must have run first. Then, from `run/`:
+
+   ```shell
+   taylorGreenVortex/Allrun
+   prescribedFlows/Allrun
+   periodicDisc/Allrun
+   progressiveWave/AllrunPartII  # several days; ends with the timing runs
+   ```
+
+   The timing runs (`progressiveWave/timing_maxCo0.1_noGauge`) need cores with nothing
+   else running; its README gives the conditions.
+
+4. Make the figures and tables, in `papers/part1` for Part I and in `papers/part2` for
+   Part II (there first `python3 browserData.py`, which the selection figures read):
+
+   ```shell
+   for d in fig_* tab_*
+   do
+       (
+           cd "$d" || exit
+           [ -f snapshots.py ] && pvbatch --force-offscreen-rendering snapshots.py
+           if [ -f make.sh ]
+           then
+               bash make.sh
+           elif grep -q paraview make.py
+           then
+               pvbatch --force-offscreen-rendering make.py
+           else
+               python3 make.py
+           fi
+       )
+   done
+   ```
+
+   Each directory makes the figure or table with the same LaTeX label, whose caption in
+   the paper names the directory (`papers/README.md`).
+
 ## Running
 
 `run/quickTest/Allrun` builds nothing and takes about a minute: it runs
@@ -190,5 +256,5 @@ The code is released under the GNU General Public License v3 (`LICENSE`), as Ope
 
 ---
 
-\* fluxinator is not endorsed by Dr. Heinz Doofenshmirtz or in any way affiliated with
+\* fluxinator is not endorsed by Dr. Heinz Doofenshmirtz or affiliated with
 Doofenshmirtz Evil Incorporated.
