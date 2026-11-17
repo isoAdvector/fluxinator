@@ -34,6 +34,7 @@ solvers
         snapTol         1e-12;
         clip            true;
         reconstructionScheme isoAlpha;
+        nInitialReconstructions 3;
     }
     "pcorr.*"
     {
@@ -72,11 +73,6 @@ PIMPLE
     nNonOrthogonalCorrectors 2;
     pRefCell        0;
     pRefValue       0;
-    gravityFactor   0;
-    useHeightFromSetAlphaFieldDict false;
-    reconstructGhf  true;
-    useOldGhf       false;
-    implicitConvection true;
 }
 
 

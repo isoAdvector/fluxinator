@@ -14,7 +14,7 @@ copyCase() {
     mkdir "$2" && cp -r "$1"/{0.orig,constant,system,Allrun} "$2"/
     rm -rf "${2:?}"/constant/polyMesh
     {
-    dictator "$2"/system/fvSolution PIMPLE.explicitConvection -delete &&
+    dictator "$2"/system/fvSolution PIMPLE.convectionNewTimeWeight -delete &&
     dictator "$2"/system/fvSolution PIMPLE.ddtCorr -delete &&
     for f in "$2"/system/controlDict "$2"/system/controlDict.run
     do

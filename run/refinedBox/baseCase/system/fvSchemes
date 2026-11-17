@@ -47,11 +47,19 @@ snGradSchemes
     default         corrected;
 }
 
+// The interface of the initial condition (system/setAlphaFieldDict), whose height
+// the constantHeight gravity model uses
+setAlphaField
+{
+    #include "setAlphaFieldDict"
+}
+
 interfaceForces
 {
     gravity
     {
         model           geometric;
+        interfacePoint  $:setAlphaField.origin;
     }
 }
 

@@ -1,1 +1,0 @@
-w9/cn_190x40_dt0.01:     application: interIsoGoamExt nx: 190 nz: 40 maxCo: 0.2 endTime: 10 dt=0.01 app=interIsoGoamExt PIMPLE.momentumBudget=yes PIMPLE.ddtCorr=no PIMPLE.convectionTheta=0.5

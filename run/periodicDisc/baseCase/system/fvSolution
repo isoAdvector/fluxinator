@@ -26,6 +26,7 @@ solvers
         nAlphaBounds    3;
         clip            false;
         reconstructionScheme plicRDF;
+        nInitialReconstructions 3;
 
         nAlphaSubCycles 1;
         cAlpha          1; // Read but not used by interIsoFoam
@@ -75,7 +76,7 @@ PIMPLE
     ddtCorr         no;
     pRefCell        0;
     pRefValue       0;
-    explicitConvection no;
+    convectionNewTimeWeight 1;
 }
 
 // ************************************************************************* //

@@ -1,1 +1,0 @@
-w6/iIG_off_380x80_dt0.0025:     application: interIsoGoam nx: 380 nz: 80 maxCo: 0.2 endTime: 10 dt=0.0025 PIMPLE.ddtCorr=no

@@ -81,7 +81,7 @@ PIMPLE
     pRefCell        0;
     pRefValue       0;
     ddtCorr         no;
-    explicitConvection yes;
+    convectionNewTimeWeight 0;
 }
 
 

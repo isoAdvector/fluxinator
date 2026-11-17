@@ -81,7 +81,7 @@ PIMPLE
     pRefCell        0;
     pRefValue       0;
     ddtCorr         no;
-    convectionTheta 0.5;
+    convectionNewTimeWeight 0.5;
 }
 
 

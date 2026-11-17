@@ -26,6 +26,7 @@ solvers
         nAlphaBounds    3;
         clip            false;
         reconstructionScheme plicRDF;
+        nInitialReconstructions 3;
 
         nAlphaSubCycles 1;
         cAlpha          1; // Read but not used by interIsoFoam

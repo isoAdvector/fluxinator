@@ -73,7 +73,7 @@ PIMPLE
     nNonOrthogonalCorrectors 1;
     pRefCell        0;
     pRefValue       0;
-    explicitConvection yes;
+    convectionNewTimeWeight 0;
     ddtCorr         no;
 }
 
