@@ -35,7 +35,7 @@ License
 // ************************************************************************* //
 
 template<typename Type>
-Type Foam::isoAdvection::isoAdvector::faceValue
+Type Foam::fluxinatorVoF::isoAdvector::faceValue
 (
     const GeometricField<Type, fvsPatchField, surfaceMesh>& f,
     const label facei
@@ -73,7 +73,7 @@ Type Foam::isoAdvection::isoAdvector::faceValue
 
 
 template<typename Type>
-void Foam::isoAdvection::isoAdvector::setFaceValue
+void Foam::fluxinatorVoF::isoAdvector::setFaceValue
 (
     GeometricField<Type, fvsPatchField, surfaceMesh>& f,
     const label facei,
@@ -112,7 +112,7 @@ void Foam::isoAdvection::isoAdvector::setFaceValue
 
 
 template<class SpType, class SuType>
-void Foam::isoAdvection::isoAdvector::limitFluxes
+void Foam::fluxinatorVoF::isoAdvector::limitFluxes
 (
     const SpType& Sp,
     const SuType& Su
@@ -262,7 +262,7 @@ void Foam::isoAdvection::isoAdvector::limitFluxes
 
 
 template<class SpType, class SuType>
-void Foam::isoAdvection::isoAdvector::boundFlux
+void Foam::fluxinatorVoF::isoAdvector::boundFlux
 (
     const bitSet& nextToInterface,
     surfaceScalarField& dVfcorrectionValues,
@@ -427,7 +427,7 @@ void Foam::isoAdvection::isoAdvector::boundFlux
 
 
 template<class SpType, class SuType>
-void Foam::isoAdvection::isoAdvector::advect(const SpType& Sp, const SuType& Su)
+void Foam::fluxinatorVoF::isoAdvector::advect(const SpType& Sp, const SuType& Su)
 {
     addProfilingInFunction(geometricVoF);
     DebugInFunction << endl;

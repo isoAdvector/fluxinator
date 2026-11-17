@@ -27,7 +27,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::isoAdvection::isoAdvector
+    Foam::fluxinatorVoF::isoAdvector
 
 Description
     An implementation of the isoAdvector geometric Volume-of-Fluid method
@@ -84,7 +84,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
 
 /*---------------------------------------------------------------------------*\
@@ -404,7 +404,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace isoAdvection
+} // End namespace fluxinatorVoF
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

@@ -25,7 +25,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::isoAdvection::reconstructionSchemes
+    Foam::fluxinatorVoF::reconstructionSchemes
 
 Description
     Original code supplied by Henning Scheufler, DLR (2019)
@@ -52,7 +52,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
 
 /*---------------------------------------------------------------------------*\
@@ -110,11 +110,16 @@ protected:
         //- Is the interface already up-to-date?
         bool alreadyReconstructed(bool forceUpdate = true) const;
 
-        //- Trigger reconstruct() if surface data has never been computed
+        //- Reconstruct if the interface data have never been computed. The
+        //  advector reconstructs at the end of advect(), so before the first
+        //  time step the first access to the data reconstructs them; hence
+        //  the const accessors below may reconstruct (const_cast).
         void ensureValid() const
         {
             if (timeIndexAndIter_.first() == -1)
+            {
                 const_cast<reconstructionSchemes*>(this)->reconstruct(false);
+            }
         }
 
         //- No copy construct
@@ -300,7 +305,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace isoAdvection
+} // End namespace fluxinatorVoF
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

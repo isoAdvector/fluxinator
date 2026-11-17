@@ -25,7 +25,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::isoAdvection::surfaceIteratorPLIC
+    Foam::fluxinatorVoF::surfaceIteratorPLIC
 
 Description
     Finds the cutValue that matches the volume fraction
@@ -60,7 +60,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
 
 /*---------------------------------------------------------------------------*\
@@ -167,7 +167,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace isoAdvection
+} // End namespace fluxinatorVoF
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

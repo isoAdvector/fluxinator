@@ -2,12 +2,12 @@
 
 | Directory | Library | Content |
 |---|---|---|
-| `geometricVoF` | `newGeometricVoF` | isoAdvector and interface reconstruction used by interIsoGoam |
+| `geometricVoF` | `fluxinatorVoF` | isoAdvector and interface reconstruction used by fluxinator and interIsoGoam |
 | `gravityModels` | `gravityModels` | gravity models `basic`, `geometric` and `constantHeight` (Part I) |
 | `interfaceSchemes` | `interfaceSchemes` | interpolation schemes `interfaceUpwind` and `laxWendroff` (Part II) |
 | `functionObjects` | `interfaceFunctionObjects` | function object `convectiveMomentumFlux` (Part II) |
 
-`newGeometricVoF` is in the namespace `Foam::isoAdvection`, so that it can be loaded next to OpenFOAM's
+`fluxinatorVoF` is in the namespace `Foam::fluxinatorVoF`, so that it can be loaded next to OpenFOAM's
 `geometricVoF`, which many function objects pull in. Its sampled surface type is therefore
 `reconstructedInterface`, not `interface`.
 

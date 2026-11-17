@@ -35,7 +35,7 @@ License
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
     defineTypeNameAndDebug(isoAlpha, 0);
     addToRunTimeSelectionTable(reconstructionSchemes,isoAlpha, components);
@@ -45,7 +45,7 @@ namespace isoAdvection
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::isoAdvection::isoAlpha::isoAlpha
+Foam::fluxinatorVoF::isoAlpha::isoAlpha
 (
     volScalarField& alpha1,
     const surfaceScalarField& phi,
@@ -74,7 +74,7 @@ Foam::isoAdvection::isoAlpha::isoAlpha
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-void Foam::isoAdvection::isoAlpha::reconstruct(bool forceUpdate)
+void Foam::fluxinatorVoF::isoAlpha::reconstruct(bool forceUpdate)
 {
     addProfilingInFunction(geometricVoF);
     const bool uptodate = alreadyReconstructed(forceUpdate);

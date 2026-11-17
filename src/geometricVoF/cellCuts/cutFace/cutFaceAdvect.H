@@ -26,7 +26,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::isoAdvection::cutFaceAdvect
+    Foam::fluxinatorVoF::cutFaceAdvect
 
 Description
     Calculates the face fluxes
@@ -59,7 +59,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
 
 /*---------------------------------------------------------------------------*\
@@ -264,7 +264,7 @@ class cutFaceAdvect
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace isoAdvection
+} // End namespace fluxinatorVoF
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

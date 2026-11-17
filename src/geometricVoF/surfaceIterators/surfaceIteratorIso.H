@@ -25,7 +25,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::isoAdvection::surfaceIteratorIso
+    Foam::fluxinatorVoF::surfaceIteratorIso
 
 Description
     Finds the isovalue that matches the volume fraction
@@ -58,7 +58,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
 
 /*---------------------------------------------------------------------------*\
@@ -172,7 +172,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace isoAdvection
+} // End namespace fluxinatorVoF
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

@@ -36,7 +36,7 @@ License
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
     defineTypeNameAndDebug(gradAlpha, 0);
     addToRunTimeSelectionTable(reconstructionSchemes, gradAlpha, components);
@@ -46,7 +46,7 @@ namespace isoAdvection
 
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
-void Foam::isoAdvection::gradAlpha::gradSurf(const volScalarField& phi)
+void Foam::fluxinatorVoF::gradAlpha::gradSurf(const volScalarField& phi)
 {
     addProfilingInFunction(geometricVoF);
     leastSquareGrad<scalar> lsGrad("polyDegree1",mesh_.geometricD());
@@ -95,7 +95,7 @@ void Foam::isoAdvection::gradAlpha::gradSurf(const volScalarField& phi)
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::isoAdvection::gradAlpha::gradAlpha
+Foam::fluxinatorVoF::gradAlpha::gradAlpha
 (
     volScalarField& alpha1,
     const surfaceScalarField& phi,
@@ -121,7 +121,7 @@ Foam::isoAdvection::gradAlpha::gradAlpha
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-void Foam::isoAdvection::gradAlpha::reconstruct(bool forceUpdate)
+void Foam::fluxinatorVoF::gradAlpha::reconstruct(bool forceUpdate)
 {
     addProfilingInFunction(geometricVoF);
     const bool uptodate = alreadyReconstructed(forceUpdate);
@@ -190,7 +190,7 @@ void Foam::isoAdvection::gradAlpha::reconstruct(bool forceUpdate)
 }
 
 
-void Foam::isoAdvection::gradAlpha::mapAlphaField() const
+void Foam::fluxinatorVoF::gradAlpha::mapAlphaField() const
 {
     // Without this line, we seem to get a race condition
     mesh_.C();

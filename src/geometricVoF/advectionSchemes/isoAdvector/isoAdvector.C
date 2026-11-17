@@ -47,7 +47,7 @@ License
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
     defineTypeNameAndDebug(isoAdvector, 0);
 }
@@ -55,7 +55,7 @@ namespace isoAdvection
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::isoAdvection::isoAdvector::isoAdvector
+Foam::fluxinatorVoF::isoAdvector::isoAdvector
 (
     volScalarField& alpha1,
     const surfaceScalarField& phi,
@@ -184,7 +184,7 @@ Foam::isoAdvection::isoAdvector::isoAdvector
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-void Foam::isoAdvection::isoAdvector::setProcessorPatches()
+void Foam::fluxinatorVoF::isoAdvector::setProcessorPatches()
 {
     const polyBoundaryMesh& patches = mesh_.boundaryMesh();
     surfaceCellFacesOnProcPatches_.clear();
@@ -206,7 +206,7 @@ void Foam::isoAdvection::isoAdvector::setProcessorPatches()
 }
 
 
-void Foam::isoAdvection::isoAdvector::extendMarkedCells
+void Foam::fluxinatorVoF::isoAdvector::extendMarkedCells
 (
     bitSet& markedCell
 ) const
@@ -240,7 +240,7 @@ void Foam::isoAdvection::isoAdvector::extendMarkedCells
 }
 
 
-void Foam::isoAdvection::isoAdvector::timeIntegratedFlux()
+void Foam::fluxinatorVoF::isoAdvector::timeIntegratedFlux()
 {
     addProfilingInFunction(geometricVoF);
     // Get time step
@@ -423,7 +423,7 @@ void Foam::isoAdvection::isoAdvector::timeIntegratedFlux()
 }
 
 
-void Foam::isoAdvection::isoAdvector::setDownwindFaces
+void Foam::fluxinatorVoF::isoAdvector::setDownwindFaces
 (
     const label celli,
     DynamicLabelList& downwindFaces
@@ -461,7 +461,7 @@ void Foam::isoAdvection::isoAdvector::setDownwindFaces
 }
 
 
-Foam::scalar Foam::isoAdvection::isoAdvector::netFlux
+Foam::scalar Foam::fluxinatorVoF::isoAdvector::netFlux
 (
     const surfaceScalarField& dVf,
     const label celli
@@ -493,7 +493,7 @@ Foam::scalar Foam::isoAdvection::isoAdvector::netFlux
 }
 
 
-Foam::DynamicList<Foam::label>  Foam::isoAdvection::isoAdvector::syncProcPatches
+Foam::DynamicList<Foam::label>  Foam::fluxinatorVoF::isoAdvector::syncProcPatches
 (
     surfaceScalarField& dVf,
     const surfaceScalarField& phi,
@@ -608,7 +608,7 @@ Foam::DynamicList<Foam::label>  Foam::isoAdvection::isoAdvector::syncProcPatches
 }
 
 
-void Foam::isoAdvection::isoAdvector::checkIfOnProcPatch(const label facei)
+void Foam::fluxinatorVoF::isoAdvector::checkIfOnProcPatch(const label facei)
 {
     if (!mesh_.isInternalFace(facei))
     {
@@ -624,7 +624,7 @@ void Foam::isoAdvection::isoAdvector::checkIfOnProcPatch(const label facei)
 }
 
 
-void Foam::isoAdvection::isoAdvector::applyBruteForceBounding()
+void Foam::fluxinatorVoF::isoAdvector::applyBruteForceBounding()
 {
     addProfilingInFunction(geometricVoF);
     bool alpha1Changed = false;
@@ -654,7 +654,7 @@ void Foam::isoAdvection::isoAdvector::applyBruteForceBounding()
 }
 
 
-void Foam::isoAdvection::isoAdvector::writeSurfaceCells() const
+void Foam::fluxinatorVoF::isoAdvector::writeSurfaceCells() const
 {
     if (!mesh_.time().writeTime()) return;
 
@@ -678,7 +678,7 @@ void Foam::isoAdvection::isoAdvector::writeSurfaceCells() const
 }
 
 
-void Foam::isoAdvection::isoAdvector::writeIsoFaces
+void Foam::fluxinatorVoF::isoAdvector::writeIsoFaces
 (
     const UList<List<point>>& faces
 ) const

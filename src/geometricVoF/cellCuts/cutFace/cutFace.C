@@ -32,11 +32,11 @@ License
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
-int Foam::isoAdvection::cutFace::debug = 0;
+int Foam::fluxinatorVoF::cutFace::debug = 0;
 
 // * * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * *
 
-void Foam::isoAdvection::cutFace::calcSubFace
+void Foam::fluxinatorVoF::cutFace::calcSubFace
 (
     const label faceI,
     const scalarList& pointStatus,
@@ -113,7 +113,7 @@ void Foam::isoAdvection::cutFace::calcSubFace
 }
 
 
-void Foam::isoAdvection::cutFace::calcSubFace
+void Foam::fluxinatorVoF::cutFace::calcSubFace
 (
     const label faceI,
     const scalarList& pointStatus,
@@ -188,7 +188,7 @@ void Foam::isoAdvection::cutFace::calcSubFace
 }
 
 
-void Foam::isoAdvection::cutFace::calcSubFace
+void Foam::fluxinatorVoF::cutFace::calcSubFace
 (
     const face& f,
     const pointField& points,
@@ -262,7 +262,7 @@ void Foam::isoAdvection::cutFace::calcSubFace
 }
 
 
-void Foam::isoAdvection::cutFace::calcSubFaceCentreAndArea
+void Foam::fluxinatorVoF::cutFace::calcSubFaceCentreAndArea
 (
     DynamicList<point>& subFacePoints,
     vector& subFaceCentre,
@@ -337,7 +337,7 @@ void Foam::isoAdvection::cutFace::calcSubFaceCentreAndArea
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::isoAdvection::cutFace::cutFace
+Foam::fluxinatorVoF::cutFace::cutFace
 (
     const fvMesh& mesh
 )

@@ -107,8 +107,8 @@ adjust_cyclicPosition()
         }
     }
 '
-    rewrite '(?m)^Foam::isoAdvection::plicRDF::plicRDF$' \
-        "s{^(Foam::isoAdvection::plicRDF::plicRDF\n\(.*?\n\{\n)}{\$1$guard\n}ms"
+    rewrite '(?m)^Foam::fluxinatorVoF::plicRDF::plicRDF$' \
+        "s{^(Foam::fluxinatorVoF::plicRDF::plicRDF\n\(.*?\n\{\n)}{\$1$guard\n}ms"
     rewrite '#include "plicRDF.H"' \
         's{(#include "plicRDF.H"\n)}{$1#include "cyclicPolyPatch.H"\n}'
 }

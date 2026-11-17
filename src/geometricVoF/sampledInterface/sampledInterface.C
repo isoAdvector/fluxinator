@@ -36,7 +36,7 @@ License
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
     defineTypeNameAndDebug(sampledInterface, 0);
     // Registered as reconstructedInterface, not as interface, so that this and
@@ -55,7 +55,7 @@ namespace isoAdvection
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
 
-bool Foam::isoAdvection::sampledInterface::updateGeometry() const
+bool Foam::fluxinatorVoF::sampledInterface::updateGeometry() const
 {
     const fvMesh& fvm = static_cast<const fvMesh&>(mesh());
 
@@ -117,7 +117,7 @@ bool Foam::isoAdvection::sampledInterface::updateGeometry() const
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::isoAdvection::sampledInterface::sampledInterface
+Foam::fluxinatorVoF::sampledInterface::sampledInterface
 (
     const word& name,
     const polyMesh& mesh,
@@ -151,7 +151,7 @@ Foam::isoAdvection::sampledInterface::sampledInterface
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-bool Foam::isoAdvection::sampledInterface::needsUpdate() const
+bool Foam::fluxinatorVoF::sampledInterface::needsUpdate() const
 {
     const fvMesh& fvm = static_cast<const fvMesh&>(mesh());
 
@@ -159,7 +159,7 @@ bool Foam::isoAdvection::sampledInterface::needsUpdate() const
 }
 
 
-bool Foam::isoAdvection::sampledInterface::expire()
+bool Foam::fluxinatorVoF::sampledInterface::expire()
 {
     surfPtr_.clear();
     subMeshPtr_.clear();
@@ -179,13 +179,13 @@ bool Foam::isoAdvection::sampledInterface::expire()
 }
 
 
-bool Foam::isoAdvection::sampledInterface::update()
+bool Foam::fluxinatorVoF::sampledInterface::update()
 {
     return updateGeometry();
 }
 
 
-Foam::tmp<Foam::scalarField> Foam::isoAdvection::sampledInterface::sample
+Foam::tmp<Foam::scalarField> Foam::fluxinatorVoF::sampledInterface::sample
 (
     const interpolation<scalar>& sampler
 ) const
@@ -194,7 +194,7 @@ Foam::tmp<Foam::scalarField> Foam::isoAdvection::sampledInterface::sample
 }
 
 
-Foam::tmp<Foam::vectorField> Foam::isoAdvection::sampledInterface::sample
+Foam::tmp<Foam::vectorField> Foam::fluxinatorVoF::sampledInterface::sample
 (
     const interpolation<vector>& sampler
 ) const
@@ -203,7 +203,7 @@ Foam::tmp<Foam::vectorField> Foam::isoAdvection::sampledInterface::sample
 }
 
 
-Foam::tmp<Foam::sphericalTensorField> Foam::isoAdvection::sampledInterface::sample
+Foam::tmp<Foam::sphericalTensorField> Foam::fluxinatorVoF::sampledInterface::sample
 (
     const interpolation<sphericalTensor>& sampler
 ) const
@@ -212,7 +212,7 @@ Foam::tmp<Foam::sphericalTensorField> Foam::isoAdvection::sampledInterface::samp
 }
 
 
-Foam::tmp<Foam::symmTensorField> Foam::isoAdvection::sampledInterface::sample
+Foam::tmp<Foam::symmTensorField> Foam::fluxinatorVoF::sampledInterface::sample
 (
     const interpolation<symmTensor>& sampler
 ) const
@@ -221,7 +221,7 @@ Foam::tmp<Foam::symmTensorField> Foam::isoAdvection::sampledInterface::sample
 }
 
 
-Foam::tmp<Foam::tensorField> Foam::isoAdvection::sampledInterface::sample
+Foam::tmp<Foam::tensorField> Foam::fluxinatorVoF::sampledInterface::sample
 (
     const interpolation<tensor>& sampler
 ) const
@@ -230,7 +230,7 @@ Foam::tmp<Foam::tensorField> Foam::isoAdvection::sampledInterface::sample
 }
 
 
-Foam::tmp<Foam::scalarField> Foam::isoAdvection::sampledInterface::interpolate
+Foam::tmp<Foam::scalarField> Foam::fluxinatorVoF::sampledInterface::interpolate
 (
     const interpolation<scalar>& interpolator
 ) const
@@ -239,7 +239,7 @@ Foam::tmp<Foam::scalarField> Foam::isoAdvection::sampledInterface::interpolate
 }
 
 
-Foam::tmp<Foam::vectorField> Foam::isoAdvection::sampledInterface::interpolate
+Foam::tmp<Foam::vectorField> Foam::fluxinatorVoF::sampledInterface::interpolate
 (
     const interpolation<vector>& interpolator
 ) const
@@ -247,7 +247,7 @@ Foam::tmp<Foam::vectorField> Foam::isoAdvection::sampledInterface::interpolate
     return sampleOnPoints(interpolator);
 }
 
-Foam::tmp<Foam::sphericalTensorField> Foam::isoAdvection::sampledInterface::interpolate
+Foam::tmp<Foam::sphericalTensorField> Foam::fluxinatorVoF::sampledInterface::interpolate
 (
     const interpolation<sphericalTensor>& interpolator
 ) const
@@ -256,7 +256,7 @@ Foam::tmp<Foam::sphericalTensorField> Foam::isoAdvection::sampledInterface::inte
 }
 
 
-Foam::tmp<Foam::symmTensorField> Foam::isoAdvection::sampledInterface::interpolate
+Foam::tmp<Foam::symmTensorField> Foam::fluxinatorVoF::sampledInterface::interpolate
 (
     const interpolation<symmTensor>& interpolator
 ) const
@@ -265,7 +265,7 @@ Foam::tmp<Foam::symmTensorField> Foam::isoAdvection::sampledInterface::interpola
 }
 
 
-Foam::tmp<Foam::tensorField> Foam::isoAdvection::sampledInterface::interpolate
+Foam::tmp<Foam::tensorField> Foam::fluxinatorVoF::sampledInterface::interpolate
 (
     const interpolation<tensor>& interpolator
 ) const
@@ -274,7 +274,7 @@ Foam::tmp<Foam::tensorField> Foam::isoAdvection::sampledInterface::interpolate
 }
 
 
-void Foam::isoAdvection::sampledInterface::print(Ostream& os, int level) const
+void Foam::fluxinatorVoF::sampledInterface::print(Ostream& os, int level) const
 {
     os  << "sampledInterface: " << name();
 }

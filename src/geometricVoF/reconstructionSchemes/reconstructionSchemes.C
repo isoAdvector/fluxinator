@@ -33,7 +33,7 @@ License
 
 namespace Foam
 {
-namespace isoAdvection
+namespace fluxinatorVoF
 {
     defineTypeNameAndDebug(reconstructionSchemes, 0);
     defineRunTimeSelectionTable(reconstructionSchemes, components);
@@ -43,7 +43,7 @@ namespace isoAdvection
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
 
-bool Foam::isoAdvection::reconstructionSchemes::alreadyReconstructed(bool forceUpdate) const
+bool Foam::fluxinatorVoF::reconstructionSchemes::alreadyReconstructed(bool forceUpdate) const
 {
     const Time& runTime = alpha1_.mesh().time();
 
@@ -82,7 +82,7 @@ bool Foam::isoAdvection::reconstructionSchemes::alreadyReconstructed(bool forceU
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::isoAdvection::reconstructionSchemes::reconstructionSchemes
+Foam::fluxinatorVoF::reconstructionSchemes::reconstructionSchemes
 (
     const word& type,
     volScalarField& alpha1,
@@ -144,7 +144,7 @@ Foam::isoAdvection::reconstructionSchemes::reconstructionSchemes
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-void Foam::isoAdvection::reconstructionSchemes::storeOld()
+void Foam::fluxinatorVoF::reconstructionSchemes::storeOld()
 {
     // oldTime() stores the field once per time step, before the first
     // reconstruct() overwrites it
@@ -155,7 +155,7 @@ void Foam::isoAdvection::reconstructionSchemes::storeOld()
 }
 
 
-void Foam::isoAdvection::reconstructionSchemes::resetToOld()
+void Foam::fluxinatorVoF::reconstructionSchemes::resetToOld()
 {
     normal_ = normal_.oldTime();
     centre_ = centre_.oldTime();
@@ -164,7 +164,7 @@ void Foam::isoAdvection::reconstructionSchemes::resetToOld()
 }
 
 
-Foam::isoAdvection::reconstructionSchemes::interface Foam::isoAdvection::reconstructionSchemes::surface()
+Foam::fluxinatorVoF::reconstructionSchemes::interface Foam::fluxinatorVoF::reconstructionSchemes::surface()
 {
     reconstruct(false);
     const fvMesh& mesh = centre_.mesh();
