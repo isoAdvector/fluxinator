@@ -11,7 +11,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 rows = []
 for d in sorted(glob.glob(os.path.join(HERE, "*_r[123]"))):
     solver, mesh, rep = os.path.basename(d).split("_")
-    log = [l for l in glob.glob(d + "/log.*") if not re.search("blockMesh|streamFun", l)][0]
+    log = [l for l in glob.glob(d + "/log.*") if not re.search("blockMesh|streamFun|dictator|Allrun", l)][0]
     t, ex = None, []
     for line in open(log):
         if line.startswith("Time = "):

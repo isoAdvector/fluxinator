@@ -5,7 +5,12 @@ time; the gauge is now surfacePosition, whose cost is negligible).
 Set-ups: solvers_maxCo_ddtCorrOff 0006-0008 (95x20), 0018-0020 (190x40), 0030-0032 (380x80) and
 finalSolver_maxCo 0008, 0020, 0032, with endTime 6 and functions.surfacePosition1.enabled false in
 system/controlDict.run (makeCases.sh).
-./runAll.sh: at most 8 concurrent unpinned runs, nothing else on the machine.
+./runAll.sh: each run pinned to one core (CORES, by default the first core of each 4-core NUMA
+node), nothing else on those NUMA nodes. The runs of 2026-11-17 used CORES="0 4 8 12 20 28"
+(OpenFOAM v2512). makeCases.sh moves the gravity model of the stored Part I set-ups from
+constant/gravityProperties to system/fvSchemes. Repeat final_95x20_r2 was 22 % slower than the
+other two (the machine was then also used interactively); it was rerun alone on core 8 and the
+first run kept as final_95x20_r2.outlier. All repeats then agree within 2.2 %.
 python3 analyse.py writes ../data/timing_maxCo0.1.csv (time per step over 2 <= t <= 6 s).
 Part II Figure fig:selCost combines it with the step counts of the full 30 s runs.
 Superseded, kept for the record: ../timing_maxCo0.1 (pinned with taskset, 30-40 % spread) and
