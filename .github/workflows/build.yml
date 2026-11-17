@@ -1,0 +1,82 @@
+# Copyright (C) 2026 Johan Roenby
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Builds fluxinator with every supported OpenFOAM.com release (OpenCFD's Ubuntu
+# packages) and runs both solvers for a few time steps of the accelerated disc
+# of Part II.
+
+name: Build
+
+# Only for changes to the code and its build, on main and in pull requests,
+# or when started by hand; a newer run on the same branch cancels an older one
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "applications/**"
+      - "bin/**"
+      - "Allwmake"
+      - "Allwclean"
+      - ".github/workflows/build.yml"
+  pull_request:
+    paths:
+      - "src/**"
+      - "applications/**"
+      - "bin/**"
+      - "Allwmake"
+      - "Allwclean"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: OpenFOAM v${{ matrix.version }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ["2306", "2312", "2406", "2412", "2506", "2512", "2606"]
+    env:
+      OPENFOAM: /usr/lib/openfoam/openfoam${{ matrix.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install OpenFOAM v${{ matrix.version }}
+        run: |
+          curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
+          sudo apt-get install -y openfoam${{ matrix.version }}-default
+
+      - name: Build
+        run: |
+          set +e; source "$OPENFOAM/etc/bashrc"; set -e
+          ./Allwmake -j 4 2>&1 | tee log.Allwmake
+          # Allwmake continues after a failed wmake: check the build products
+          if grep -q "Error [0-9]" log.Allwmake; then exit 1; fi
+          for app in fluxinator interIsoGoam setHydrostaticPressure convectionTest \
+              interFoamDdtCorr interIsoFoamDdtCorr
+          do
+              test -x "$FOAM_USER_APPBIN/$app" || { echo "Missing $app"; exit 1; }
+          done
+          for lib in fluxinatorVoF gravityModels interfaceSchemes interfaceFunctionObjects
+          do
+              test -f "$FOAM_USER_LIBBIN/lib$lib.so" || { echo "Missing lib$lib.so"; exit 1; }
+          done
+
+      - name: Smoke test
+        run: |
+          set +e; source "$OPENFOAM/etc/bashrc"; set -e
+          for app in interIsoGoam fluxinator
+          do
+              case=$RUNNER_TEMP/disc_$app
+              cp -r run/periodicDisc/explicitLWIU_rhoNew "$case"
+              foamDictionary "$case/system/controlDict" -entry application -set $app
+              foamDictionary "$case/system/controlDict" -entry endTime -set 0.05
+              "$case/Allrun"
+              grep -q "^End" "$case/log.$app" || { tail -n 30 "$case/log.$app"; exit 1; }
+          done
