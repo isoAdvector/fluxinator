@@ -1,7 +1,7 @@
 Scan reconstruction_1000steps
-0000  gravityModel: geometric solvers."alpha.water.*".reconstructionScheme: plicRDF application: interIsoGoam deltaT: 0.01 endTime: 10 writeInterval: 1000
+0000  interfaceForces.gravity.model: geometric solvers."alpha.water.*".reconstructionScheme: plicRDF application: interIsoGoam deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 4.0210318e-10  t=10: 6.3564430e-10  peak: 2.3618066e-09
-0001  gravityModel: geometric solvers."alpha.water.*".reconstructionScheme: isoAlpha application: interIsoGoam deltaT: 0.01 endTime: 10 writeInterval: 1000
+0001  interfaceForces.gravity.model: geometric solvers."alpha.water.*".reconstructionScheme: isoAlpha application: interIsoGoam deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 1.2357346e-07  t=10: 1.2068590e-07  peak: 1.6069533e-06
-0002  gravityModel: constantHeight solvers."alpha.water.*".reconstructionScheme: isoAlpha application: interIsoGoam deltaT: 0.01 endTime: 10 writeInterval: 1000
+0002  interfaceForces.gravity.model: constantHeight solvers."alpha.water.*".reconstructionScheme: isoAlpha application: interIsoGoam deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 1.8200702e-10  t=10: 3.8457638e-10  peak: 2.2267120e-09

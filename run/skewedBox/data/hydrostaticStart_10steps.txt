@@ -1,13 +1,13 @@
 Scan hydrostaticStart_10steps
-0000  rotAngle: 0 gravityModel: geometric application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+0000  rotAngle: 0 interfaceForces.gravity.model: geometric application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
       first p_rgh residual 6.0560963029586e-15  max|U| t=0.01: 8.8344318e-13  t=0.1: 7.6948125e-10  peak: 1.7813828e-09
-0001  rotAngle: 0 gravityModel: geometric application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 5
+0001  rotAngle: 0 interfaceForces.gravity.model: geometric application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 5
       first p_rgh residual 6.0560963029586e-15  max|U| t=0.01: 8.8344318e-13  t=0.1: 7.7057967e-10  peak: 1.7813828e-09
-0002  rotAngle: 0 gravityModel: constantHeight application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
-      first p_rgh residual 6.0543758983449e-15  max|U| t=0.01: 7.9630759e-13  t=0.1: 1.0165285e-09  peak: 1.0272911e-09
-0003  rotAngle: 0 gravityModel: constantHeight application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 5
-      first p_rgh residual 6.0543758983449e-15  max|U| t=0.01: 7.9630759e-13  t=0.1: 1.0165285e-09  peak: 1.0272911e-09
-0004  rotAngle: 0 gravityModel: basic application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
-      first p_rgh residual 0.014450871545835  max|U| t=0.01: 1.9863031e+00  t=0.1: 7.8020733e+00  peak: 7.8020733e+00
-0005  rotAngle: 0 gravityModel: basic application: interFoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+0002  rotAngle: 0 interfaceForces.gravity.model: constantHeight application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+      first p_rgh residual 6.0543758983449e-15  max|U| t=0.01: 7.9630759e-13  t=0.1: 1.0145251e-09  peak: 1.0270843e-09
+0003  rotAngle: 0 interfaceForces.gravity.model: constantHeight application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 5
+      first p_rgh residual 6.0543758983449e-15  max|U| t=0.01: 7.9630759e-13  t=0.1: 1.0148140e-09  peak: 1.0275779e-09
+0004  rotAngle: 0 interfaceForces.gravity.model: basic application: interIsoGoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
+      first p_rgh residual 0.014450871545835  max|U| t=0.01: 1.9863031e+00  t=0.1: 7.8034484e+00  peak: 7.8034484e+00
+0005  rotAngle: 0 interfaceForces.gravity.model: basic application: interFoam writeInterval: 10 PIMPLE.nNonOrthogonalCorrectors: 0
       first p_rgh residual 0.014450871545835  max|U| t=0.01: 1.9863031e+00  t=0.1: 5.6445325e+00  peak: 5.6445325e+00

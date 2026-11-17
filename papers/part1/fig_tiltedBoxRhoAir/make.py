@@ -51,7 +51,7 @@ with open(os.path.join(args.scanDir, "parmScannerParms")) as f:
     for line in f:
         case = line.split(":")[0].split("/")[-1]
         parms = dict(re.findall(r"([\w.]+):\s*(\S+)", line.split(":", 1)[1]))
-        key = (parms["application"], parms["gravityModel"])
+        key = (parms["application"], parms["interfaceForces.gravity.model"])
         fmm = os.path.join(args.scanDir, case, "postProcessing", "fieldMinMax1", "0", "fieldMinMax.dat")
         if not os.path.isfile(fmm):
             print(f"{case}: no fieldMinMax output")

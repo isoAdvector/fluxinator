@@ -1,49 +1,49 @@
 Scan airDensity_1000steps
-0000  gravityModel: basic application: interFoam air.rho: 1e-4 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0000  interfaceForces.gravity.model: basic application: interFoam air.rho: 1e-4 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 2.8176424e+03  t=1.84: 8.5524546e+12  peak: 8.5524546e+12
-0001  gravityModel: basic application: interFoam air.rho: 1e-3 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0001  interfaceForces.gravity.model: basic application: interFoam air.rho: 1e-3 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 2.8181125e+02  t=10: 1.5260689e+01  peak: 2.8181125e+02
-0002  gravityModel: basic application: interFoam air.rho: 1e-2 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0002  interfaceForces.gravity.model: basic application: interFoam air.rho: 1e-2 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 2.8228054e+01  t=10: 5.3517415e+00  peak: 2.8228054e+01
-0003  gravityModel: basic application: interFoam air.rho: 1e-1 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0003  interfaceForces.gravity.model: basic application: interFoam air.rho: 1e-1 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 2.8689876e+00  t=10: 3.5419436e+00  peak: 3.5419436e+00
-0004  gravityModel: basic application: interFoam air.rho: 1e0 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0004  interfaceForces.gravity.model: basic application: interFoam air.rho: 1e0 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 3.2974762e-01  t=10: 1.6440892e+00  peak: 1.6440892e+00
-0005  gravityModel: basic application: interFoam air.rho: 1e1 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0005  interfaceForces.gravity.model: basic application: interFoam air.rho: 1e1 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 7.3417182e-02  t=10: 8.9776418e-01  peak: 9.1947129e-01
-0006  gravityModel: basic application: interFoam air.rho: 1e2 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0006  interfaceForces.gravity.model: basic application: interFoam air.rho: 1e2 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 1.2174174e-02  t=10: 3.4460002e-01  peak: 4.5769175e-01
-0007  gravityModel: basic application: interFoam air.rho: 1e3 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0007  interfaceForces.gravity.model: basic application: interFoam air.rho: 1e3 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 0.63215900427809  max|U| t=0.01: 1.5943671e-16  t=10: 3.2843729e-15  peak: 3.3309145e-15
-0008  gravityModel: basic application: interIsoGoam air.rho: 1e-4 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 2.8176424e+03  t=10: 9.8424300e+03  peak: 3.8204578e+04
-0009  gravityModel: basic application: interIsoGoam air.rho: 1e-3 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 2.8181125e+02  t=10: 1.8058107e+03  peak: 6.2389638e+03
-0010  gravityModel: basic application: interIsoGoam air.rho: 1e-2 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 2.8228054e+01  t=10: 1.5821834e+02  peak: 1.3618477e+03
-0011  gravityModel: basic application: interIsoGoam air.rho: 1e-1 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 2.8689876e+00  t=10: 8.9609784e+00  peak: 2.8154872e+01
-0012  gravityModel: basic application: interIsoGoam air.rho: 1e0 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 3.2974762e-01  t=10: 4.4371733e+00  peak: 4.6109962e+00
-0013  gravityModel: basic application: interIsoGoam air.rho: 1e1 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 7.3417182e-02  t=10: 1.7636344e+00  peak: 1.7636344e+00
-0014  gravityModel: basic application: interIsoGoam air.rho: 1e2 deltaT: 0.01 endTime: 10 writeInterval: 1000
-      first p_rgh residual 1  max|U| t=0.01: 1.2174174e-02  t=10: 5.9121773e-01  peak: 6.0231537e-01
-0015  gravityModel: basic application: interIsoGoam air.rho: 1e3 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0008  interfaceForces.gravity.model: basic application: interIsoGoam air.rho: 1e-4 deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 2.8176424e+03  t=10: 5.6093213e+03  peak: 5.1633500e+04
+0009  interfaceForces.gravity.model: basic application: interIsoGoam air.rho: 1e-3 deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 2.8181125e+02  t=10: 1.1972514e+03  peak: 5.8205562e+03
+0010  interfaceForces.gravity.model: basic application: interIsoGoam air.rho: 1e-2 deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 2.8228054e+01  t=10: 2.2717209e+02  peak: 1.5522638e+03
+0011  interfaceForces.gravity.model: basic application: interIsoGoam air.rho: 1e-1 deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 2.8689876e+00  t=10: 9.0169339e+00  peak: 3.8272319e+01
+0012  interfaceForces.gravity.model: basic application: interIsoGoam air.rho: 1e0 deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 3.2974762e-01  t=10: 4.4334270e+00  peak: 4.5678128e+00
+0013  interfaceForces.gravity.model: basic application: interIsoGoam air.rho: 1e1 deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 7.3417182e-02  t=10: 1.7636345e+00  peak: 1.7636345e+00
+0014  interfaceForces.gravity.model: basic application: interIsoGoam air.rho: 1e2 deltaT: 0.01 endTime: 10 writeInterval: 1000
+      first p_rgh residual 1  max|U| t=0.01: 1.2174174e-02  t=10: 5.9121801e-01  peak: 6.0231537e-01
+0015  interfaceForces.gravity.model: basic application: interIsoGoam air.rho: 1e3 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 0.63215900427809  max|U| t=0.01: 1.5943671e-16  t=10: 4.4415914e-16  peak: 9.5368200e-16
-0016  gravityModel: geometric application: interIsoGoam air.rho: 1e-4 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0016  interfaceForces.gravity.model: geometric application: interIsoGoam air.rho: 1e-4 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 2.4529106e-06  t=10: 7.3991272e-05  peak: 7.4559035e-05
-0017  gravityModel: geometric application: interIsoGoam air.rho: 1e-3 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0017  interfaceForces.gravity.model: geometric application: interIsoGoam air.rho: 1e-3 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 2.7459217e-07  t=10: 1.6277556e-06  peak: 3.2551842e-06
-0018  gravityModel: geometric application: interIsoGoam air.rho: 1e-2 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0018  interfaceForces.gravity.model: geometric application: interIsoGoam air.rho: 1e-2 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 2.7468453e-08  t=10: 1.4421719e-07  peak: 3.4048425e-07
-0019  gravityModel: geometric application: interIsoGoam air.rho: 1e-1 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0019  interfaceForces.gravity.model: geometric application: interIsoGoam air.rho: 1e-1 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 2.7011184e-09  t=10: 8.9209344e-09  peak: 2.9819542e-08
-0020  gravityModel: geometric application: interIsoGoam air.rho: 1e0 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0020  interfaceForces.gravity.model: geometric application: interIsoGoam air.rho: 1e0 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 4.0210318e-10  t=10: 6.3564430e-10  peak: 2.3618066e-09
-0021  gravityModel: geometric application: interIsoGoam air.rho: 1e1 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0021  interfaceForces.gravity.model: geometric application: interIsoGoam air.rho: 1e1 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 1.0810385e-10  t=10: 1.3086188e-10  peak: 3.7932777e-10
-0022  gravityModel: geometric application: interIsoGoam air.rho: 1e2 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0022  interfaceForces.gravity.model: geometric application: interIsoGoam air.rho: 1e2 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 1  max|U| t=0.01: 5.2482595e-11  t=10: 3.2865706e-12  peak: 5.2482595e-11
-0023  gravityModel: geometric application: interIsoGoam air.rho: 1e3 deltaT: 0.01 endTime: 10 writeInterval: 1000
+0023  interfaceForces.gravity.model: geometric application: interIsoGoam air.rho: 1e3 deltaT: 0.01 endTime: 10 writeInterval: 1000
       first p_rgh residual 0.63130244482405  max|U| t=0.01: 8.6905415e-17  t=10: 2.7652470e-16  peak: 8.6634470e-16
