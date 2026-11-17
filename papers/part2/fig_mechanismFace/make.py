@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     STY = {"interfaceUpwind": dict(color=COL["explicit + interfaceUpwind"], marker="o", ms=3.5, label="interfaceUpwind"),
            "limitedLinearV": dict(color=COL["explicit"], marker="s", ms=3.5, label="limitedLinearV"),
-           "linear": dict(color=COL["implicit"], marker="^", ms=3.5, label="linear")}
+           "linear": dict(color="#EE3377", marker="^", ms=3.5, label="linear")}  # magenta, Paul Tol vibrant
     fig = plt.figure(figsize=(FULL, 2.7))
     gs = fig.add_gridspec(2, 2, width_ratios=[1.6, 1], height_ratios=[1, 2.6], hspace=0.08, wspace=0.28)
     ax0 = fig.add_subplot(gs[0, 0]); ax = fig.add_subplot(gs[1, 0], sharex=ax0); bx = fig.add_subplot(gs[:, 1])

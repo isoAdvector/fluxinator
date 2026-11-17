@@ -18,7 +18,7 @@ import re
 import sys
 import numpy as np
 from matplotlib.patches import FancyArrowPatch
-from common import plt, STYLE, COL, DATA, FULL, RUN, WAVE, TGV, save, write
+from common import plt, STYLE, COL, DATA, FULL, RUN, WAVE, TGV, save, write, SOLVER_COLOUR, SOLVER_MARKER
 
 sys.path.insert(0, WAVE)
 import foamio  # noqa: E402
@@ -127,8 +127,9 @@ def wave(b, rows):
     cm = np.mean(np.cosh(2*k*Z))
     R = [r for r in json.load(open(os.path.join(DATA, "browser_runs.json")))
          if r["scan"] == "maxCo" and r["ulow"] is not None and r["par"] <= 0.2 and r["solver"] != "centred"]
-    sty = {"interFoam": ("#2a78d6", "s"), "interIsoFoam": ("#eb6834", "^"), "interIsoGoam": ("#1baf7a", "o"),
-           "final": ("#1f1f1e", "D")}
+    sty = {s: (SOLVER_COLOUR[n], SOLVER_MARKER[n]) for s, n in
+           [("interFoam", "interFoam"), ("interIsoFoam", "interIsoFoam"), ("interIsoGoam", "interIsoGoam"),
+            ("final", "fluxinator")]}
     P, M = [], []
     for s, (col, mk) in sty.items():
         th = 0 if s == "final" else 1

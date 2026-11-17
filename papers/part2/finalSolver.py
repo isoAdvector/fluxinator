@@ -26,7 +26,7 @@ import os
 import sys
 from multiprocessing import Pool
 import numpy as np
-from common import G, K, WAVE, plt, save, write, outpath, FULL, DATA, STYLE
+from common import G, K, WAVE, plt, save, write, outpath, FULL, DATA, STYLE, SOLVER_COLOUR, SOLVER_MARKER
 
 FLUME = WAVE
 sys.path.insert(0, WAVE)
@@ -40,9 +40,8 @@ SCANS = {"fixedDt": ("solvers_fixedDt_ddtCorrOff", "finalSolver_fixedDt", "solve
          "maxCo": ("solvers_maxCo_ddtCorrOff", "finalSolver_maxCo", "solvers_maxCo.csv", "maxCo")}
 FINAL = "explicit + LW + interfaceUpwind"
 SOLVERS = ["interFoam", "interIsoFoam", "interIsoGoam", FINAL]
-COLOUR = {"interFoam": "#2a78d6", "interIsoFoam": "#eb6834", "interIsoGoam": "#1baf7a",
-          FINAL: "#1f1f1e"}
-MARKER = {"interFoam": "s", "interIsoFoam": "^", "interIsoGoam": "o", FINAL: "D"}
+COLOUR = {s: SOLVER_COLOUR["fluxinator" if s == FINAL else s] for s in SOLVERS}
+MARKER = {s: SOLVER_MARKER["fluxinator" if s == FINAL else s] for s in SOLVERS}
 MESHES = [190, 380, 760]
 
 

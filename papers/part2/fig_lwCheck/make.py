@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 import os
 import numpy as np
 import finalSolver as F
-from common import G, WAVE, CONV, write, plt, save, FULL
+from common import G, WAVE, CONV, write, plt, save, FULL, COL
 
 FIN = WAVE
 CASES = {"0014": (190, 0.5), "0017": (190, 0.2), "0020": (190, 0.1),
@@ -64,15 +64,19 @@ print("\n".join(L))
 
 # figure: wave height error and crest-column speed error against the maximum Courant number
 fig, axes = plt.subplots(1, 2, figsize=(FULL, 2.7))
-COLM = {190: "#2a78d6", 380: "#eb6834"}
+# colour by variant (with LW: fluxinator, black), line style and marker by mesh
+COLV = {"LW + interfaceUpwind": COL["explicit + LW + interfaceUpwind"],
+        "interfaceUpwind": COL["explicit + interfaceUpwind"]}
+STYM = {190: ("--", "s"), 380: ("-", "o")}
 for ax, k, lab in [(axes[0], "dH", "(a) Wave height error after 15 periods [%]"),
                    (axes[1], "emax", "(b) Crest-column speed error [%]")]:
     for nx in (190, 380):
-        for v, ls, mk in [("LW + interfaceUpwind", "-", "o"), ("interfaceUpwind", "--", "s")]:
+        ls, mk = STYM[nx]
+        for v in ("LW + interfaceUpwind", "interfaceUpwind"):
             pts = sorted((co, RES[(n, co, vv)][k]) for (n, co, vv) in RES if n == nx and vv == v)
             if pts:
                 x, y = zip(*pts)
-                ax.plot(x, y, ls, marker=mk, color=COLM[nx], ms=4, mfc="white" if ls == "--" else COLM[nx],
+                ax.plot(x, y, ls, marker=mk, color=COLV[v], ms=4, mfc="white" if nx == 190 else COLV[v],
                         label=f"{nx}x{nx*4//19}, {'with' if v.startswith('LW') else 'without'} LW")
     ax.set_xscale("log"); ax.set_xticks([0.1, 0.2, 0.5]); ax.set_xticklabels(["0.1", "0.2", "0.5"])
     ax.minorticks_off(); ax.set_xlabel("max Courant number"); ax.set_title(lab, fontsize=9, loc="left")

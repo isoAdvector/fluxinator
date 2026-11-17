@@ -9,6 +9,7 @@ Writes tab_wave/wave.txt and fig_waveCrest/waveCrest.pdf (run by their make.py).
 import os
 import re
 import numpy as np
+from matplotlib import patheffects
 from common import CONV, K, plt, save, write, FULL, COL
 from hmatch import analyse_input, celerity
 
@@ -87,9 +88,11 @@ if __name__ == "__main__":
             st = {"implicit": dict(marker="s", ls="-"), "explicit": dict(marker="^", ls="-"),
                   "explicit + interfaceUpwind": dict(marker="o", ls="none", mfc="none", mew=1.1)}[v]
             ax.plot(un, z, color=COL[v], ms=4, lw=1.0, label=v, zorder=3, **st)
-        # exact profile as a thin black line on top
+        # exact profile on top, thick with long dashes and a white outline (as in fig_problem), so
+        # that it stays visible in poor print where it crosses the profiles
         ze = np.linspace(M.z1, M.z1 + W0.eta(0.0)[0], 200)
-        ax.plot(W0.uv(0.0, ze - M.z1)[0], ze, "-", color="k", lw=0.9,
+        ax.plot(W0.uv(0.0, ze - M.z1)[0], ze, color=COL["exact"], lw=1.6, ls=(0, (5, 2)),
+                path_effects=[patheffects.withStroke(linewidth=3.0, foreground="white")],
                 label="exact (input wave)", zorder=5)
         ax.set_title(title.replace("dt", r"$\Delta t$").replace("x", r"$\times$", 1) + ", t = 10 s", fontsize=9)
         ax.set_xlabel("horizontal velocity under the crest [m/s]"); ax.set_ylim(-0.42, 0.11)

@@ -55,10 +55,11 @@ for ax, (c, lab) in zip(axes, [("implicit_rhoNew", "(a) implicit convection"), (
     e = np.linalg.norm(K.foamio.read_vol(f"{case}/1/U") - (U0 + acc), axis=1).reshape(n, n)
     A = K.foamio.read_vol(f"{case}/1/alpha.water").reshape(n, n)
     ax.grid(False)
-    # each panel its own linear colour scale, with the colour bar inside the panel (as in Part I)
+    # each panel its own linear colour scale, with the colour bar inside the panel, and the colour
+    # map of the velocity fields of Part I (ParaView's Cool to Warm, matplotlib's coolwarm)
     im = ax.pcolormesh(np.linspace(0, 1, n + 1), np.linspace(0, 1, n + 1), e,
-                       vmin=0, vmax=e.max(), cmap="magma_r", shading="flat")
-    ax.contour(x, x, A, [0.5], colors="#2a78d6", linewidths=0.8)
+                       vmin=0, vmax=e.max(), cmap="coolwarm", shading="flat")
+    ax.contour(x, x, A, [0.5], colors="#1f1f1e", linewidths=0.8)
     cax = ax.inset_axes([0.08, 0.15, 0.52, 0.045], zorder=4)
     cax.grid(False)
     cb = fig.colorbar(im, cax=cax, orientation="horizontal", ticks=[0, e.max()])

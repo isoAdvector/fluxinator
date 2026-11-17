@@ -58,10 +58,16 @@ STYLE = {"font.family": "serif", "font.serif": ["Latin Modern Roman", "DejaVu Se
 plt.rcParams.update(STYLE)
 # Figure widths in inches: FULL is the text width of the paper (455 pt), so figures are not scaled
 FULL, HALF = 6.3, 3.1
-# Variant colours, fixed per variant across all figures
-COL = {"implicit": "#eb6834", "Crank-Nicolson": "#a35c9e", "explicit": "#2a78d6",
-       "explicit + LW": "#86b6ef", "explicit + interfaceUpwind": "#1baf7a",
-       "explicit + LW + interfaceUpwind": "#0f6e4a", "exact": "#1f1f1e"}
+# Solver colours and markers as in Part I (Paul Tol's high-contrast scheme), fluxinator black
+SOLVER_COLOUR = {"interFoam": "#DDAA33", "interIsoFoam": "#BB5566", "interIsoGoam": "#004488",
+                 "fluxinator": "#1f1f1e"}
+SOLVER_MARKER = {"interFoam": "o", "interIsoFoam": "s", "interIsoGoam": "D", "fluxinator": "^"}
+# Variant colours, fixed per variant across all figures: implicit convection is interIsoGoam of
+# Part I and explicit + LW + interfaceUpwind is fluxinator, so they take those solver colours; the
+# others are from Paul Tol's vibrant scheme
+COL = {"implicit": SOLVER_COLOUR["interIsoGoam"], "Crank-Nicolson": "#009988", "explicit": "#EE7733",
+       "explicit + LW": "#EE3377", "explicit + interfaceUpwind": "#33BBEE",
+       "explicit + LW + interfaceUpwind": SOLVER_COLOUR["fluxinator"], "exact": "#1f1f1e"}
 
 
 LOWER = ("inter", "fluxinator", "limitedLinear", "linear", "nOuter", "ddtCorr", "a1", "a2", "a3", "b2", "b3", "c2", "c3", "c5", "e3")

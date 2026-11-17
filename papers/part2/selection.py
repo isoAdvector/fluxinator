@@ -15,15 +15,14 @@ import csv
 import json
 import os
 import numpy as np
-from common import plt, STYLE, DATA, FULL, WAVE, save, write
+from common import plt, STYLE, DATA, FULL, WAVE, save, write, SOLVER_COLOUR
 
 plt.rcdefaults()
 plt.rcParams.update(STYLE)
 SOLVERS = ["interFoam", "interIsoFoam", "interIsoGoam", "explicit + LW + interfaceUpwind"]
 LABEL = {"interFoam": "interFoam", "interIsoFoam": "interIsoFoam", "interIsoGoam": "interIsoGoam",
          "explicit + LW + interfaceUpwind": "fluxinator"}
-COLOUR = {"interFoam": "#2a78d6", "interIsoFoam": "#eb6834", "interIsoGoam": "#1baf7a",
-          "explicit + LW + interfaceUpwind": "#1f1f1e"}
+COLOUR = {s: SOLVER_COLOUR[LABEL[s]] for s in SOLVERS}
 LW = {s: (1.8 if s.startswith("explicit") else 1.1) for s in SOLVERS}
 LS = {s: ((0, (4, 2)) if s.startswith("centred") else "-") for s in SOLVERS}
 MESH, CO = 380, 0.1
