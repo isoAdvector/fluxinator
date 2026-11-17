@@ -23,14 +23,10 @@ License
 //#include "dummyTransform.H"
 #include "emptyPolyPatch.H"
 #include "markInterfaceRegion.H"
-#include "processorPolyPatch.H"
+#include "coupledPolyPatch.H"
 #include "syncTools.H"
-#include "wedgePolyPatch.H"
-#include "indexedOctree.H"
-#include "treeDataPoint.H"
-//#include "alphaContactAngleFvPatchScalarField.H"
 
-// * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
+// * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * * //
 
 Foam::autoPtr<Foam::indirectPrimitivePatch>
 Foam::markInterfaceRegion::coupledFacesPatch() const
@@ -73,264 +69,113 @@ Foam::markInterfaceRegion::coupledFacesPatch() const
     );
 }
 
-void Foam::markInterfaceRegion::markCellsNearSurf
-(
-    const boolList& interfaceCells,
-    const label neiRingLevel,
-    boolList& nextToInterface,
-    volScalarField& cellDistLevel
-)
-{
-    // performance might be improved by increasing the saving last iteations
-    // cells in a Map and loop over the map
-    if (mesh_.topoChanging())
-    {
-        // Introduced resizing to cope with changing meshes
-        if (nextToInterface.size() != mesh_.nCells())
-        {
-            nextToInterface.resize(mesh_.nCells());
-        }
-        coupledBoundaryPoints_ = coupledFacesPatch()().meshPoints();
-    }
-
-    const labelListList& pCells = mesh_.cellPoints();
-    const labelListList& cPoints = mesh_.pointCells();
-
-    boolList alreadyMarkedPoint(mesh_.nPoints(),false);
-    nextToInterface = false;
-
-    // do coupled face first
-    Map<bool> syncMap;
-
-    for(int level = 0;level<=neiRingLevel;level++)
-    {
-        // parallel
-        if (level > 0)
-        {
-            forAll(coupledBoundaryPoints_,i)
-            {
-                const label& pi = coupledBoundaryPoints_[i];
-                forAll(mesh_.pointCells()[pi], j)
-                {
-                    const label celli = cPoints[pi][j];
-                    if (cellDistLevel[celli] == level-1)
-                    {
-                        syncMap.insert(pi, true);
-                        break;
-                    }
-                }
-            }
-
-            syncTools::syncPointMap(mesh_, syncMap, orEqOp<bool>());
-
-            // mark parallel points first
-            forAllConstIter(Map<bool>, syncMap, iter)
-            {
-                const label pi = iter.key();
-
-                if (!alreadyMarkedPoint[pi])
-                {
-                    // loop over all cells attached to the point
-                    forAll(cPoints[pi],j)
-                    {
-                        const label& pCelli = cPoints[pi][j];
-                        if (cellDistLevel[pCelli] == -1)
-                        {
-                            cellDistLevel[pCelli] = level;
-                            nextToInterface[pCelli] = true;
-                        }
-
-                    }
-                }
-
-                alreadyMarkedPoint[pi] = true;
-            }
-        }
-
-
-        forAll(cellDistLevel, celli)
-        {
-            if (level == 0)
-            {
-                if (interfaceCells[celli])
-                {
-                    cellDistLevel[celli] = 0;
-                    nextToInterface[celli] = true;
-                }
-                else
-                {
-                    cellDistLevel[celli] = -1;
-                }
-            }
-            else
-            {
-                if (cellDistLevel[celli] == level-1)
-                {
-                    forAll(pCells[celli], i)
-                    {
-                        const label& pI = pCells[celli][i];
-                        // interfacePoint_[pI] = true;
-                        if (!alreadyMarkedPoint[pI])
-                        {
-                            // loop over all cells attached to the point
-                            forAll(cPoints[pI],j)
-                            {
-                                const label& pCelli = cPoints[pI][j];
-                                if (cellDistLevel[pCelli] == -1)
-                                {
-                                    cellDistLevel[pCelli] = level;
-                                    nextToInterface[pCelli] = true;
-                                }
-
-                            }
-                        }
-                        alreadyMarkedPoint[pI] = true;
-
-                    }
-                }
-            }
-        }
-
-    }
-
-}
-
-
-void Foam::markInterfaceRegion::markCellsNearSurf
-(
-    const boolList& interfaceCells,
-    const label neiRingLevel,
-    boolList& nextToInterface
-)
-{
-    // performance might be improved by increasing the saving last iteations
-    // cells in a Map and loop over the map
-    if (mesh_.topoChanging())
-    {
-        // Introduced resizing to cope with changing meshes
-        if (nextToInterface.size() != mesh_.nCells())
-        {
-            nextToInterface.resize(mesh_.nCells());
-        }
-        coupledBoundaryPoints_ = coupledFacesPatch()().meshPoints();
-    }
-    labelField cellDistLevel(mesh_.nCells());
-
-    const labelListList& pCells = mesh_.cellPoints();
-    const labelListList& cPoints = mesh_.pointCells();
-
-    boolList alreadyMarkedPoint(mesh_.nPoints(),false);
-    nextToInterface = false;
-
-    // do coupled face first
-    Map<bool> syncMap;
-
-    for(int level = 0;level<=neiRingLevel;level++)
-    {
-        // parallel
-        if (level > 0)
-        {
-            forAll(coupledBoundaryPoints_,i)
-            {
-                const label& pi = coupledBoundaryPoints_[i];
-                forAll(mesh_.pointCells()[pi], j)
-                {
-                    const label celli = cPoints[pi][j];
-                    if (cellDistLevel[celli] == level-1)
-                    {
-                        syncMap.insert(pi, true);
-                        break;
-                    }
-                }
-            }
-
-            syncTools::syncPointMap(mesh_, syncMap, orEqOp<bool>());
-
-            // mark parallel points first
-            forAllConstIter(Map<bool>, syncMap, iter)
-            {
-                const label pi = iter.key();
-
-                if (!alreadyMarkedPoint[pi])
-                {
-                    // loop over all cells attached to the point
-                    forAll(cPoints[pi],j)
-                    {
-                        const label& pCelli = cPoints[pi][j];
-                        if (cellDistLevel[pCelli] == -1)
-                        {
-                            cellDistLevel[pCelli] = level;
-                            nextToInterface[pCelli] = true;
-                        }
-
-                    }
-                }
-
-                alreadyMarkedPoint[pi] = true;
-            }
-        }
-
-
-        forAll(cellDistLevel, celli)
-        {
-            if (level == 0)
-            {
-                if (interfaceCells[celli])
-                {
-                    cellDistLevel[celli] = 0;
-                    nextToInterface[celli] = true;
-                }
-                else
-                {
-                    cellDistLevel[celli] = -1;
-                }
-            }
-            else
-            {
-                if (cellDistLevel[celli] == level-1)
-                {
-                    forAll(pCells[celli], i)
-                    {
-                        const label& pI = pCells[celli][i];
-                        // interfacePoint_[pI] = true;
-                        if (!alreadyMarkedPoint[pI])
-                        {
-                             // loop over all cells attached to the point
-                            forAll(cPoints[pI],j)
-                            {
-                                const label& pCelli = cPoints[pI][j];
-                                if (cellDistLevel[pCelli] == -1)
-                                {
-                                    cellDistLevel[pCelli] = level;
-                                    nextToInterface[pCelli] = true;
-                                }
-
-                            }
-                        }
-                        alreadyMarkedPoint[pI] = true;
-
-                    }
-                }
-            }
-        }
-
-    }
-
-}
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::markInterfaceRegion::markInterfaceRegion
-(
-    const fvMesh& mesh
-)
+Foam::markInterfaceRegion::markInterfaceRegion(const fvMesh& mesh)
 :
     mesh_(mesh),
     coupledBoundaryPoints_(coupledFacesPatch()().meshPoints())
-{
-}
+{}
+
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
+
+void Foam::markInterfaceRegion::markCellsNearSurf
+(
+    const boolList& interfaceCells,
+    const label nLayers,
+    boolList& nearInterface,
+    labelList& cellLayer
+)
+{
+    const labelListList& cellPoints = mesh_.cellPoints();
+    const labelListList& pointCells = mesh_.pointCells();
+
+    nearInterface.resize(mesh_.nCells());
+    nearInterface = false;
+    cellLayer.resize(mesh_.nCells());
+
+    boolList alreadyMarkedPoint(mesh_.nPoints(), false);
+
+    // Points on coupled boundaries next to the previous layer, synchronised
+    // across processors
+    Map<bool> syncMap;
+
+    for (label layer = 0; layer <= nLayers; ++layer)
+    {
+        if (layer > 0)
+        {
+            // Mark the cells at the synchronised points first
+            for (const label pointi : coupledBoundaryPoints_)
+            {
+                for (const label celli : pointCells[pointi])
+                {
+                    if (cellLayer[celli] == layer - 1)
+                    {
+                        syncMap.insert(pointi, true);
+                        break;
+                    }
+                }
+            }
+
+            syncTools::syncPointMap(mesh_, syncMap, orEqOp<bool>());
+
+            forAllConstIters(syncMap, iter)
+            {
+                const label pointi = iter.key();
+
+                if (!alreadyMarkedPoint[pointi])
+                {
+                    for (const label celli : pointCells[pointi])
+                    {
+                        if (cellLayer[celli] == -1)
+                        {
+                            cellLayer[celli] = layer;
+                            nearInterface[celli] = true;
+                        }
+                    }
+                }
+
+                alreadyMarkedPoint[pointi] = true;
+            }
+        }
+
+        forAll(cellLayer, celli)
+        {
+            if (layer == 0)
+            {
+                if (interfaceCells[celli])
+                {
+                    cellLayer[celli] = 0;
+                    nearInterface[celli] = true;
+                }
+                else
+                {
+                    cellLayer[celli] = -1;
+                }
+            }
+            else if (cellLayer[celli] == layer - 1)
+            {
+                for (const label pointi : cellPoints[celli])
+                {
+                    if (!alreadyMarkedPoint[pointi])
+                    {
+                        for (const label pCelli : pointCells[pointi])
+                        {
+                            if (cellLayer[pCelli] == -1)
+                            {
+                                cellLayer[pCelli] = layer;
+                                nearInterface[pCelli] = true;
+                            }
+                        }
+                    }
+                    alreadyMarkedPoint[pointi] = true;
+                }
+            }
+        }
+    }
+}
 
 
 // ************************************************************************* //

@@ -27,8 +27,10 @@ Class
     Foam::gravityModel
 
 Description
-    Abstract base class for models of gravity force in interfacial solvers like
-    interFoam and interIsoFoam.
+    Abstract base class for models of the gravity force in interfacial
+    solvers like interFoam and interIsoFoam: the face force -gh_f snGrad(rho)
+    that remains when the hydrostatic part is absorbed in p_rgh, with
+    gh = g & x - ghRef.
 
 SourceFiles
     gravityModel.C
@@ -41,13 +43,11 @@ SourceFiles
 
 #include "typeInfo.H"
 #include "runTimeSelectionTables.H"
-#include "volFields.H"
-#include "dimensionedScalar.H"
 #include "autoPtr.H"
-
-#include "IOdictionary.H"
 #include "volFields.H"
 #include "surfaceFields.H"
+#include "uniformDimensionedFields.H"
+#include "ghRef.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -62,17 +62,19 @@ class gravityModel
 {
 protected:
 
+    // Protected Data
+
         const fvMesh& mesh_;
 
-private:
+        //- Reference height of the solvers (constant/hRef, default 0)
+        const uniformDimensionedScalarField hRef_;
 
-    // Private Member Functions
 
-        //- Disallow copy construct
-        gravityModel(const gravityModel&);
+    // Protected Member Functions
 
-        //- Disallow default bitwise assignment
-        void operator=(const gravityModel&);
+        //- The reference geopotential of the solvers (ghRef.H)
+        dimensionedScalar ghRef() const;
+
 
 public:
 
@@ -94,6 +96,7 @@ public:
             (dict, mesh)
         );
 
+
     // Selectors
 
         //- Return a reference to the selected gravity model: the model of
@@ -105,6 +108,7 @@ public:
             const word& defaultModel = "basic"
         );
 
+
     // Constructors
 
         //- Construct from components
@@ -115,27 +119,20 @@ public:
             const fvMesh& mesh
         );
 
+        //- No copy construct
+        gravityModel(const gravityModel&) = delete;
+
+        //- No copy assignment
+        void operator=(const gravityModel&) = delete;
+
+
     //- Destructor
-    virtual ~gravityModel()
-    {}
+    virtual ~gravityModel() = default;
+
 
     // Member Functions
-/*
-        const surfaceScalarField& accf() const
-        {
-            return accf_;
-        }
 
-        const volScalarField& acc() const
-        {
-            return acc_;
-        }
-
-        void correct()
-        {
-            calculateAcc();
-        }
-*/
+        //- The face gravity force
         virtual tmp<surfaceScalarField> force() = 0;
 };
 

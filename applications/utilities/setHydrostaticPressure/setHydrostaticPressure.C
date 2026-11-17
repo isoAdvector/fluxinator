@@ -36,8 +36,9 @@ Description
 
     where rho = alpha1*rho1 + (1 - alpha1)*rho2 is formed from the current
     volume fraction field, x_I is a point on the interface, and ghRef is the
-    reference geopotential formed from constant/hRef exactly as in the gravity
-    models of interIsoGoam. The interface pressure is taken as zero.
+    reference geopotential formed from constant/hRef as in fluxinator and its
+    gravity models (ghRef.H). The interface pressure is taken as
+    zero.
 
     For a flat interface this field is an exact discrete hydrostatic state for
     any face-normal gradient scheme that is linear in the cell values, provided
@@ -48,13 +49,14 @@ Description
     corrections of the corrected schemes, which are lagged by one solution.
 
     Gravity is read from constant/g unless -gravity is given. The interface
-    position is taken from -height, from -origin, or from the entry origin in
-    system/setAlphaFieldDict (the dictionary of setAlphaField, as used by the
-    constantHeight gravity model). Only a flat interface perpendicular to
-    gravity is a state of rest; the utility warns if it is given another one.
+    position is taken from one of -height, -origin and -dict, by default from
+    the entry origin in system/setAlphaFieldDict (the dictionary of
+    setAlphaField). Only a flat interface perpendicular to gravity is a state
+    of rest; the utility warns if it is given another one.
 
-    The densities are read from the first two phases in
-    constant/transportProperties unless -rho1 and -rho2 are given.
+    The volume fraction field and the densities are those of the first two
+    phases in constant/transportProperties, unless -alpha, -rho1 or -rho2 is
+    given.
 
     The internal field is set from the volume fraction, and the boundary values
     follow it wherever the boundary condition does not fix the value, so that
@@ -77,6 +79,7 @@ Usage
 #include "fvCFD.H"
 #include "timeSelector.H"
 #include "uniformDimensionedFields.H"
+#include "ghRef.H"
 
 using namespace Foam;
 
@@ -119,7 +122,8 @@ int main(int argc, char *argv[])
     (
         "alpha",
         "name",
-        "Name of the volume fraction field. Default: alpha.water"
+        "Name of the volume fraction field."
+        " Default: alpha.<first phase of constant/transportProperties>"
     );
     argList::addOption
     (
@@ -139,7 +143,60 @@ int main(int argc, char *argv[])
 
     #include "createMesh.H"
 
-    const word alphaName = args.getOrDefault<word>("alpha", "alpha.water");
+    // The phases (constant/transportProperties): the volume fraction field of
+    // the first phase and the densities, unless given as options
+    IOdictionary transportProperties
+    (
+        IOobject
+        (
+            "transportProperties",
+            runTime.constant(),
+            mesh,
+            IOobject::MUST_READ,
+            IOobject::NO_WRITE
+        )
+    );
+
+    const wordList phases(transportProperties.get<wordList>("phases"));
+
+    if (phases.size() < 2)
+    {
+        FatalErrorInFunction
+            << "Expected two phases in " << transportProperties.name()
+            << ", found " << phases
+            << exit(FatalError);
+    }
+
+    const word alphaName =
+        args.getOrDefault<word>
+        (
+            "alpha",
+            IOobject::groupName("alpha", phases[0])
+        );
+
+    const scalar rho1 =
+        args.getOrDefault<scalar>
+        (
+            "rho1",
+            dimensionedScalar
+            (
+                "rho",
+                dimDensity,
+                transportProperties.subDict(phases[0])
+            ).value()
+        );
+
+    const scalar rho2 =
+        args.getOrDefault<scalar>
+        (
+            "rho2",
+            dimensionedScalar
+            (
+                "rho",
+                dimDensity,
+                transportProperties.subDict(phases[1])
+            ).value()
+        );
     const word pName = args.getOrDefault<word>("p", "p_rgh");
 
     // Gravitational acceleration
@@ -185,14 +242,16 @@ int main(int argc, char *argv[])
         dimensionedScalar(dimLength, Zero)
     );
 
-    const scalar ghRef =
-        (gValue & (cmptMag(gValue)/mag(gValue)))*hRef.value();
+    const scalar ghRef = Foam::ghRef(gValue, hRef.value());
 
     // Point on the interface
-    if (args.found("height") && args.found("origin"))
+    if
+    (
+        args.found("height") + args.found("origin") + args.found("dict") > 1
+    )
     {
         FatalErrorInFunction
-            << "Specify either -height or -origin, not both"
+            << "Specify at most one of -height, -origin and -dict"
             << exit(FatalError);
     }
 
@@ -247,57 +306,6 @@ int main(int argc, char *argv[])
                     << " field written here is not an equilibrium." << endl;
             }
         }
-    }
-
-    // Densities
-    scalar rho1 = 0;
-    scalar rho2 = 0;
-
-    if (args.found("rho1") && args.found("rho2"))
-    {
-        rho1 = args.get<scalar>("rho1");
-        rho2 = args.get<scalar>("rho2");
-    }
-    else
-    {
-        IOdictionary transportProperties
-        (
-            IOobject
-            (
-                "transportProperties",
-                runTime.constant(),
-                mesh,
-                IOobject::MUST_READ,
-                IOobject::NO_WRITE
-            )
-        );
-
-        const wordList phases(transportProperties.get<wordList>("phases"));
-
-        if (phases.size() < 2)
-        {
-            FatalErrorInFunction
-                << "Expected two phases in " << transportProperties.name()
-                << ", found " << phases
-                << exit(FatalError);
-        }
-
-        rho1 = dimensionedScalar
-        (
-            "rho",
-            dimDensity,
-            transportProperties.subDict(phases[0])
-        ).value();
-
-        rho2 = dimensionedScalar
-        (
-            "rho",
-            dimDensity,
-            transportProperties.subDict(phases[1])
-        ).value();
-
-        rho1 = args.getOrDefault<scalar>("rho1", rho1);
-        rho2 = args.getOrDefault<scalar>("rho2", rho2);
     }
 
     const scalar ghInterface = (gValue & interfacePoint) - ghRef;

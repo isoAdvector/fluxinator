@@ -31,11 +31,10 @@ License
 #include "addToRunTimeSelectionTable.H"
 #include "fvc.H"
 #include "reconstructionSchemes.H"
-#include "cutFaceAdvect.H"
-#include "processorPolyPatch.H"
+#include "markInterfaceRegion.H"
 #include "syncTools.H"
 
-using namespace Foam::isoAdvection;
+using namespace Foam::fluxinatorVoF;
 
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
@@ -47,6 +46,323 @@ namespace Foam
 }
 
 
+// * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * * //
+
+void Foam::geometricGravityModel::addInterfaceFaces
+(
+    boolList& interfaceCell,
+    volVectorField& interfaceCentre,
+    volVectorField& interfaceNormal
+) const
+{
+    // A face separates two non-interface cells with densities on either side
+    // of the mean. Both cells get the face as their interface segment
+    // (area-weighted over several such faces), with the normal towards the
+    // lighter side.
+    const fvMesh& mesh = mesh_;
+    const volScalarField& rho = mesh.lookupObject<volScalarField>("rho");
+    const scalar rhoMid =
+        0.5*(gMin(rho.primitiveField()) + gMax(rho.primitiveField()));
+
+    const labelUList& own = mesh.owner();
+    const labelUList& nei = mesh.neighbour();
+
+    boolList nbrInterfaceCell;
+    syncTools::swapBoundaryCellList(mesh, interfaceCell, nbrInterfaceCell);
+    scalarField nbrRho;
+    syncTools::swapBoundaryCellList(mesh, rho.primitiveField(), nbrRho);
+
+    vectorField sumCf(mesh.nCells(), Zero);
+    vectorField sumSf(mesh.nCells(), Zero);
+    scalarField sumA(mesh.nCells(), Zero);
+
+    // Adds face facei to cell celli, with Sf towards the lighter side
+    const auto addFace = [&](label celli, label facei, scalar sign)
+    {
+        const scalar A = mag(mesh.faceAreas()[facei]);
+        sumCf[celli] += A*mesh.faceCentres()[facei];
+        sumSf[celli] += sign*mesh.faceAreas()[facei];
+        sumA[celli] += A;
+    };
+
+    forAll(nei, facei)
+    {
+        const label P = own[facei];
+        const label N = nei[facei];
+        if
+        (
+            !interfaceCell[P] && !interfaceCell[N]
+         && (rho[P] - rhoMid)*(rho[N] - rhoMid) < 0
+        )
+        {
+            const scalar sign = rho[P] > rho[N] ? 1 : -1;
+            addFace(P, facei, sign);
+            addFace(N, facei, sign);
+        }
+    }
+
+    for (const polyPatch& pp : mesh.boundaryMesh())
+    {
+        if (!pp.coupled())
+        {
+            continue;
+        }
+
+        forAll(pp, i)
+        {
+            const label facei = pp.start() + i;
+            const label bFacei = facei - mesh.nInternalFaces();
+            const label P = own[facei];
+            if
+            (
+                !interfaceCell[P] && !nbrInterfaceCell[bFacei]
+             && (rho[P] - rhoMid)*(nbrRho[bFacei] - rhoMid) < 0
+            )
+            {
+                addFace(P, facei, rho[P] > nbrRho[bFacei] ? 1 : -1);
+            }
+        }
+    }
+
+    forAll(sumA, celli)
+    {
+        if (sumA[celli] > 0 && mag(sumSf[celli]) > 0)
+        {
+            interfaceCentre[celli] = sumCf[celli]/sumA[celli];
+            interfaceNormal[celli] = sumSf[celli];
+            interfaceCell[celli] = true;
+        }
+    }
+}
+
+
+void Foam::geometricGravityModel::setInterfaceCellsAndFirstLayer
+(
+    const volVectorField& interfaceCentre,
+    const volVectorField& interfaceNormal,
+    const labelList& cellLayer,
+    const boolList& nearInterface,
+    zoneDistribute& exchangeFields,
+    const scalar ghRef,
+    volScalarField& assigned
+)
+{
+    const fvMesh& mesh = mesh_;
+    const vector g = meshObjects::gravity::New(mesh.time()).value();
+
+    const Map<vector> mapCentres =
+        exchangeFields.getDatafromOtherProc(nearInterface, interfaceCentre);
+    const Map<vector> mapNormals =
+        exchangeFields.getDatafromOtherProc(nearInterface, interfaceNormal);
+
+    const labelListList& stencil = exchangeFields.getStencil();
+
+    forAll(cellLayer, celli)
+    {
+        if (mag(interfaceNormal[celli]) != 0)
+        {
+            // Interface cell: the height of its interface centroid
+            gh_[celli] = (interfaceCentre[celli] & g) - ghRef;
+            assigned[celli] = 1;
+        }
+        else if (cellLayer[celli] == 1)
+        {
+            // Layer 1: the mean of the neighbouring interface centroids,
+            // weighted by (d & n)^2, with d the unit vector from the cell
+            // centre to the centroid and n the interface normal
+            vector centroidSum = Zero;
+            scalar weightSum = 0;
+            const point& C = mesh.C()[celli];
+
+            for (const label gblIdx : stencil[celli])
+            {
+                vector n =
+                    -exchangeFields.getValue(interfaceNormal, mapNormals, gblIdx);
+
+                if (mag(n) != 0)
+                {
+                    n /= mag(n);
+                    const vector c =
+                        exchangeFields.getValue
+                        (
+                            interfaceCentre,
+                            mapCentres,
+                            gblIdx
+                        );
+                    vector d = c - C;
+                    scalar weight = 0;
+
+                    if (mag(d) != 0)
+                    {
+                        d /= mag(d);
+                        weight = sqr(mag(d & n));
+                    }
+                    else
+                    {
+                        // The centroid is at the cell centre
+                        weight = 1;
+                    }
+                    centroidSum += c*weight;
+                    weightSum += weight;
+                }
+            }
+
+            if (weightSum != 0)
+            {
+                centroidSum /= weightSum;
+                gh_[celli] = (centroidSum & g) - ghRef;
+                assigned[celli] = 1;
+            }
+        }
+    }
+}
+
+
+void Foam::geometricGravityModel::setFurtherLayers
+(
+    const labelList& cellLayer,
+    const boolList& nearInterface,
+    zoneDistribute& exchangeFields,
+    volScalarField& assigned
+)
+{
+    const labelListList& stencil = exchangeFields.getStencil();
+
+    // One pass per layer, with its own parallel exchange; the new values only
+    // take effect after the pass
+    for (label layer = 2; layer <= nLayers_; ++layer)
+    {
+        const Map<scalar> mapGh =
+            exchangeFields.getDatafromOtherProc(nearInterface, gh_);
+        const Map<scalar> mapAssigned =
+            exchangeFields.getDatafromOtherProc(nearInterface, assigned);
+
+        scalarField ghNew(gh_.primitiveField());
+        boolList newlyAssigned(cellLayer.size(), false);
+
+        forAll(cellLayer, celli)
+        {
+            if (cellLayer[celli] != layer)
+            {
+                continue;
+            }
+
+            scalar ghSum = 0;
+            label nAssigned = 0;
+
+            for (const label gblIdx : stencil[celli])
+            {
+                if
+                (
+                    exchangeFields.getValue(assigned, mapAssigned, gblIdx)
+                  > 0.5
+                )
+                {
+                    ghSum += exchangeFields.getValue(gh_, mapGh, gblIdx);
+                    ++nAssigned;
+                }
+            }
+
+            if (nAssigned > 0)
+            {
+                ghNew[celli] = ghSum/nAssigned;
+                newlyAssigned[celli] = true;
+            }
+        }
+
+        gh_.primitiveFieldRef() = ghNew;
+
+        forAll(newlyAssigned, celli)
+        {
+            if (newlyAssigned[celli])
+            {
+                assigned[celli] = 1;
+            }
+        }
+    }
+}
+
+
+// Sets g*h from the reconstructed interface: (1) take the interface centroids
+// and normals of the reconstruction, adding faces that are themselves the
+// interface, (2) mark the interface cells and the layers around them, (3) set
+// g*h in the interface cells and the first layer, (4) then in each further
+// layer, (5) interpolate to the faces. Elsewhere g*h is that of the cell
+// centre and the face centre.
+void Foam::geometricGravityModel::calculateGhf()
+{
+    const fvMesh& mesh = mesh_;
+    const uniformDimensionedVectorField& g =
+        meshObjects::gravity::New(mesh.time());
+    const dimensionedScalar ghRef(this->ghRef());
+
+    gh_ = (g & mesh.C()) - ghRef;
+    ghf_ = ((g & mesh.Cf()) - ghRef);
+
+    const auto* surfPtr =
+        mesh.findObject<reconstructionSchemes>("reconstructionScheme");
+    if (!surfPtr)
+    {
+        FatalErrorInFunction
+            << "The geometric gravity model needs the interface reconstruction"
+            << " of a geometric VoF solver (isoAdvector)" << exit(FatalError);
+    }
+
+    // (1)
+    volVectorField interfaceCentre("ghInterfaceCentre", surfPtr->centre());
+    volVectorField interfaceNormal("ghInterfaceNormal", surfPtr->normal());
+    boolList interfaceCell(surfPtr->interfaceCell());
+    addInterfaceFaces(interfaceCell, interfaceCentre, interfaceNormal);
+
+    // (2)
+    boolList nearInterface;
+    labelList cellLayer;
+    markInterfaceRegion(mesh).markCellsNearSurf
+    (
+        interfaceCell,
+        nLayers_,
+        nearInterface,
+        cellLayer
+    );
+
+    zoneDistribute& exchangeFields = zoneDistribute::New(mesh);
+    exchangeFields.setUpCommforZone(nearInterface, true);
+
+    // 1 where gh_ holds an interface-based value
+    volScalarField assigned
+    (
+        IOobject
+        (
+            "ghAssigned",
+            mesh.time().timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            IOobject::NO_REGISTER
+        ),
+        mesh,
+        dimensionedScalar(dimless, Zero)
+    );
+
+    // (3), (4)
+    setInterfaceCellsAndFirstLayer
+    (
+        interfaceCentre,
+        interfaceNormal,
+        cellLayer,
+        nearInterface,
+        exchangeFields,
+        ghRef.value(),
+        assigned
+    );
+    setFurtherLayers(cellLayer, nearInterface, exchangeFields, assigned);
+
+    // (5)
+    gh_.correctBoundaryConditions();
+    ghf_ = fvc::interpolate(gh_);
+}
+
+
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 Foam::geometricGravityModel::geometricGravityModel
@@ -55,22 +371,20 @@ Foam::geometricGravityModel::geometricGravityModel
     const fvMesh& mesh
 )
 :
-    gravityModel
-    (
-        typeName,
-        dict,
-        mesh
-    ),
+    gravityModel(typeName, dict, mesh),
     ghf_
     (
         IOobject
         (
             "ghf",
             mesh.time().timeName(),
-            mesh
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            IOobject::NO_REGISTER
         ),
         mesh,
-        dimensionedScalar("ghf_", dimAcceleration*dimLength, 0.0)
+        dimensionedScalar(dimAcceleration*dimLength, Zero)
     ),
     gh_
     (
@@ -78,22 +392,13 @@ Foam::geometricGravityModel::geometricGravityModel
         (
             "gh",
             mesh.time().timeName(),
-            mesh
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            IOobject::NO_REGISTER
         ),
         mesh,
-        dimensionedScalar("gh_", dimAcceleration*dimLength, 0.0)
-    ),
-    hRef_
-    (
-        IOobject
-        (
-            "hRef",
-            mesh.time().constant(),
-            mesh,
-            IOobject::READ_IF_PRESENT,
-            IOobject::NO_WRITE
-        ),
-        dimensionedScalar(dimLength, Zero)
+        dimensionedScalar(dimAcceleration*dimLength, Zero)
     ),
     nLayers_(dict.getOrDefault<label>("nLayers", 2))
 {
@@ -104,324 +409,13 @@ Foam::geometricGravityModel::geometricGravityModel
             << exit(FatalIOError);
     }
 
-    // Option to specify number of initial reconstruct calls.
-    // Observed to be beneficial for plicRDF with high accuracy requirements.
-    const label nInitReconstructs =
-        dict.getOrDefault<label>("nInitReconstructs", 3);
-
-    Info<< "geometric gravity model: nLayers = " << nLayers_
-        << ", nInitReconstructs = " << nInitReconstructs << endl;
-
-    reconstructionSchemes& surf =
-        mesh_.lookupObjectRef<reconstructionSchemes>("reconstructionScheme");
-
-    for (label i = 0; i < nInitReconstructs; ++i)
-    {
-        surf.reconstruct(true);
-    }
+    Info<< "geometric gravity model: nLayers " << nLayers_ << endl;
 
     calculateGhf();
 }
 
 
-// * * * * * * * * * * * * * * Public Access Member Functions  * * * * * * * //
-
-// Sets g*h from the reconstructed interface: (1) collect the interface centres
-// and normals, adding faces that are themselves the interface, (2) mark the
-// interface cells and the layers around them, (3) assign g*h in the interface
-// cells and the first layer, (4) then in each further layer, (5) interpolate to
-// the faces.
-void Foam::geometricGravityModel::calculateGhf()
-{
-    const fvMesh& mesh = gh_.mesh();
-    zoneDistribute& exchangeFields = zoneDistribute::New(mesh);
-
-    const uniformDimensionedVectorField& g =
-        meshObjects::gravity::New(mesh_.time());
-
-    dimensionedScalar ghRef
-    (
-        mag(g.value()) > SMALL
-      ? g & (cmptMag(g.value())/mag(g.value()))*hRef_
-      : dimensionedScalar("ghRef", g.dimensions()*dimLength, 0)
-    );
-
-    gh_ = (g & mesh.C()) - ghRef;
-    ghf_ = ((g & mesh.Cf()) - ghRef);
-
-    if(mesh.foundObject<reconstructionSchemes>("reconstructionScheme"))
-    {
-        reconstructionSchemes& surf =
-            mesh.lookupObjectRef<reconstructionSchemes>("reconstructionScheme");
-
-        // Interface centres, normals and cells of the reconstruction, extended
-        // below by faces that are themselves the interface
-        volVectorField faceCentre("ghInterfaceCentre", surf.centre());
-        volVectorField faceNormal("ghInterfaceNormal", surf.normal());
-        boolList interfaceCell(surf.interfaceCell());
-
-        // An interface lying exactly on mesh faces (e.g. a still water level
-        // initialised on a face) leaves volume fractions of exactly 0 and 1
-        // and no interface cells. Such a face separates two non-interface
-        // cells with densities on either side of the mean. Both cells get the
-        // face as their interface (area-weighted over several such faces).
-        if (mesh.foundObject<volScalarField>("rho"))
-        {
-            const volScalarField& rho = mesh.lookupObject<volScalarField>("rho");
-            const scalar rhoMid = 0.5*(gMin(rho.primitiveField()) + gMax(rho.primitiveField()));
-
-            const labelUList& own = mesh.owner();
-            const labelUList& nei = mesh.neighbour();
-            const label nBFaces = mesh.nBoundaryFaces();
-
-            boolList nbrInterfaceCell;
-            syncTools::swapBoundaryCellList(mesh, interfaceCell, nbrInterfaceCell);
-            scalarField nbrRho;
-            syncTools::swapBoundaryCellList(mesh, rho.primitiveField(), nbrRho);
-
-            vectorField sumCf(mesh.nCells(), Zero);
-            vectorField sumSf(mesh.nCells(), Zero);
-            scalarField sumA(mesh.nCells(), Zero);
-
-            // Adds face facei to cell celli; Sf is oriented towards the lighter side
-            const auto addFace = [&](label celli, label facei, scalar sign)
-            {
-                const scalar A = mesh.magSf()[facei];
-                sumCf[celli] += A*mesh.Cf()[facei];
-                sumSf[celli] += sign*mesh.Sf()[facei];
-                sumA[celli] += A;
-            };
-
-            forAll(nei, facei)
-            {
-                const label P = own[facei], N = nei[facei];
-                if
-                (
-                    !interfaceCell[P] && !interfaceCell[N]
-                 && (rho[P] - rhoMid)*(rho[N] - rhoMid) < 0
-                )
-                {
-                    const scalar sign = rho[P] > rho[N] ? 1 : -1;
-                    addFace(P, facei, sign);
-                    addFace(N, facei, sign);
-                }
-            }
-
-            for (const polyPatch& pp : mesh.boundaryMesh())
-            {
-                if (!pp.coupled()) continue;
-
-                forAll(pp, i)
-                {
-                    const label facei = pp.start() + i;
-                    const label bFacei = facei - mesh.nInternalFaces();
-                    const label P = own[facei];
-                    if
-                    (
-                        bFacei < nBFaces
-                     && !interfaceCell[P] && !nbrInterfaceCell[bFacei]
-                     && (rho[P] - rhoMid)*(nbrRho[bFacei] - rhoMid) < 0
-                    )
-                    {
-                        const scalar sign = rho[P] > nbrRho[bFacei] ? 1 : -1;
-                        const scalar A = mag(pp.faceAreas()[i]);
-                        sumCf[P] += A*pp.faceCentres()[i];
-                        sumSf[P] += sign*pp.faceAreas()[i];
-                        sumA[P] += A;
-                    }
-                }
-            }
-
-            forAll(sumA, celli)
-            {
-                if (sumA[celli] > 0 && mag(sumSf[celli]) > 0)
-                {
-                    faceCentre[celli] = sumCf[celli]/sumA[celli];
-                    faceNormal[celli] = sumSf[celli];
-                    interfaceCell[celli] = true;
-                }
-            }
-        }
-
-        // Interface cells and nLayers layers of point neighbours, with the
-        // layer number of each cell (0 for interface cells, -1 outside)
-        boolList nearInterface(mesh.nCells(), false);
-        volScalarField cellDistLevel
-        (
-            IOobject
-            (
-                "cellDistLevel",
-                mesh.time().timeName(),
-                mesh,
-                IOobject::NO_READ,
-                IOobject::NO_WRITE,
-                IOobject::NO_REGISTER
-            ),
-            mesh,
-            dimensionedScalar(dimless, -1)
-        );
-
-        markInterfaceRegion markIF(mesh);
-        markIF.markCellsNearSurf
-        (
-            interfaceCell,
-            nLayers_,
-            nearInterface,
-            cellDistLevel
-        );
-
-        const auto inLayer = [&cellDistLevel](label celli, label layer)
-        {
-            return mag(cellDistLevel[celli] - layer) < 0.5;
-        };
-
-        exchangeFields.setUpCommforZone(nearInterface,true);
-
-        Map<vector > mapCentres =
-            exchangeFields.getDatafromOtherProc(nearInterface,faceCentre);
-        Map<vector > mapNormal =
-            exchangeFields.getDatafromOtherProc(nearInterface,faceNormal);
-
-        const labelListList& stencil = exchangeFields.getStencil();
-
-        // 1 where gh_ holds an interface-based value
-        volScalarField assigned
-        (
-            IOobject
-            (
-                "ghAssigned",
-                mesh.time().timeName(),
-                mesh,
-                IOobject::NO_READ,
-                IOobject::NO_WRITE,
-                IOobject::NO_REGISTER
-            ),
-            mesh,
-            dimensionedScalar(dimless, Zero)
-        );
-
-        // Interface cells and the first layer
-        forAll(interfaceCell,celli)
-        {
-            if(mag(faceNormal[celli]) != 0)
-            {
-                gh_[celli] = (faceCentre[celli] & g.value()) - ghRef.value();
-                assigned[celli] = 1;
-            }
-            else if(inLayer(celli, 1))
-            {
-                // Weighted mean of the neighbouring interface centres
-                vector averageSurfP = vector::zero;
-                scalar avgWeight = 0;
-                const point p = mesh.C()[celli];
-
-                forAll(stencil[celli],i)
-                {
-                    const label& gblIdx = stencil[celli][i];
-                    vector n = -exchangeFields.getValue
-                        (
-                            faceNormal,
-                            mapNormal,
-                            gblIdx
-                        );
-
-                    if (mag(n) != 0)
-                    {
-                        n /= mag(n);
-                        vector c = exchangeFields.getValue
-                        (
-                            faceCentre,
-                            mapCentres,
-                            gblIdx
-                        );
-                        vector distanceToIntSeg = (c - p);
-                        scalar weight = 0;
-
-                        if (mag(distanceToIntSeg) != 0)
-                        {
-                            distanceToIntSeg /= mag(distanceToIntSeg);
-                            weight = sqr(mag(distanceToIntSeg & n));
-                        }
-                        else // exactly on the center
-                        {
-                            weight = 1;
-                        }
-                        averageSurfP += c * weight;
-                        avgWeight += weight;
-                    }
-                }
-
-                if (avgWeight != 0)
-                {
-                    averageSurfP /= avgWeight;
-                    gh_[celli] = (averageSurfP & g.value()) - ghRef.value();
-                    assigned[celli] = 1;
-                }
-            }
-        }
-
-        // Further layers: average of the values already assigned to the
-        // neighbours. Each layer is one pass with its own parallel exchange,
-        // and the new values only take effect after the pass.
-        for (label layer = 2; layer <= nLayers_; ++layer)
-        {
-            Map<scalar> mapGh =
-                exchangeFields.getDatafromOtherProc(nearInterface, gh_);
-            Map<scalar> mapAssigned =
-                exchangeFields.getDatafromOtherProc(nearInterface, assigned);
-
-            scalarField ghNew(gh_.primitiveField());
-            boolList newlyAssigned(mesh.nCells(), false);
-
-            forAll(nearInterface, celli)
-            {
-                if (!inLayer(celli, layer))
-                {
-                    continue;
-                }
-
-                scalar ghSum = 0;
-                label nAssigned = 0;
-
-                forAll(stencil[celli], i)
-                {
-                    const label& gblIdx = stencil[celli][i];
-
-                    if
-                    (
-                        exchangeFields.getValue(assigned, mapAssigned, gblIdx)
-                      > 0.5
-                    )
-                    {
-                        ghSum += exchangeFields.getValue(gh_, mapGh, gblIdx);
-                        ++nAssigned;
-                    }
-                }
-
-                if (nAssigned > 0)
-                {
-                    ghNew[celli] = ghSum/nAssigned;
-                    newlyAssigned[celli] = true;
-                }
-            }
-
-            gh_.primitiveFieldRef() = ghNew;
-
-            forAll(newlyAssigned, celli)
-            {
-                if (newlyAssigned[celli])
-                {
-                    assigned[celli] = 1;
-                }
-            }
-        }
-
-        gh_.correctBoundaryConditions();
-        ghf_ = fvc::interpolate(gh_);
-
-    }
-}
-
+// * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 Foam::tmp<Foam::surfaceScalarField> Foam::geometricGravityModel::force()
 {
@@ -441,5 +435,6 @@ Foam::tmp<Foam::volScalarField> Foam::geometricGravityModel::gh() const
 {
     return gh_;
 }
+
 
 // ************************************************************************* //

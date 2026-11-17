@@ -52,75 +52,18 @@ Foam::constantHeightGravityModel::constantHeightGravityModel
     const fvMesh& mesh
 )
 :
-    gravityModel
+    gravityModel(typeName, dict, mesh),
+    interfacePoint_(dict.get<point>("interfacePoint")),
+    ghInterface_
     (
-        typeName,
-        dict,
-        mesh
-    ),
-    ghf_
-    (
-        IOobject
-        (
-            "ghf",
-            mesh.time().timeName(),
-            mesh
-        ),
-        mesh,
-        dimensionedScalar("ghf_", dimAcceleration*dimLength, 0.0)
+        "ghInterface",
+        dimAcceleration*dimLength,
+        (meshObjects::gravity::New(mesh.time()).value() & interfacePoint_)
+      - ghRef().value()
     )
 {
-
-    // Reading surface point
-    IOdictionary setAlphaFieldDict
-    (
-        IOobject
-        (
-            "setAlphaFieldDict",
-            mesh_.time().system(),
-            mesh_.time(),
-            IOobject::READ_IF_PRESENT,
-            IOobject::NO_WRITE
-        )
-    );
-    point interfacePoint = (setAlphaFieldDict.get<vector>("origin"));
-
-    // Reading gravity
-    const uniformDimensionedVectorField& g =
-        meshObjects::gravity::New(mesh_.time());
-
-    // Reading reference height or setting to zero
-    uniformDimensionedScalarField hRef
-    (
-        IOobject
-        (
-            "hRef",
-            mesh.time().constant(),
-            mesh,
-            IOobject::READ_IF_PRESENT,
-            IOobject::NO_WRITE
-        ),
-        dimensionedScalar(dimLength, Zero)
-    );
-
-    dimensionedScalar ghRef
-    (
-        mag(g.value()) > SMALL
-        ? g & (cmptMag(g.value())/mag(g.value()))*hRef
-        : dimensionedScalar("ghRef", g.dimensions()*dimLength, 0)
-    );
-
-    // Setting internal field
-    ghf_.primitiveFieldRef() = (g.value() & interfacePoint) - ghRef.value();
-
-    // Setting boundary field
-    const polyBoundaryMesh& patches = mesh_.boundaryMesh();
-
-    forAll(patches, patchi)
-    {
-        ghf_.boundaryFieldRef()[patchi] =
-            (g.value() & interfacePoint) - ghRef.value();
-    }
+    Info<< "constantHeight gravity model: interfacePoint " << interfacePoint_
+        << endl;
 }
 
 
@@ -129,7 +72,7 @@ Foam::constantHeightGravityModel::constantHeightGravityModel
 Foam::tmp<Foam::surfaceScalarField> Foam::constantHeightGravityModel::force()
 {
     const volScalarField& rho = mesh_.lookupObject<volScalarField>("rho");
-    return -ghf_*fvc::snGrad(rho);
+    return -ghInterface_*fvc::snGrad(rho);
 }
 
 // ************************************************************************* //

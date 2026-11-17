@@ -27,7 +27,8 @@ Class
     Foam::basicGravityModel
 
 Description
-    Gravity force calculated as ghf*fvc::sngrad(rho).
+    Gravity force of interFoam and interIsoFoam: -gh_f snGrad(rho) with the
+    height of the face centre, gh_f = g & Cf - ghRef.
 
 SourceFiles
     basicGravityModel.C
@@ -57,22 +58,6 @@ class basicGravityModel
 :
 public gravityModel
 {
-
-        //- gravity vector
-        dimensionedVector g_;
-
-        //- Href Field
-        uniformDimensionedScalarField hRef_;
-
-    // Private Member Functions
-
-        //- Disallow copy construct
-        basicGravityModel(const basicGravityModel&);
-
-        //- Disallow default bitwise assignment
-        void operator=(const basicGravityModel&);
-
-
 public:
 
     //- Runtime type information
@@ -90,12 +75,13 @@ public:
 
 
     //- Destructor
-    virtual ~basicGravityModel()
-    {}
-
-    virtual tmp<surfaceScalarField> force();
+    virtual ~basicGravityModel() = default;
 
 
+    // Member Functions
+
+        //- The face gravity force
+        virtual tmp<surfaceScalarField> force();
 };
 
 

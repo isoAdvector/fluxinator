@@ -26,7 +26,7 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "gravityModel.H"
-#include "reconstructionSchemes.H"
+#include "gravityMeshObject.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
@@ -45,8 +45,28 @@ Foam::gravityModel::gravityModel
     const fvMesh& mesh
 )
 :
-    mesh_(mesh)
+    mesh_(mesh),
+    hRef_
+    (
+        IOobject
+        (
+            "hRef",
+            mesh.time().constant(),
+            mesh,
+            IOobject::READ_IF_PRESENT,
+            IOobject::NO_WRITE,
+            IOobject::NO_REGISTER
+        ),
+        dimensionedScalar(dimLength, Zero)
+    )
+{}
+
+
+// * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
+
+Foam::dimensionedScalar Foam::gravityModel::ghRef() const
 {
+    return Foam::ghRef(meshObjects::gravity::New(mesh_.time()), hRef_);
 }
 
 

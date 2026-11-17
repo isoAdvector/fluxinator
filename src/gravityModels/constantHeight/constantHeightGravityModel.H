@@ -27,8 +27,22 @@ Class
     Foam::constantHeightGravityModel
 
 Description
-    Gravity force calculated using constant interface height read from system/
-    setAlphaFieldDict. Only for model testing purposes.
+    Gravity force with the height of a fixed horizontal interface on every
+    face, gh_f = g & interfacePoint - ghRef: the exact gravity term for a flat
+    interface at rest, a reference for testing the other models.
+
+Usage
+    In system/fvSchemes:
+    \verbatim
+    interfaceForces
+    {
+        gravity
+        {
+            model           constantHeight;
+            interfacePoint  (0 0 0.5);  // a point on the interface
+        }
+    }
+    \endverbatim
 
 SourceFiles
     constantHeightGravityModel.C
@@ -58,17 +72,13 @@ class constantHeightGravityModel
 :
     public gravityModel
 {
+    // Private Data
 
-        // g*h at faces based on height read from setAlphaFieldDict
-        surfaceScalarField ghf_;
+        //- A point on the interface
+        const point interfacePoint_;
 
-        // Private Member Functions
-
-        //- Disallow copy construct
-        constantHeightGravityModel(const constantHeightGravityModel&);
-
-        //- Disallow default bitwise assignment
-        void operator=(const constantHeightGravityModel&);
+        //- g*h of the interface, used on every face
+        const dimensionedScalar ghInterface_;
 
 
 public:
@@ -88,12 +98,13 @@ public:
 
 
     //- Destructor
-    virtual ~constantHeightGravityModel()
-    {}
-
-    virtual tmp<surfaceScalarField> force();
+    virtual ~constantHeightGravityModel() = default;
 
 
+    // Member Functions
+
+        //- The face gravity force
+        virtual tmp<surfaceScalarField> force();
 };
 
 

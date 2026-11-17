@@ -38,14 +38,7 @@ SourceFiles
 #define markInterfaceRegion_H
 
 #include "fvMesh.H"
-#include "volFields.H"
-#include "surfaceFields.H"
-#include "globalIndex.H"
-#include "Map.H"
-#include "zoneDistribute.H"
-#include "dimensionedScalar.H"
-
-
+#include "indirectPrimitivePatch.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -58,51 +51,43 @@ namespace Foam
 
 class markInterfaceRegion
 {
+    // Private Data
+
+        //- The mesh
+        const fvMesh& mesh_;
+
+        //- Points on coupled boundaries, which are synchronised
+        labelList coupledBoundaryPoints_;
 
 
-private:
+    // Private Member Functions
 
-    // Private data
-
-    // reference to mesh
-    const fvMesh& mesh_;
-
-    //- stores the coupled boundary points which have to be synced
-    labelList coupledBoundaryPoints_;
-
-    //- Return patch of all coupled faces.
-    autoPtr<indirectPrimitivePatch> coupledFacesPatch() const;
-
-
-
+        //- Patch of all coupled faces
+        autoPtr<indirectPrimitivePatch> coupledFacesPatch() const;
 
 
 public:
 
     // Constructors
 
-    //- Construct from fvMesh and a scalarField
-    //  Length of scalarField should equal number of mesh points
-    markInterfaceRegion(const fvMesh& mesh);
+        //- Construct from mesh
+        explicit markInterfaceRegion(const fvMesh& mesh);
 
 
-    // Member functions
+    // Member Functions
 
-    void markCellsNearSurf
-    (
-        const boolList& interfaceCells,
-        const label neiRingLevel,
-        boolList& nextToInterface,
-        volScalarField& cellDistLevel
-    );
-
-    void markCellsNearSurf
-    (
-        const boolList& interfaceCells,
-        const label neiRingLevel,
-        boolList& nextToInterface
-    );
-
+        //- Mark the interface cells (layer 0) and nLayers layers of point
+        //  neighbours around them. Layer k consists of the cells that share a
+        //  point with layer k - 1 and are not in a lower layer. On return,
+        //  nearInterface is true in all of them, and cellLayer holds the layer
+        //  of each cell, -1 outside.
+        void markCellsNearSurf
+        (
+            const boolList& interfaceCells,
+            const label nLayers,
+            boolList& nearInterface,
+            labelList& cellLayer
+        );
 };
 
 

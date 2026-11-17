@@ -55,9 +55,8 @@ Usage
     {
         gravity
         {
-            model               geometric;
-            nLayers             2;  // Optional, default 2
-            nInitReconstructs   3;  // Optional, default 3: reconstructions at start-up
+            model           geometric;
+            nLayers         2;  // Optional, default 2
         }
     }
     \endverbatim
@@ -70,15 +69,9 @@ SourceFiles
 #ifndef geometricGravityModel_H
 #define geometricGravityModel_H
 
-#include "typeInfo.H"
-#include "volFields.H"
-#include "dimensionedScalar.H"
-#include "autoPtr.H"
-#include "uniformDimensionedFields.H"
 #include "gravityModel.H"
 
 #include "zoneDistribute.H"
-#include "markInterfaceRegion.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -93,6 +86,7 @@ class geometricGravityModel
 :
     public gravityModel
 {
+    // Private Data
 
         //- g*h at faces based on the reconstructed interface height
         surfaceScalarField ghf_;
@@ -100,24 +94,47 @@ class geometricGravityModel
         //- g*h at cell centres based on the reconstructed interface height
         volScalarField gh_;
 
-        //- Height reference field
-        uniformDimensionedScalarField hRef_;
-
         //- Number of layers of cells around the interface cells that get the
         //  interface-based g*h
-        label nLayers_;
+        const label nLayers_;
+
 
     // Private Member Functions
 
-        //- Disallow copy construct
-        geometricGravityModel(const geometricGravityModel&);
+        //- Add the faces that are themselves the interface (volume fractions
+        //  exactly 0 and 1 on either side) as interface segments of both
+        //  their cells
+        void addInterfaceFaces
+        (
+            boolList& interfaceCell,
+            volVectorField& interfaceCentre,
+            volVectorField& interfaceNormal
+        ) const;
 
-        //- Disallow default bitwise assignment
-        void operator=(const geometricGravityModel&);
+        //- Set gh_ in the interface cells and in layer 1, and mark them in
+        //  assigned
+        void setInterfaceCellsAndFirstLayer
+        (
+            const volVectorField& interfaceCentre,
+            const volVectorField& interfaceNormal,
+            const labelList& cellLayer,
+            const boolList& nearInterface,
+            zoneDistribute& exchangeFields,
+            const scalar ghRef,
+            volScalarField& assigned
+        );
 
-        protected:
+        //- Set gh_ in layers 2 to nLayers_: the average of the values already
+        //  assigned to the point neighbours, one layer at a time
+        void setFurtherLayers
+        (
+            const labelList& cellLayer,
+            const boolList& nearInterface,
+            zoneDistribute& exchangeFields,
+            volScalarField& assigned
+        );
 
-        //- Calculate the interface height
+        //- Calculate gh_ and ghf_ from the reconstructed interface
         void calculateGhf();
 
 
@@ -138,8 +155,8 @@ public:
 
 
     //- Destructor
-    virtual ~geometricGravityModel()
-    {}
+    virtual ~geometricGravityModel() = default;
+
 
     //- Calculate and return force on faces
     virtual tmp<surfaceScalarField> force();

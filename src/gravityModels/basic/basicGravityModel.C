@@ -47,29 +47,11 @@ Foam::basicGravityModel::basicGravityModel
     const fvMesh& mesh
 )
 :
-    gravityModel
-    (
-        typeName,
-        dict,
-        mesh
-    ),
-    hRef_
-    (
-        IOobject
-        (
-            "hRef",
-            mesh.time().constant(),
-            mesh,
-            IOobject::READ_IF_PRESENT,
-            IOobject::NO_WRITE
-        ),
-        dimensionedScalar(dimLength, Zero)
-    )
+    gravityModel(typeName, dict, mesh)
 {}
 
 
-// * * * * * * * * * * * * * * Public Access Member Functions  * * * * * * * //
-
+// * * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * //
 
 Foam::tmp<Foam::surfaceScalarField> Foam::basicGravityModel::force()
 {
@@ -78,14 +60,7 @@ Foam::tmp<Foam::surfaceScalarField> Foam::basicGravityModel::force()
     const uniformDimensionedVectorField& g =
         meshObjects::gravity::New(mesh_.time());
 
-    dimensionedScalar ghRef
-    (
-        mag(g.value()) > SMALL
-        ? g & (cmptMag(g.value())/mag(g.value()))*hRef_
-        : dimensionedScalar("ghRef", g.dimensions()*dimLength, 0)
-    );
-
-    return -((g & mesh_.Cf()) - ghRef)*fvc::snGrad(rho);
+    return -((g & mesh_.Cf()) - ghRef())*fvc::snGrad(rho);
 }
 
 // ************************************************************************* //
