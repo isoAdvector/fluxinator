@@ -57,7 +57,10 @@ Foam::laxWendroff<Type>::correction
     // Face gradient: tangential part interpolated, normal part compact
     GeometricField<GradType, fvsPatchField, surfaceMesh> gradf
     (
-        linearInterpolate(fv::gaussGrad<Type>::gradf(linearInterpolate(vf), "gradLW"))
+        linearInterpolate
+        (
+            fv::gaussGrad<Type>::gradf(linearInterpolate(vf), "gradLW")
+        )
     );
     gradf +=
         nf
@@ -66,19 +69,22 @@ Foam::laxWendroff<Type>::correction
           - (nf & gradf)
         );
 
-    // Time-weighted convection theta*div(U^{n+1}) + (1 - theta)*div(U^n):
-    // the anti-diffusion is (1 - 2 theta) times that of forward Euler, and
-    // the solver registers laxWendroffFactor = 1 - 2 theta (1 if absent)
-    const scalar lwFactor =
-        mesh.template foundObject<uniformDimensionedScalarField>
+    // Time-weighted convection w*div(U^{n+1}) + (1 - w)*div(U^n): the
+    // anti-diffusion is (1 - 2 w) times that of forward Euler. The solver
+    // registers w as convectionNewTimeWeight.
+    const auto* weightPtr =
+        mesh.template findObject<uniformDimensionedScalarField>
         (
-            "laxWendroffFactor"
-        )
-      ? mesh.template lookupObject<uniformDimensionedScalarField>
-        (
-            "laxWendroffFactor"
-        ).value()
-      : 1;
+            "convectionNewTimeWeight"
+        );
+    if (!weightPtr)
+    {
+        FatalErrorInFunction
+            << "laxWendroff needs the time weight of the convection term,"
+            << " convectionNewTimeWeight, which fluxinator and interIsoGoam"
+            << " register" << exit(FatalError);
+    }
+    const scalar lwFactor = 1 - 2*weightPtr->value();
 
     const dimensionedScalar dt(lwFactor*mesh.time().deltaT());
 

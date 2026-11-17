@@ -29,14 +29,15 @@ Class
 Description
     Face flux of momentum of the momentum convection term of the last time
     step, rhoPhi*U_f [kg m/s^2], with U_f the face velocity of the convection
-    scheme of div(rhoPhi,U), weighted in time as in interIsoGoam:
+    scheme of div(rhoPhi,U), weighted in time as in fluxinator and interIsoGoam:
 
-        U_f = theta*interpolate(rhoPhi, U^{n+1})
-            + (1 - theta)*interpolate(rhoPhi, U^n)
+        U_f = w*interpolate(rhoPhi, U^{n+1})
+            + (1 - w)*interpolate(rhoPhi, U^n)
 
-    theta is the PIMPLE entry convectionTheta, with the solver's defaults if
-    absent: 1/2 for nOuterCorrectors > 1, else 0 with explicitConvection yes
-    and 1 otherwise. A diagnostic: run it at write times (executeControl
+    w is the convectionNewTimeWeight that fluxinator and interIsoGoam
+    register. With other solvers it is the entry convectionNewTimeWeight of
+    this function object, default 1 (implicit convection, as in the solvers
+    of OpenFOAM). A diagnostic: run it at write times (executeControl
     writeTime), when U^n is still the old-time velocity of the step.
 
     Usage, in system/controlDict functions:
@@ -52,7 +53,7 @@ Description
             U               U;
             rhoPhi          rhoPhi;
             scheme          div(rhoPhi,U);
-            theta           <from PIMPLE>;
+            convectionNewTimeWeight 1;  // only for other solvers
             result          convectiveMomentumFlux;
         }
     \endverbatim
@@ -89,8 +90,11 @@ class convectiveMomentumFlux
         //- Name of the convection scheme in fvSchemes divSchemes
         word schemeName_;
 
-        //- Time weight (negative: from the PIMPLE dictionary)
-        scalar theta_;
+        //- Entry convectionNewTimeWeight, for solvers that do not register it
+        scalar weight_;
+
+        //- Whether the entry was given
+        bool weightGiven_;
 
         //- Name of the result field
         word resultName_;
@@ -99,7 +103,7 @@ class convectiveMomentumFlux
     // Private Member Functions
 
         //- Time weight of the convection term
-        scalar theta() const;
+        scalar weight() const;
 
 
 public:

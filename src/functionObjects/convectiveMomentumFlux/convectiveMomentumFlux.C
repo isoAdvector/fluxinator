@@ -48,38 +48,29 @@ namespace functionObjects
 
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
-Foam::scalar Foam::functionObjects::convectiveMomentumFlux::theta() const
+Foam::scalar Foam::functionObjects::convectiveMomentumFlux::weight() const
 {
-    if (theta_ >= 0)
-    {
-        return theta_;
-    }
-
-    // The defaults of interIsoGoam (timeWeights.H)
-    const dictionary& pimple = mesh_.solutionDict().subDict("PIMPLE");
-    const bool centredOuter =
-        pimple.getOrDefault<label>("nOuterCorrectors", 1) > 1;
-    const bool explicitConvection =
-        pimple.getOrDefault<bool>("explicitConvection", false);
-    const scalar theta =
-        pimple.getOrDefault<scalar>
+    const auto* registeredPtr =
+        mesh_.findObject<uniformDimensionedScalarField>
         (
-            "convectionTheta",
-            centredOuter ? 0.5 : (explicitConvection ? 0 : 1)
+            "convectionNewTimeWeight"
         );
 
-    // The solver registers 1 - 2 theta for the laxWendroff scheme
-    const auto* lwPtr =
-        mesh_.findObject<uniformDimensionedScalarField>("laxWendroffFactor");
-    if (lwPtr && mag(lwPtr->value() - (1 - 2*theta)) > SMALL)
+    if (!registeredPtr)
     {
-        FatalErrorInFunction
-            << "convectionTheta " << theta << " from the PIMPLE dictionary"
-            << " differs from the solver's (laxWendroffFactor "
-            << lwPtr->value() << "); set theta" << exit(FatalError);
+        return weight_;
     }
 
-    return theta;
+    if (weightGiven_ && weight_ != registeredPtr->value())
+    {
+        FatalErrorInFunction
+            << "convectionNewTimeWeight " << weight_ << " of " << name()
+            << " differs from the solver's " << registeredPtr->value()
+            << "; the entry is only for solvers that do not set the weight"
+            << exit(FatalError);
+    }
+
+    return registeredPtr->value();
 }
 
 
@@ -92,7 +83,9 @@ Foam::functionObjects::convectiveMomentumFlux::convectiveMomentumFlux
     const dictionary& dict
 )
 :
-    fvMeshFunctionObject(name, runTime, dict)
+    fvMeshFunctionObject(name, runTime, dict),
+    weight_(1),
+    weightGiven_(false)
 {
     read(dict);
 }
@@ -110,7 +103,8 @@ bool Foam::functionObjects::convectiveMomentumFlux::read
     UName_ = dict.getOrDefault<word>("U", "U");
     rhoPhiName_ = dict.getOrDefault<word>("rhoPhi", "rhoPhi");
     schemeName_ = dict.getOrDefault<word>("scheme", "div(rhoPhi,U)");
-    theta_ = dict.getOrDefault<scalar>("theta", -1);
+    weightGiven_ = dict.found("convectionNewTimeWeight");
+    weight_ = dict.getOrDefault<scalar>("convectionNewTimeWeight", 1);
     resultName_ = dict.getOrDefault<word>("result", typeName);
 
     return true;
@@ -131,9 +125,10 @@ bool Foam::functionObjects::convectiveMomentumFlux::execute()
         )
     );
 
-    const scalar t = theta();
+    const scalar t = weight();
 
-    Log << type() << " " << name() << ": theta " << t << endl;
+    Log << type() << " " << name() << ": convectionNewTimeWeight " << t
+        << endl;
 
     return store
     (

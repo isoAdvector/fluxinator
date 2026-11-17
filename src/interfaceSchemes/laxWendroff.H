@@ -45,19 +45,20 @@ Description
     by phi/|Sf|; grad(vf)_f: linear interpolate of the Gauss gradient with the
     normal component replaced by the compact face-normal gradient.
 
-    If the mesh holds a uniformDimensionedScalarField laxWendroffFactor
-    (interIsoGoam: 1 - 2 convectionTheta), the correction is scaled by
-    it: the theta scheme has (1 - 2 theta) times the anti-diffusion of
-    forward Euler, so the correction vanishes for the time-centred scheme.
+    The correction is scaled by 1 - 2 w, with w the convectionNewTimeWeight
+    that fluxinator and interIsoGoam register: the time-weighted convection
+    has (1 - 2 w) times the anti-diffusion of forward Euler, so the
+    correction vanishes for Crank-Nicolson convection (w 1/2). Without w
+    (another solver) the scheme stops with an error.
 
-    Usage, for explicit momentum convection in interIsoGoam
-    (PIMPLE explicitConvection yes, convected field U.oldTime()):
+    Usage, for explicit momentum convection in fluxinator, or in interIsoGoam
+    with PIMPLE convectionNewTimeWeight 0 (convected field U.oldTime()):
     \verbatim
         div(rhoPhi,U)   Gauss laxWendroff interfaceUpwind limitedLinearV 1;
     \endverbatim
-    The velocity and the volumetric flux may be named before the underlying
-    scheme, e.g. laxWendroff U phi limitedLinearV 1; the defaults are U and
-    phi.
+    The velocity field is U and the volumetric face flux phi, as in the
+    solvers of OpenFOAM. A corrected underlying scheme is allowed: its
+    correction is added to that of laxWendroff.
     fluxinator links the library; other solvers need libs (interfaceSchemes)
     in controlDict.
 
@@ -71,7 +72,6 @@ SourceFiles
 
 #include "surfaceInterpolationScheme.H"
 #include "volFields.H"
-#include "interfaceSchemeArgs.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -85,10 +85,10 @@ class laxWendroff
 {
     // Private Data
 
-        //- Name of the velocity field (its oldTime() is used; default U)
+        //- Name of the velocity field (its oldTime() is used)
         const word UName_;
 
-        //- Name of the volumetric face flux (default phi)
+        //- Name of the volumetric face flux
         const word phiName_;
 
         //- Face flux of the underlying scheme (upwind direction)
@@ -99,12 +99,6 @@ class laxWendroff
 
 
     // Private Member Functions
-
-        //- A corrected underlying scheme is allowed: its correction is
-        //  added to that of laxWendroff (the limiter fraction
-        //  is taken from its weights)
-        void checkUncorrected() const
-        {}
 
         //- The correction, given the weights w of the underlying scheme
         tmp<GeometricField<Type, fvsPatchField, surfaceMesh>> correction
@@ -126,11 +120,8 @@ public:
         laxWendroff(const fvMesh& mesh, Istream& is)
         :
             surfaceInterpolationScheme<Type>(mesh),
-            UName_(interfaceSchemeArgs::fieldName<volVectorField>(mesh, is, "U")),
-            phiName_
-            (
-                interfaceSchemeArgs::fieldName<surfaceScalarField>(mesh, is, "phi")
-            ),
+            UName_("U"),
+            phiName_("phi"),
             faceFlux_(mesh.lookupObject<surfaceScalarField>(phiName_)),
             tScheme_
             (
@@ -141,9 +132,7 @@ public:
                     is
                 )
             )
-        {
-            checkUncorrected();
-        }
+        {}
 
         //- Construct from mesh, faceFlux and Istream
         laxWendroff
@@ -154,16 +143,11 @@ public:
         )
         :
             surfaceInterpolationScheme<Type>(mesh),
-            UName_(interfaceSchemeArgs::fieldName<volVectorField>(mesh, is, "U")),
-            phiName_
-            (
-                interfaceSchemeArgs::fieldName<surfaceScalarField>(mesh, is, "phi")
-            ),
+            UName_("U"),
+            phiName_("phi"),
             faceFlux_(faceFlux),
             tScheme_(surfaceInterpolationScheme<Type>::New(mesh, faceFlux, is))
-        {
-            checkUncorrected();
-        }
+        {}
 
         //- No copy construct
         laxWendroff(const laxWendroff&) = delete;

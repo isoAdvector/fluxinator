@@ -45,12 +45,11 @@ Description
     \verbatim
         div(rhoPhi,U)   Gauss interfaceUpwind limitedLinearV 1;
     \endverbatim
-    The volume fraction field and tol may be given before the underlying
-    scheme, e.g. interfaceUpwind alpha.water 1e-6 limitedLinearV 1. By
-    default they are alpha1 (alpha.<first phase> of transportProperties) and
-    surfCellTol of its solver dictionary, so that the interface cells are
-    those of isoAdvector. The phase makes no difference: the test is the
-    same for alpha and 1 - alpha.
+    The volume fraction field is alpha1 (alpha.<first phase> of
+    transportProperties) and tol is surfCellTol of its solver dictionary
+    (default 1e-8), so that the interface cells are those of isoAdvector.
+    The phase makes no difference: the test is the same for alpha and
+    1 - alpha.
     fluxinator links the library; other solvers need libs (interfaceSchemes)
     in controlDict. Needs the face flux; the underlying scheme must not be a
     corrected scheme.
@@ -65,7 +64,7 @@ SourceFiles
 
 #include "surfaceInterpolationScheme.H"
 #include "volFields.H"
-#include "interfaceSchemeArgs.H"
+#include "IOdictionary.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -94,31 +93,50 @@ class interfaceUpwind
 
     // Private Member Functions
 
-        //- The volume fraction field named in the scheme, or alpha1
-        static word readAlphaName(const fvMesh& mesh, Istream& is)
+        //- alpha.<first phase> of constant/transportProperties, the alpha1
+        //  of a two-phase mixture
+        static word alpha1Name(const fvMesh& mesh)
         {
-            const word name
+            const word dictName("transportProperties");
+            const IOdictionary* dictPtr =
+                mesh.findObject<IOdictionary>(dictName);
+            if (dictPtr)
+            {
+                return IOobject::groupName
+                (
+                    "alpha",
+                    dictPtr->get<wordList>("phases")[0]
+                );
+            }
+
+            const IOdictionary dict
             (
-                interfaceSchemeArgs::fieldName<volScalarField>(mesh, is)
+                IOobject
+                (
+                    dictName,
+                    mesh.time().constant(),
+                    mesh,
+                    IOobject::MUST_READ,
+                    IOobject::NO_WRITE,
+                    IOobject::NO_REGISTER
+                )
             );
-            return name.empty() ? interfaceSchemeArgs::alpha1Name(mesh) : name;
+            return IOobject::groupName("alpha", dict.get<wordList>("phases")[0]);
         }
 
-        //- The tolerance given in the scheme, or surfCellTol of alphaName
-        static scalar readTol
-        (
-            const fvMesh& mesh,
-            const word& alphaName,
-            Istream& is
-        )
+        //- surfCellTol of the solver dictionary of alphaName, which defines
+        //  the interface cells of isoAdvector (default 1e-8, as there)
+        static scalar surfCellTol(const fvMesh& mesh, const word& alphaName)
         {
-            scalar tol = 0;
+            const scalar defaultTol = 1e-8;
+            const dictionary* dictPtr = mesh.solversDict().findDict(alphaName);
             return
-                interfaceSchemeArgs::readNumber(is, tol)
-              ? tol
-              : interfaceSchemeArgs::surfCellTol(mesh, alphaName);
+                dictPtr
+              ? dictPtr->getOrDefault<scalar>("surfCellTol", defaultTol)
+              : defaultTol;
         }
 
+        //- Fatal error for a corrected underlying scheme
         void checkUncorrected() const
         {
             if (tScheme_().corrected())
@@ -138,12 +156,12 @@ public:
 
     // Constructors
 
-        //- Construct from mesh and Istream: not available (needs the flux)
+        //- Construct from mesh and Istream, which names the face flux first
         interfaceUpwind(const fvMesh& mesh, Istream& is)
         :
             surfaceInterpolationScheme<Type>(mesh),
-            alphaName_(readAlphaName(mesh, is)),
-            tol_(readTol(mesh, alphaName_, is)),
+            alphaName_(alpha1Name(mesh)),
+            tol_(surfCellTol(mesh, alphaName_)),
             faceFlux_
             (
                 mesh.lookupObject<surfaceScalarField>(word(is))
@@ -162,8 +180,8 @@ public:
         )
         :
             surfaceInterpolationScheme<Type>(mesh),
-            alphaName_(readAlphaName(mesh, is)),
-            tol_(readTol(mesh, alphaName_, is)),
+            alphaName_(alpha1Name(mesh)),
+            tol_(surfCellTol(mesh, alphaName_)),
             faceFlux_(faceFlux),
             tScheme_(surfaceInterpolationScheme<Type>::New(mesh, faceFlux, is))
         {
