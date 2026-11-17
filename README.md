@@ -30,11 +30,12 @@ additions on one at a time.
 
 **`fluxinator`** is a two-phase Volume-of-Fluid solver derived from OpenFOAM's
 interIsoFoam. It keeps the geometric interface advection of interIsoFoam (isoAdvector)
-and adds a consistent gravity force (Part I) and momentum convection (Part II). It is
-built from the source of interIsoGoam (below), with other defaults
-(`applications/solvers/interIsoGoam/solverDefaults.H`): the geometric gravity model, explicit convection
-(PIMPLE `explicitConvection yes`) and the `ddtCorr` term off (PIMPLE `ddtCorr no`);
-an entry in the case overrides them. The convection scheme is set in `system/fvSchemes`,
+and adds a consistent gravity force (Part I) and momentum convection (Part II). Its
+source is in `applications/solvers/fluxinator`, and its defaults
+(`solverDefaults.H` there) are the geometric gravity model, explicit convection
+(PIMPLE `convectionNewTimeWeight 0`), the `ddtCorr` term off (PIMPLE `ddtCorr no`) and
+three reconstructions of the initial interface (`nInitialReconstructions 3` in the solver
+dictionary of alpha); an entry in the case overrides them. The convection scheme is set in `system/fvSchemes`,
 and explicit convection requires `interfaceUpwind` (the solver warns without it):
 
 ```
@@ -43,9 +44,9 @@ div(rhoPhi,U) Gauss laxWendroff interfaceUpwind limitedLinearV 1;
 
 Keep the maximum Courant number at about 0.1 or less for accurate wave propagation.
 
-`interIsoGoam` (`applications/solvers/interIsoGoam`) is interIsoFoam with the additions
-of Parts I and II, all selected at run time; with the defaults of interIsoFoam and one outer
-corrector it is interIsoFoam. It gives the same results as `fluxinator` with the same
+`interIsoGoam` (`applications/solvers/interIsoGoam`) is built from the source of fluxinator
+with the defaults of interIsoFoam, so the additions of Parts I and II are all selected at run
+time; with these defaults and one outer corrector it is interIsoFoam. It gives the same results as `fluxinator` with the same
 settings. The cases of the papers rely on its defaults, so they reproduce the published
 results unchanged. It has these run-time options:
 
@@ -53,18 +54,20 @@ results unchanged. It has these run-time options:
 |---|---|
 | defaults, one outer corrector | interIsoFoam |
 | `interfaceForces { gravity { model geometric; } }` (system/fvSchemes) | the solver of Part I |
-| also PIMPLE `explicitConvection yes` and `div(rhoPhi,U) Gauss laxWendroff interfaceUpwind limitedLinearV 1` | fluxinator of Part II |
+| the defaults of fluxinator (above) and `div(rhoPhi,U) Gauss laxWendroff interfaceUpwind limitedLinearV 1` | fluxinator of Part II |
 | `nOuterCorrectors` > 1 | time-centred step (not interIsoFoam, see below) |
 
 The geometric gravity model takes the height in the gravity term at the
 centroids of the reconstructed interface segments instead of at the face
 centres. With more than one outer corrector the step is centred in time by
 default: the interface is advected with the mean of the old and the latest
-flux, and the convection term and the gravity force are the means of their
-values at the start and the end of the step (PIMPLE `convectionTheta` and
-`gravityTheta`, default 0.5; use `momentumPredictor no`). Stock interIsoFoam
-centres only the interface advection, which damps waves. The header of
-`applications/solvers/interIsoGoam/interIsoGoam.C` and `timeWeights.H` list
+velocity and flux, and the convection term and the gravity force are the means of
+their values at the start and the end of the step. The three weights are
+`convectionNewTimeWeight` and `gravityNewTimeWeight` (PIMPLE) and `outerNewTimeWeight`
+(solver dictionary of alpha), each the weight of the end of the step, default 0.5 with
+outer correctors. They belong together: changing one of them alone can damp a wave
+strongly. Stock interIsoFoam centres only the interface advection, which damps waves. The header of
+`applications/solvers/fluxinator/fluxinator.C` and `readControls.H` list
 all switches. Test forces and diagnostics are set per case, not in the solver:
 forces with fvOptions (for example the uniform body acceleration of
 `run/periodicDisc`, a `vectorCodedSource` in `system/fvOptions`), diagnostics
@@ -75,12 +78,12 @@ with function objects (for example `convectiveMomentumFlux` in
 
 | Directory | Contents |
 |---|---|
-| `src/geometricVoF/` | isoAdvector and interface reconstruction: a modified copy of OpenFOAM's geometricVoF, in namespace `Foam::isoAdvection` so that both can be loaded together (library `newGeometricVoF`; sampled surface `reconstructedInterface`) |
+| `src/geometricVoF/` | isoAdvector and interface reconstruction: a modified copy of OpenFOAM's geometricVoF, in namespace `Foam::fluxinatorVoF` so that both can be loaded together (library `fluxinatorVoF`; sampled surface `reconstructedInterface`) |
 | `src/gravityModels/` | gravity models: `basic` (as in OpenFOAM), `geometric` (Part I) and `constantHeight` (the exact height of a flat interface) |
 | `src/interfaceSchemes/` | the interfaceUpwind and laxWendroff interpolation schemes (Part II); fluxinator links the library, other solvers need `libs (interfaceSchemes);` in controlDict |
 | `src/functionObjects/` | the function object `convectiveMomentumFlux`, the face momentum flux of the convection term (Part II); `libs (interfaceFunctionObjects);` |
-| `applications/solvers/fluxinator/` | fluxinator: the source of interIsoGoam with the defaults of `solverDefaults.H` |
-| `applications/solvers/interIsoGoam/` | interIsoGoam, and the source of both solvers |
+| `applications/solvers/fluxinator/` | fluxinator, and the source of both solvers |
+| `applications/solvers/interIsoGoam/` | interIsoGoam: the source of fluxinator with the defaults of interIsoFoam (`solverDefaults.H`) |
 | `applications/test/convectionTest/` | prescribed-flow test of the momentum convection (Part II) |
 | `applications/test/ddtCorrSwitch/` | stock interFoam and interIsoFoam with a PIMPLE `ddtCorr` switch (Part I, Appendix A) |
 | `applications/utilities/` | `setHydrostaticPressure` (hydrostatic `p_rgh` of a flat interface at rest) |
@@ -187,5 +190,5 @@ The code is released under the GNU General Public License v3 (`LICENSE`), as Ope
 
 ---
 
-\* fluxinator is not affiliated with or endorsed by Dr. Heinz Doofenshmirtz or
+\* fluxinator is not endorsed by Dr. Heinz Doofenshmirtz or in any way affiliated with
 Doofenshmirtz Evil Incorporated.
