@@ -2,15 +2,10 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | www.openfoam.com
+    \\  /    A nd           |
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2011-2017 OpenFOAM Foundation
-    Copyright (C) 2016 DHI
-    Copyright (C) 2017 OpenCFD Ltd.
-    Copyright (C) 2018, 2025-2026 Johan Roenby
-    Copyright (C) 2019-2020 DLR
-    Copyright (C) 2020 OpenCFD Ltd.
+    Copyright (C) 2026 Johan Roenby
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -35,196 +30,24 @@ Group
     grpMultiphaseSolvers
 
 Description
-    Solver derived from interFoam for two incompressible, isothermal immiscible
-    fluids using the isoAdvector phase-fraction based interface capturing
-    approach, with optional mesh motion and mesh topology changes including
-    adaptive re-meshing.
+    The solver of Parts I and II, kept to reproduce their results. It is
+    built from the source of fluxinator (../fluxinator), with the defaults
+    of interIsoFoam instead of those of fluxinator:
 
-    With its default settings and one outer corrector the solver is
-    interIsoFoam. The same source also builds fluxinator, the solver to use,
-    which has other defaults (solverDefaults.H, ../fluxinator). Additions,
-    all selected at run time:
+    - interfaceForces.gravity.model basic (system/fvSchemes)
+    - PIMPLE convectionNewTimeWeight 1 (implicit convection)
+    - PIMPLE ddtCorr yes
+    - nInitialReconstructions 0 (solver dictionary of alpha)
 
-    - Gravity model (interfaceForces.gravity.model in system/fvSchemes,
-      default basic, as in interIsoFoam). The geometric model evaluates the
-      gravity term at the height of the reconstructed interface (Part I).
-
-    - PIMPLE explicitConvection (default no): with one outer corrector the
-      convected velocity of div(rhoPhi, U) is taken at the start of the time
-      step, the time level of the mass flux rhoPhi (Part II). Use it with
-      the interfaceUpwind and laxWendroff schemes of libinterfaceSchemes.
-
-    - Outer correctors (nOuterCorrectors > 1): the step is centred in time.
-      The interface is advected with the mean of the start and latest flux
-      (outerCorrBlending 0.5 in the alpha solver dictionary), and the
-      convection and the gravity force are the means of their values at
-      the start and the end of the step (convectionTheta and gravityTheta
-      0.5). Only the pressure equation uses the weighted gravity force, so
-      use momentumPredictor no. See timeWeights.H.
-
-    - PIMPLE ddtCorr (default yes, as in interIsoFoam).
-
-    - PIMPLE convectionTheta and gravityTheta override the time weights
-      above.
-
-    Reference:
-    \verbatim
-        Roenby, J., Bredmose, H. and Jasak, H. (2016).
-        A computational method for sharp interface advection
-        Royal Society Open Science, 3
-        doi 10.1098/rsos.160405
-    \endverbatim
-
-    isoAdvector code supplied by Johan Roenby, STROMNING (2018)
+    With these defaults and one outer corrector it is interIsoFoam. An entry
+    in the case overrides a default, so with the same settings interIsoGoam
+    and fluxinator give identical results. The settings are listed in
+    ../fluxinator/fluxinator.C.
 
 \*---------------------------------------------------------------------------*/
 
-#include "fvCFD.H"
-#include "dynamicFvMesh.H"
-#include "isoAdvector.H"
-#include "EulerDdtScheme.H"
-#include "localEulerDdtScheme.H"
-#include "CrankNicolsonDdtScheme.H"
-#include "subCycle.H"
-#include "immiscibleIncompressibleTwoPhaseMixture.H"
-#include "incompressibleInterPhaseTransportModel.H"
-#include "pimpleControl.H"
-#include "fvOptions.H"
-#include "CorrectPhi.H"
-#include "fvcSmooth.H"
-#include "dynamicRefineFvMesh.H"
-#include "gravityModel.H"
-#include "uniformDimensionedFields.H"
-#include "solverDefaults.H"
+#define INTERISOGOAM
 
-using namespace Foam::isoAdvection;
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-int main(int argc, char *argv[])
-{
-    argList::addNote
-    (
-        "Solver for two incompressible, isothermal immiscible fluids"
-        " using isoAdvector phase-fraction based interface capturing.\n"
-        "With optional mesh motion and mesh topology changes including"
-        " adaptive re-meshing.\n"
-        "The solver is derived from interFoam"
-    );
-
-    #include "postProcess.H"
-
-    #include "addCheckCaseOptions.H"
-    #include "setRootCaseLists.H"
-    #include "createTime.H"
-    #include "createDynamicFvMesh.H"
-    #include "initContinuityErrs.H"
-    #include "createDyMControls.H"
-    #include "createFields.H"
-    #include "initCorrectPhi.H"
-    #include "createUfIfPresent.H"
-
-    #include "porousCourantNo.H"
-    #include "setInitialDeltaT.H"
-
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-    Info<< "\nStarting time loop\n" << endl;
-
-    while (runTime.run())
-    {
-        #include "readDyMControls.H"
-        #include "porousCourantNo.H"
-        #include "porousAlphaCourantNo.H"
-        #include "setDeltaT.H"
-
-        ++runTime;
-
-        Info<< "Time = " << runTime.timeName() << nl << endl;
-
-        #include "timeWeights.H"
-
-        // --- Pressure-velocity PIMPLE corrector loop
-        while (pimple.loop())
-        {
-            if (pimple.firstIter() || moveMeshOuterCorrectors)
-            {
-                if (isA<dynamicRefineFvMesh>(mesh))
-                {
-                    advector.surf().reconstruct();
-                }
-
-                mesh.update();
-
-                if (mesh.changing())
-                {
-                    gh = (g & mesh.C()) - ghRef;
-
-                    if (isA<dynamicRefineFvMesh>(mesh))
-                    {
-                        advector.surf().mapAlphaField();
-                        alpha2 = 1.0 - alpha1;
-                        alpha2.correctBoundaryConditions();
-                        rho == alpha1*rho1 + alpha2*rho2;
-                        rho.correctBoundaryConditions();
-                        rho.oldTime() = rho;
-                        alpha2.oldTime() = alpha2;
-                    }
-
-                    MRF.update();
-
-                    if (correctPhi)
-                    {
-                        // Calculate absolute flux
-                        // from the mapped surface velocity
-                        phi = mesh.Sf() & Uf();
-
-                        #include "correctPhi.H"
-
-                        // Make the flux relative to the mesh motion
-                        fvc::makeRelative(phi, U);
-
-                        mixture.correct();
-                    }
-
-                    if (checkMeshCourantNo)
-                    {
-                        #include "meshCourantNo.H"
-                    }
-                }
-            }
-
-            #include "alphaControls.H"
-            #include "alphaEqnSubCycle.H"
-
-            mixture.correct();
-
-            if (pimple.frozenFlow())
-            {
-                continue;
-            }
-
-            #include "UEqn.H"
-
-            // --- Pressure corrector loop
-            while (pimple.correct())
-            {
-                #include "pEqn.H"
-            }
-
-            if (pimple.turbCorr())
-            {
-                turbulence->correct();
-            }
-        }
-
-        runTime.write();
-        runTime.printExecutionTime(Info);
-    }
-
-    Info<< "End\n" << endl;
-
-    return 0;
-}
-
+#include "../fluxinator/fluxinator.C"
 
 // ************************************************************************* //

@@ -19,8 +19,8 @@ wmake "$@" libso src/geometricVoF
 wmake "$@" libso src/gravityModels
 wmake "$@" libso src/interfaceSchemes
 wmake "$@" libso src/functionObjects/convectiveMomentumFlux
-wmake "$@" applications/solvers/interIsoGoam
 wmake "$@" applications/solvers/fluxinator
+wmake "$@" applications/solvers/interIsoGoam
 wmake "$@" applications/test/convectionTest
 wmake "$@" applications/utilities/setHydrostaticPressure
 wmake "$@" applications/test/ddtCorrSwitch/interFoamDdtCorr

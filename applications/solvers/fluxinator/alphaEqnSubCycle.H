@@ -5,10 +5,10 @@ if (pimple.nCorrPIMPLE() > 1)
 {
     // If nOuterCorrectors > 1 then for all but the first loop the advection
     // of alpha is done using a blend,
-    // oCorrBlend*phiNew + (1-oCorrBlend)*phi,
+    // outerWeight*phiNew + (1 - outerWeight)*phi,
     // where phi is the flux at the beginning of the time step and phiNew
     // is the flux estimate at the end of the time step from the previous
-    // outer iteration. Similarly for U and UNew.
+    // outer iteration (outerNewTimeWeight, readControls.H). Similarly for U.
     if (pimple.firstIter())
     {
         // Storing the interface data (centre, normal, interfaceCell,
@@ -34,8 +34,8 @@ if (pimple.nCorrPIMPLE() > 1)
         // the blend used to advect the interface.
         U.storePrevIter();
         phi.storePrevIter();
-        U = oCorrBlend*U + (1 - oCorrBlend)*U.oldTime();
-        phi = oCorrBlend*phi + (1 - oCorrBlend)*phi.oldTime();
+        U = outerWeight*U + (1 - outerWeight)*U.oldTime();
+        phi = outerWeight*phi + (1 - outerWeight)*phi.oldTime();
     }
 }
 
