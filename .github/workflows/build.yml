@@ -47,10 +47,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The packages come from SourceForge mirrors, which are slow and sometimes time
+      # out: keep the downloaded packages in the Actions cache, one entry per version
+      - name: Restore OpenFOAM v${{ matrix.version }} packages
+        id: debs
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/debs
+          key: openfoam-debs-${{ matrix.version }}-noble
+
       - name: Install OpenFOAM v${{ matrix.version }}
         run: |
           curl -s https://dl.openfoam.com/add-debian-repo.sh | sudo bash
-          sudo apt-get install -y openfoam${{ matrix.version }}-default
+          mkdir -p ~/debs/partial
+          sudo apt-get install -y -o Dir::Cache::Archives="$HOME/debs" -o Acquire::Retries=5 \
+              openfoam${{ matrix.version }}-default
+          sudo rm -rf ~/debs/partial ~/debs/lock
+          sudo chown -R "$USER" ~/debs
+
+      # Saved right after the install, so that a failing build still fills the cache
+      - name: Save OpenFOAM v${{ matrix.version }} packages
+        if: steps.debs.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/debs
+          key: openfoam-debs-${{ matrix.version }}-noble
 
       - name: Build
         run: |
