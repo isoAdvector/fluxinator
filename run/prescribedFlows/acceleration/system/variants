@@ -1,14 +1,14 @@
 variants
 {
-    implEuler_new   { convection implicit; ddt Euler;    div "Gauss limitedLinearV 1"; force new; }
-    implEuler_old   { convection implicit; ddt Euler;    div "Gauss limitedLinearV 1"; force old; }
-    explEuler_new   { convection explicit; ddt Euler;    div "Gauss limitedLinearV 1"; force new; }
-    explEuler_old   { convection explicit; ddt Euler;    div "Gauss limitedLinearV 1"; force old; }
-    implBackward_new { convection implicit; ddt backward; div "Gauss limitedLinearV 1"; force new; }
-    explLinear_new  { convection explicit; ddt Euler;    div "Gauss linear"; force new; }
-    explUpwind_new  { convection explicit; ddt Euler;    div "Gauss upwind"; force new; }
-    explIU_new      { convection explicit; ddt Euler;    div "Gauss interfaceUpwind limitedLinearV 1"; force new; }
-    implIU_new      { convection implicit; ddt Euler;    div "Gauss interfaceUpwind limitedLinearV 1"; force new; }
-    explLW_new      { convection explicit; ddt Euler;    div "Gauss laxWendroff limitedLinearV 1"; force new; }
-    explLWIU_new    { convection explicit; ddt Euler;    div "Gauss laxWendroff interfaceUpwind limitedLinearV 1"; force new; }
+    implEuler_new   { convectionNewTimeWeight 1; ddt Euler;    div "Gauss limitedLinearV 1"; forceNewTimeWeight 1; }
+    implEuler_old   { convectionNewTimeWeight 1; ddt Euler;    div "Gauss limitedLinearV 1"; forceNewTimeWeight 0; }
+    explEuler_new   { convectionNewTimeWeight 0; ddt Euler;    div "Gauss limitedLinearV 1"; forceNewTimeWeight 1; }
+    explEuler_old   { convectionNewTimeWeight 0; ddt Euler;    div "Gauss limitedLinearV 1"; forceNewTimeWeight 0; }
+    implBackward_new { convectionNewTimeWeight 1; ddt backward; div "Gauss limitedLinearV 1"; forceNewTimeWeight 1; }
+    explLinear_new  { convectionNewTimeWeight 0; ddt Euler;    div "Gauss linear"; forceNewTimeWeight 1; }
+    explUpwind_new  { convectionNewTimeWeight 0; ddt Euler;    div "Gauss upwind"; forceNewTimeWeight 1; }
+    explIU_new      { convectionNewTimeWeight 0; ddt Euler;    div "Gauss interfaceUpwind limitedLinearV 1"; forceNewTimeWeight 1; }
+    implIU_new      { convectionNewTimeWeight 1; ddt Euler;    div "Gauss interfaceUpwind limitedLinearV 1"; forceNewTimeWeight 1; }
+    explLW_new      { convectionNewTimeWeight 0; ddt Euler;    div "Gauss laxWendroff limitedLinearV 1"; forceNewTimeWeight 1; }
+    explLWIU_new    { convectionNewTimeWeight 0; ddt Euler;    div "Gauss laxWendroff interfaceUpwind limitedLinearV 1"; forceNewTimeWeight 1; }
 }

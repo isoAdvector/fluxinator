@@ -41,10 +41,13 @@ Description
     Each variant in system/convectionTestDict solves the momentum equation
     without pressure,
         ddt(rho, Uv) + div(rhoPhi, Uv) = rho* a_exact,
-    with a_exact = dU/dt + grad(u).u and rho* = rho^{n+1} (force new) or rho^n
-    (force old). Convection is implicit or explicit, with any ddt and div
-    scheme. Mode reset starts every step from the exact field (one-step error);
-    mode evolve carries Uv.
+    with a_exact = dU/dt + grad(u).u. Named as the time weights of fluxinator,
+    forceNewTimeWeight w_f gives the force density rho* = w_f rho^{n+1}
+    + (1 - w_f) rho^n (default 1), and convectionNewTimeWeight w_c the
+    convection w_c div(rhoPhi, Uv^{n+1}) + (1 - w_c) div(rhoPhi, Uv^n), with
+    any ddt and div scheme. Mode oneStep starts every step from the exact
+    field (the error of one step); mode carried carries Uv from step to step
+    (the accumulated error).
 
     Output, for e = Uv - u(reference, t^{n+1}): per step and variant
     postProcessing/convectionTest/<variant>.dat holds
@@ -74,20 +77,21 @@ Description
 #include "StringStream.H"
 #include "emptyFvPatch.H"
 #include "zeroField.H"
+#include "uniformDimensionedFields.H"
 
-using namespace Foam::isoAdvection;
+using namespace Foam::fluxinatorVoF;
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
 
-struct linearFlow
+struct prescribedFlow
 {
     vector n, U0, a, c, r0, ef, es;
     scalar Omega, beta, S;
 
-    linearFlow(const dictionary& d, const vector& nEmpty)
+    prescribedFlow(const dictionary& d, const vector& nEmpty)
     :
         n(nEmpty),
         U0(d.getOrDefault<vector>("U0", Zero)),
@@ -151,7 +155,7 @@ struct linearFlow
 
 void setFlux
 (
-    const linearFlow& flow,
+    const prescribedFlow& flow,
     scalar t,
     surfaceScalarField& phi
 )
@@ -195,7 +199,7 @@ void setFlux
 
 void setVelocity
 (
-    const linearFlow& flow,
+    const prescribedFlow& flow,
     scalar t,
     volVectorField& U
 )
@@ -208,11 +212,18 @@ void setVelocity
     auto& Ubf = U.boundaryFieldRef();
     forAll(Ubf, patchi)
     {
-        if (!Ubf[patchi].coupled() && !isA<emptyFvPatch>(mesh.boundary()[patchi]))
+        if
+        (
+            !Ubf[patchi].coupled()
+         && !isA<emptyFvPatch>(mesh.boundary()[patchi])
+        )
         {
             const vectorField& Cf = mesh.boundary()[patchi].Cf();
             vectorField v(Cf.size());
-            forAll(v, i) v[i] = flow.u(Cf[i], t);
+            forAll(v, i)
+            {
+                v[i] = flow.u(Cf[i], t);
+            }
             Ubf[patchi] == v;
         }
     }
@@ -290,7 +301,10 @@ int main(int argc, char *argv[])
     vector nEmpty(Zero);
     for (direction d = 0; d < 3; ++d)
     {
-        if (gD[d] == -1) nEmpty[d] = 1;
+        if (gD[d] == -1)
+        {
+            nEmpty[d] = 1;
+        }
     }
     if (mag(nEmpty) != 1)
     {
@@ -299,8 +313,14 @@ int main(int argc, char *argv[])
             << exit(FatalError);
     }
 
-    const linearFlow flow(testDict.subDict("flow"), nEmpty);
-    const word mode(testDict.getOrDefault<word>("mode", "reset"));
+    const prescribedFlow flow(testDict.subDict("flow"), nEmpty);
+    const word mode(testDict.getOrDefault<word>("mode", "oneStep"));
+    if (mode != "oneStep" && mode != "carried")
+    {
+        FatalErrorInFunction
+            << "mode " << mode << ", valid: oneStep carried"
+            << exit(FatalError);
+    }
     const word reference
     (
         testDict.getOrDefault<word>("reference", "cellCentre")
@@ -327,11 +347,15 @@ int main(int argc, char *argv[])
     const wordList phases(transportProperties.get<wordList>("phases"));
     const dimensionedScalar rho1
     (
-        "rho1", dimDensity, transportProperties.subDict(phases[0]).get<scalar>("rho")
+        "rho1",
+        dimDensity,
+        transportProperties.subDict(phases[0]).get<scalar>("rho")
     );
     const dimensionedScalar rho2
     (
-        "rho2", dimDensity, transportProperties.subDict(phases[1]).get<scalar>("rho")
+        "rho2",
+        dimDensity,
+        transportProperties.subDict(phases[1]).get<scalar>("rho")
     );
 
     volScalarField alpha1
@@ -391,7 +415,7 @@ int main(int argc, char *argv[])
     const wordList names(variantsDict.toc());
     PtrList<volVectorField> Uv(names.size());
     List<word> ddtSchemes(names.size()), divSchemes(names.size());
-    boolList implicitConv(names.size()), forceNew(names.size());
+    scalarList convectionWeight(names.size()), forceWeight(names.size());
     PtrList<OFstream> files(names.size());
     mkDir(runTime.globalPath()/"postProcessing"/"convectionTest");
 
@@ -400,8 +424,8 @@ int main(int argc, char *argv[])
         const dictionary& vd = variantsDict.subDict(names[vi]);
         ddtSchemes[vi] = vd.getOrDefault<string>("ddt", "Euler");
         divSchemes[vi] = vd.get<string>("div");
-        implicitConv[vi] = (vd.get<word>("convection") == "implicit");
-        forceNew[vi] = (vd.getOrDefault<word>("force", "new") == "new");
+        convectionWeight[vi] = vd.get<scalar>("convectionNewTimeWeight");
+        forceWeight[vi] = vd.getOrDefault<scalar>("forceNewTimeWeight", 1);
 
         Uv.set
         (
@@ -434,8 +458,8 @@ int main(int argc, char *argv[])
         files[vi]
             << "# " << names[vi] << ": ddt " << ddtSchemes[vi]
             << ", div " << divSchemes[vi]
-            << ", convection " << (implicitConv[vi] ? "implicit" : "explicit")
-            << ", force " << (forceNew[vi] ? "new" : "old")
+            << ", convectionNewTimeWeight " << convectionWeight[vi]
+            << ", forceNewTimeWeight " << forceWeight[vi]
             << ", mode " << mode << ", reference " << reference << nl
             << "# t maxAll maxWater maxInterface rmsInterface maxAir"
             << " momentumError" << nl;
@@ -443,6 +467,22 @@ int main(int argc, char *argv[])
 
     alpha1.oldTime();
     isoAdvector advector(alpha1, phi, U);
+
+    // The convection time weight of the variant being solved, registered as in
+    // fluxinator for the laxWendroff scheme
+    uniformDimensionedScalarField convectionNewTimeWeight
+    (
+        IOobject
+        (
+            "convectionNewTimeWeight",
+            runTime.constant(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE,
+            IOobject::REGISTER
+        ),
+        dimensionedScalar(dimless, Zero)
+    );
     zeroField Sp, Su;
     surfaceIteratorPLIC sIter(mesh, 1e-12);
 
@@ -528,6 +568,7 @@ int main(int argc, char *argv[])
                     IStringStream(ddtSchemes[vi])()
                 )
             );
+            convectionNewTimeWeight.value() = convectionWeight[vi];
             tmp<fv::convectionScheme<vector>> tconv
             (
                 fv::convectionScheme<vector>::New
@@ -538,21 +579,39 @@ int main(int argc, char *argv[])
                 )
             );
 
-            const volVectorField F((forceNew[vi] ? rho : rho0)*aEx);
+            const scalar wf = forceWeight[vi];
+            const tmp<volScalarField> trhoStar
+            (
+                wf == 1 ? tmp<volScalarField>(rho)
+              : wf == 0 ? tmp<volScalarField>(rho0)
+              : wf*rho + (1 - wf)*rho0
+            );
+            const volVectorField F(trhoStar()*aEx);
 
+            // As UEqn.H of fluxinator: the implicit operator only for w_c > 0
+            const scalar wc = convectionWeight[vi];
             fvVectorMatrix WEqn
             (
-                implicitConv[vi]
+                wc == 1
               ? tmp<fvVectorMatrix>
                 (
                     tddt.ref().fvmDdt(rho, W) + tconv().fvmDiv(rhoPhi, W)
                  ==
                     F
                 )
-              : tmp<fvVectorMatrix>
+              : wc == 0
+              ? tmp<fvVectorMatrix>
                 (
                     tddt.ref().fvmDdt(rho, W)
                   + tconv().fvcDiv(rhoPhi, W.oldTime())
+                 ==
+                    F
+                )
+              : tmp<fvVectorMatrix>
+                (
+                    tddt.ref().fvmDdt(rho, W)
+                  + wc*tconv().fvmDiv(rhoPhi, W)
+                  + (1 - wc)*tconv().fvcDiv(rhoPhi, W.oldTime())
                  ==
                     F
                 )
@@ -570,8 +629,14 @@ int main(int argc, char *argv[])
                 maxAll = max(maxAll, me);
                 const scalar amin = min(a1[celli], a0[celli]);
                 const scalar amax = max(a1[celli], a0[celli]);
-                if (amin >= 0.99) maxW = max(maxW, me);
-                else if (amax <= 0.01) maxA = max(maxA, me);
+                if (amin >= 0.99)
+                {
+                    maxW = max(maxW, me);
+                }
+                else if (amax <= 0.01)
+                {
+                    maxA = max(maxA, me);
+                }
                 else
                 {
                     maxI = max(maxI, me);
@@ -591,9 +656,9 @@ int main(int argc, char *argv[])
             if (Pstream::master())
             {
                 files[vi]
-                    << tNew << ' ' << maxAll << ' ' << maxW << ' ' << maxI << ' '
-                    << (nI ? Foam::sqrt(sumI/nI) : 0) << ' ' << maxA << ' '
-                    << mag(mom) << nl;
+                    << tNew << ' ' << maxAll << ' ' << maxW << ' ' << maxI
+                    << ' ' << (nI ? Foam::sqrt(sumI/nI) : 0) << ' ' << maxA
+                    << ' ' << mag(mom) << nl;
             }
 
             if (runTime.writeTime())
@@ -602,7 +667,7 @@ int main(int argc, char *argv[])
                 err.write();
             }
 
-            if (mode == "reset")
+            if (mode == "oneStep")
             {
                 W == UexNew;
             }

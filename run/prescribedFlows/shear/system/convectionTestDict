@@ -1,4 +1,4 @@
 FoamFile { version 2.0; format ascii; class dictionary; object convectionTestDict; }
-mode reset;
+mode oneStep;
 flow { U0 (0 0 -0.2); shearRate -1; shearOrigin (0.5 0 0.5); shearDirection (1 0 0); }
 #include "variants"

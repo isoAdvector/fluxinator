@@ -39,8 +39,8 @@ cases = ["uniform", "acceleration", "accelerationCarried", "shear", "shearCarrie
 lines = ["Kinematic rig, 50x50, dt 0.005 s, 1 s, water/air 1000/1, disc r 0.15 m.",
          "Entry: max over steps of max |U - u_exact| [m/s] (mean over steps of interface rms).",
          "Flows: uniform U0 (0.2,0,0.05); acceleration U0 (0.1,0,0.05) + a (0.5,0,0); shear u = (z-0.5, 0, -0.2), disc at (0.5, 0.75);",
-         "rotation solid body Omega 2 about (0.5,0.5). Reference: u at the cell centre. Mode: one step (reset) or",
-         "carried (...Carried). Sources: run/prescribedFlows/<case>/postProcessing/convectionTest/<variant>.dat", ""]
+         "rotation solid body Omega 2 about (0.5,0.5). Reference: u at the cell centre. Mode: one step (oneStep) or",
+         "carried (carried, cases ...Carried). Sources: run/prescribedFlows/<case>/postProcessing/convectionTest/<variant>.dat", ""]
 lines += table(cases[:5], "-- time scheme, time level, shear")
 lines += [""] + table(cases[5:], "-- rotation")
 write("rig.txt", lines)

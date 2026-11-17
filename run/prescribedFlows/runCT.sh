@@ -1,9 +1,9 @@
 #!/bin/bash
 # Copyright (C) 2026 Johan Roenby
 # SPDX-License-Identifier: GPL-3.0-or-later
-# runCT.sh <case> <mode reset|evolve> <disc origin "x 0 z"> <endTime> "<flow dictionary entries>"
+# runCT.sh <case> <mode oneStep|carried> <disc origin "x 0 z"> <endTime> "<flow dictionary entries>"
 # REF=massCentroid sets the reference point (default cellCentre, see convectionTest.C)
-# e.g. runCT.sh rot reset "0.5 0 0.75" 1 "Omega 2; rotationCentre (0.5 0 0.5);"
+# e.g. runCT.sh rot oneStep "0.5 0 0.75" 1 "Omega 2; rotationCentre (0.5 0 0.5);"
 [ -n "${WM_PROJECT_DIR:-}" ] || { echo "Source the OpenFOAM v2606 environment first" >&2; exit 1; }
 type dictator > /dev/null 2>&1 || { echo "Source dictator first (github.com/isoAdvector/dictator)" >&2; exit 1; }
 out=$1; mode=$2; origin=$3; tEnd=$4; flow=$5

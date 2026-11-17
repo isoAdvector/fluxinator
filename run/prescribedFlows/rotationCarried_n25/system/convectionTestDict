@@ -1,4 +1,4 @@
 FoamFile { version 2.0; format ascii; class dictionary; object convectionTestDict; }
-mode evolve;
+mode carried;
 flow { Omega 2; rotationCentre (0.5 0 0.5); }
 #include "variants"

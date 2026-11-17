@@ -17,7 +17,7 @@ solved, for several convection variants at once, by the test application
 One step: every step starts from the exact cell-centre velocity (the error of
 one step). Carried: the computed velocity is carried from step to step.
 
-`runCT.sh <case> <mode reset|evolve> "<disc origin>" <endTime> "<flow entries>"`
+`runCT.sh <case> <mode oneStep|carried> "<disc origin>" <endTime> "<flow entries>"`
 makes a case from `baseCase` and runs it; `summarise.sh <case>` prints the
 largest errors per variant. The paper figures and tables are made in
 `papers/part2` (`tab_rigUniform`, `tab_rigFaces`, `tab_rigConvergence`,
