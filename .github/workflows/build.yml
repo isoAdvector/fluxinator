@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Builds fluxinator with every supported OpenFOAM.com release (OpenCFD's Ubuntu
-# packages) and runs both solvers for a few time steps of the accelerated disc
-# of Part II.
+# packages) and runs both solvers for a few time steps of the tilted box of
+# Part I and the accelerated disc of Part II.
 
 name: Build
 
@@ -73,10 +73,36 @@ jobs:
           set +e; source "$OPENFOAM/etc/bashrc"; set -e
           for app in interIsoGoam fluxinator
           do
+              # Tilted box at rest: walls only, geometric gravity model, plicRDF
+              case=$RUNNER_TEMP/box_$app
+              cp -r run/tiltedBox/baseCase "$case"
+              (
+                  cd "$case"
+                  cp -r 0.orig 0
+                  foamDictionary system/controlDict -entry application -set $app > /dev/null
+                  foamDictionary system/controlDict -entry endTime -set 0.05 > /dev/null
+                  blockMesh > log.blockMesh 2>&1
+                  transformPoints -centre '(.5 0 .5)' -rotate-y 5 > log.transformPoints 2>&1
+                  setAlphaField > log.setAlphaField 2>&1
+                  $app > log.$app 2>&1 || { tail -n 30 log.$app; exit 1; }
+              )
+
+              # Accelerated periodic disc: explicit Lax-Wendroff convection with
+              # interfaceUpwind. plicRDF needs v2506 or later on cyclic patches.
               case=$RUNNER_TEMP/disc_$app
               cp -r run/periodicDisc/explicitLWIU_rhoNew "$case"
-              foamDictionary "$case/system/controlDict" -entry application -set $app
-              foamDictionary "$case/system/controlDict" -entry endTime -set 0.05
-              "$case/Allrun"
-              grep -q "^End" "$case/log.$app" || { tail -n 30 "$case/log.$app"; exit 1; }
+              (
+                  cd "$case"
+                  cp -r 0.orig 0
+                  foamDictionary system/controlDict -entry application -set $app > /dev/null
+                  foamDictionary system/controlDict -entry endTime -set 0.05 > /dev/null
+                  if [ "${WM_PROJECT_VERSION#v}" -lt 2506 ]
+                  then
+                      sed -i 's/reconstructionScheme *plicRDF;/reconstructionScheme isoAlpha;/' \
+                          system/fvSolution
+                  fi
+                  blockMesh > log.blockMesh 2>&1
+                  setAlphaField > log.setAlphaField 2>&1
+                  $app > log.$app 2>&1 || { tail -n 30 log.$app; exit 1; }
+              )
           done
