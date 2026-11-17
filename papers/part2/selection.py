@@ -15,7 +15,7 @@ import csv
 import json
 import os
 import numpy as np
-from common import plt, STYLE, DATA, FULL, WAVE, save, write, SOLVER_COLOUR
+from common import plt, STYLE, DATA, FULL, WAVE, save, write, SOLVER_COLOUR, COL
 
 plt.rcdefaults()
 plt.rcParams.update(STYLE)
@@ -32,6 +32,19 @@ C = {(c["scan"], c["nx"], c["par"], c["solver"]): c for c in B["cases"]}
 E = B["exact"]
 
 
+# The exact solution in green, a colour no solver has: open circles on top of the solver curves
+# for the exact profiles, about a dozen per curve so that a matching solver stays visible, and a
+# thin line beneath the curves for the exact constant values
+EXACT_COLOUR = "#228833"
+EXACT = dict(ls="none", marker="o", ms=4, mfc="none", mec=EXACT_COLOUR, mew=1.0)
+EXACT_LINE = dict(color=EXACT_COLOUR, lw=1.0)
+
+
+def sparse(n, k):
+    """k indices spread evenly over 0..n-1, both ends included"""
+    return np.unique(np.linspace(0, n - 1, k).round().astype(int))
+
+
 def get(nx, co, s):
     return C.get(("maxCo", nx, co, s))
 
@@ -39,7 +52,7 @@ def get(nx, co, s):
 def legend(fig, ncol=5, y=1.0):
     h = [plt.Line2D([], [], color=COLOUR[s], lw=LW[s], ls=LS[s], label=LABEL[s]) for s in SOLVERS
          if any(k[3] == s for k in C)]
-    h.append(plt.Line2D([], [], color="0.45", lw=1.0, ls="--", label="exact"))
+    h.append(plt.Line2D([], [], label="exact", **{**EXACT, **EXACT_LINE, "ls": "-"}))
     fig.legend(handles=h, loc="upper center", ncol=ncol, bbox_to_anchor=(0.5, y))
 
 
@@ -56,20 +69,28 @@ def fig_case():
         a.plot(r["tH"], r["dH"], marker="o", ms=2.5, **kw)
         b.plot(r["tair"], r["Uair"], **kw)
         sn = r["snaps"]["30"]
-        c.plot(sn["u"], sn["z"], marker="o", ms=2.5, **kw)
+        # thinner lines without markers in (c) and (d), where the curves lie close together
+        kwThin = dict(kw, lw=0.6*LW[s])
+        c.plot(sn["u"], sn["z"], **kwThin)
         x, h = np.array(sn["x"]), np.array(sn["h"])
         m = np.abs(x) <= 0.12
-        d.plot(x[m], h[m], marker="o", ms=2.5, **kw)
-        dz.plot(x[m], h[m], marker="o", ms=2.5, **kw)
-    ex = np.array(E["x"]); m = np.abs(ex) <= 0.12
-    c.plot(E["u"], E["z"], "--", color="0.45", lw=1.0)
-    d.plot(ex[m], np.array(E["h"])[m], "--", color="0.45", lw=1.0)
-    dz.plot(ex[m], np.array(E["h"])[m], "--", color="0.45", lw=1.0)
+        d.plot(x[m], h[m], **kwThin)
+        dz.plot(x[m], h[m], **kwThin)
+    eu, ez = np.array(E["u"]), np.array(E["z"])
+    i = sparse(len(eu), 13)
+    c.plot(eu[i], ez[i], zorder=5, **EXACT)
+    ex, eh = np.array(E["x"]), np.array(E["h"])
+    m = np.abs(ex) <= 0.12
+    i = sparse(m.sum(), 13)
+    d.plot(ex[m][i], eh[m][i], zorder=5, **EXACT)
+    m = np.abs(ex) <= 0.015
+    i = sparse(m.sum(), 7)
+    dz.plot(ex[m][i], eh[m][i], zorder=5, **EXACT)
     dz.set(xlim=(-0.015, 0.015), ylim=(0.63, 0.665))
     dz.tick_params(labelsize=8, length=2, pad=1, labelbottom=False)
     d.indicate_inset_zoom(dz, edgecolor="0.4")
-    a.axhline(0, color="0.45", lw=0.7, ls="--")
-    b.axhline(1, color="0.45", lw=0.7, ls="--")
+    a.axhline(0, zorder=1.5, **EXACT_LINE)
+    b.axhline(1, zorder=1.5, **EXACT_LINE)
     a.set(xlabel="t [s]", ylabel=r"wave height error [%]", xlim=(0, 30))
     b.set(xlabel="t [s]", ylabel=r"max $|\mathbf{U}|$ in air / $u_\mathrm{crest}$", xlim=(0, 30))
     c.set(xlabel=r"$u_x / u_\mathrm{crest}$", ylabel="height above bed / crest elevation")
@@ -88,7 +109,7 @@ def fig_height():
             r = get(MESH, co, s)
             if r is not None:
                 ax.plot(r["tH"], r["dH"], color=COLOUR[s], lw=LW[s], ls=LS[s])
-        ax.axhline(0, color="0.45", lw=0.7, ls="--")
+        ax.axhline(0, zorder=1.5, **EXACT_LINE)
         ax.set_title(f"max Co {co}", fontsize=9)
         ax.set_xlabel("t [s]")
         ax.set_xlim(0, 30)
