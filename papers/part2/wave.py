@@ -9,8 +9,8 @@ Writes tab_wave/wave.txt and fig_waveCrest/waveCrest.pdf (run by their make.py).
 import os
 import re
 import numpy as np
-from matplotlib import patheffects
 from common import CONV, K, plt, save, write, FULL, COL
+EXACT_COLOUR = "#228833"  # the exact solution, as in selection.py
 from hmatch import analyse_input, celerity
 
 CASES = {
@@ -83,17 +83,13 @@ if __name__ == "__main__":
                 continue
             M, W0 = K.Mesh(p), K.Wave(p)
             z, un, _ = K.snapshot(p, "10", M, W0, None)["prof"]
-            # distinct marker shapes so the runs can be told apart without colour; interfaceUpwind
-            # as open circles without a line, so the exact line can be seen through them
-            st = {"implicit": dict(marker="s", ls="-"), "explicit": dict(marker="^", ls="-"),
-                  "explicit + interfaceUpwind": dict(marker="o", ls="none", mfc="none", mew=1.1)}[v]
-            ax.plot(un, z, color=COL[v], ms=4, lw=1.0, label=v, zorder=3, **st)
-        # exact profile on top, thick with long dashes and a white outline (as in fig_problem), so
-        # that it stays visible in poor print where it crosses the profiles
+            # lines without markers in the variant colours, as in fig_selCase (c)
+            ax.plot(un, z, color=COL[v], lw=1.0, label=v, zorder=3)
+        # exact profile as green open circles on top, as in fig_selCase (c)
         ze = np.linspace(M.z1, M.z1 + W0.eta(0.0)[0], 200)
-        ax.plot(W0.uv(0.0, ze - M.z1)[0], ze, color=COL["exact"], lw=1.6, ls=(0, (5, 2)),
-                path_effects=[patheffects.withStroke(linewidth=3.0, foreground="white")],
-                label="exact (input wave)", zorder=5)
+        i = np.unique(np.linspace(0, len(ze) - 1, 13).round().astype(int))
+        ax.plot(W0.uv(0.0, ze - M.z1)[0][i], ze[i], ls="none", marker="o", ms=4, mfc="none",
+                mec=EXACT_COLOUR, mew=1.0, label="exact (input wave)", zorder=5)
         ax.set_title(title.replace("dt", r"$\Delta t$").replace("x", r"$\times$", 1) + ", t = 10 s", fontsize=9)
         ax.set_xlabel("horizontal velocity under the crest [m/s]"); ax.set_ylim(-0.42, 0.11)
     axes[0].set_ylabel("z above still water level [m]")

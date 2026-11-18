@@ -104,7 +104,7 @@ def fig_case():
 
 def fig_height():
     fig, axs = plt.subplots(1, 4, figsize=(FULL, 2.4), sharex=True)
-    for ax, co in zip(axs, (0.5, 0.2, 0.1, 0.05)):
+    for ax, co in zip(axs, (0.05, 0.1, 0.2, 0.5)):
         for s in SOLVERS:
             r = get(MESH, co, s)
             if r is not None:
