@@ -19,4 +19,4 @@ PIMPLE `ddtCorr no` (Part I, Appendix A; `common/runDdtCorrOffStudy.sh`).
 The figures and tables of the papers are made in `../papers`.
 
 Runs are not tracked by git, only their set-ups and the summaries in `data/`;
-the run data behind the papers is published separately.
+the `Allrun` scripts reproduce the runs.

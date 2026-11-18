@@ -21,5 +21,4 @@ maximum elevation, so the exact velocity after one step of 0.01 s is only
 `baseRefinedMesh`), applies the settings and runs it.
 
 The paper figure and table are made in `papers/part1/fig_standingWaveSnapshots`
-and `papers/part1/tab_standingWave`. The experiments that located the remaining
-spurious currents (`FINDINGS.md`) are not part of the release.
+and `papers/part1/tab_standingWave`.

@@ -4,7 +4,7 @@ A 1 m x 1 m two-dimensional box with 25 x 25 cells is rotated by 5 degrees about
 its centre while gravity stays vertical. Water (1000 kg/m3) lies below the
 horizontal plane z = 0.5 m and air above; both fluids are inviscid and surface
 tension is zero. The exact solution is rest, U = 0, so every velocity is a
-spurious current. Fixed time step 0.01 s, OpenFOAM v2606.
+spurious current. Fixed time step 0.01 s; the results were computed with OpenFOAM v2512.
 
 ## Studies
 
@@ -32,8 +32,7 @@ The base case uses the default `nLayers`. `nLayers_1000steps` varies it and star
   magnitude per decade of density, to 5.6e-5 m/s at 1e-4 kg/m3, while staying
   8 to 11 orders of magnitude below interIsoFoam. interFoam diverges at 1e-4 kg/m3.
 - The spurious currents of the standard gravity term are concentrated in a few
-  cells, and which cells those are follows in closed form from the tilt and the
-  water level (closed-form theory in the archive, see below).
+  cells, and which cells those are follows from the tilt and the water level.
 - The first layer of cells around the interface must get interface heights:
   with nLayers 0 (heights in interface cells only) the geometric model reaches
   0.53 m/s after the first step and 5.2 m/s after 10 s, worse than the standard

@@ -1,6 +1,6 @@
-# fluxinator\*
+# fluxinator
 
-fluxinator is an incompressible interfacial flow solver for OpenFOAM based on the
+fluxinator\* is an incompressible interfacial flow solver for OpenFOAM based on the
 isoAdvector geometric Volume-of-Fluid method. It is essentially the interIsoFoam solver,
 but with numerics that take the sharp jump in density at the fluid interface into account.
 

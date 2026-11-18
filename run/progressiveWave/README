@@ -36,15 +36,16 @@ Part II:
                             the convection variants of Part II Section 6 at fixed dt,
                             from the Part I interIsoGoam case: implicit, crankNicolson,
                             explicit, explicitLW, explicitIU, explicitLWIU (the final
-                            solver); the implicit, crankNicolson, explicit and
-                            explicitLW runs carry budget_* fields of the former
-                            PIMPLE switch momentumBudget (no longer used)
+                            solver)
   momentumFlux/<case>       the four 190x40 convection cases of Part II Figure
                             fig:momFlux (implicit dt 0.005 and 0.0025, Crank-Nicolson
                             and explicit dt 0.005), rerun with the function object
                             convectiveMomentumFlux (system/controlDict)
   timing_maxCo0.1_noGauge/  time per step at max Co 0.1 without the wave gauge (Part II
                             Figure fig:selCost; data/timing_maxCo0.1.csv); see its README
+Part I timing:
+  timing_partI/             time per step of the solvers_maxCo runs (Part I Figure
+                            fig:waveCost; data/timing_partI.csv); see its README
 
 Scripts
 -------
@@ -55,6 +56,7 @@ analyseScan.py            accuracy and efficiency metrics per run (CSV in data/)
                           velocities, cost
 writeData.py              data/statistics.txt: derived numbers quoted in Part I
 plotCrestHeight.py        crest, trough and wave height against time; shared functions
+runPinned.py              runs the Part I studies on all cores, each run pinned to its cores
 
 The paper figures and tables are made in papers/part1 and papers/part2 (one directory
 per figure or table, named after its LaTeX label).

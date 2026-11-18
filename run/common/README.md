@@ -10,3 +10,4 @@
 | `runStoredDdtCorrOff.sh` | reruns a stored case with PIMPLE `ddtCorr no` |
 | `runDdtCorrOffStudy.sh` | `<study>_ddtCorrOff` from `<study>`, with the script above |
 | `makeNLayersBase.sh` | a base case with an `nLayers` entry, for the studies that vary it |
+| `runCases.sh` | runs case directories with their `Allrun`, several at a time, and skips finished ones |
