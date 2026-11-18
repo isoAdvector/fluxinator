@@ -24,10 +24,11 @@ make1() {   # make1 <source case> <name>
         } > "$d/log.dictator" || exit 1
     done
 }
-off=$wave/solvers_maxCo_ddtCorrOff; fin=$wave/finalSolver_maxCo
+on=$wave/solvers_maxCo; off=$wave/solvers_maxCo_ddtCorrOff; fin=$wave/finalSolver_maxCo
 i=0
 for mesh in 95x20:0006:0007:0008 190x40:0018:0019:0020 380x80:0030:0031:0032; do
     IFS=: read -r m a b c <<< "$mesh"
+    make1 "$on/$a" interFoamDefault_$m   # interFoam as released: ddtCorr on
     make1 "$off/$a" interFoam_$m
     make1 "$off/$b" interIsoFoam_$m
     make1 "$off/$c" interIsoGoam_$m

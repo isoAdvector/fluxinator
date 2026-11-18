@@ -1,9 +1,10 @@
 # Copyright (C) 2026 Johan Roenby
 # SPDX-License-Identifier: GPL-3.0-or-later
 """fluxinator (explicit convection, Gauss laxWendroff ... interfaceUpwind, ddtCorr off;
-run/progressiveWave/finalSolver_*) against the Part 1 solvers rerun with ddtCorr off
+run/progressiveWave/finalSolver_*) against interFoam as released (ddtCorr on, the Part 1 runs
+run/progressiveWave/solvers_*) and interIsoFoam and interIsoGoam rerun with ddtCorr off
 (run/progressiveWave/solvers_*_ddtCorrOff), on the progressive wave of Part 1 (H 0.125 m, T 2 s,
-d 0.4 m, one wavelength, periodic, 30 s = 15 periods). Same case numbers in both sets.
+d 0.4 m, one wavelength, periodic, 30 s = 15 periods). Same case numbers in all sets.
 Only finished runs are used (Part 1 reruns of the 760x160 mesh are partly still running).
 
 Per case:
@@ -40,6 +41,8 @@ SCANS = {"fixedDt": ("solvers_fixedDt_ddtCorrOff", "finalSolver_fixedDt", "solve
          "maxCo": ("solvers_maxCo_ddtCorrOff", "finalSolver_maxCo", "solvers_maxCo.csv", "maxCo")}
 FINAL = "explicit + LW + interfaceUpwind"
 SOLVERS = ["interFoam", "interIsoFoam", "interIsoGoam", FINAL]
+# Run as OpenFOAM users run it, with ddtCorr on: the Part 1 runs (the data file's own directory)
+AS_RELEASED = {"interFoam"}
 COLOUR = {s: SOLVER_COLOUR["fluxinator" if s == FINAL else s] for s in SOLVERS}
 MARKER = {s: SOLVER_MARKER["fluxinator" if s == FINAL else s] for s in SOLVERS}
 MESHES = [190, 380, 760]
@@ -53,7 +56,8 @@ def cases():
             app = r["application"]
             if app not in SOLVERS:
                 continue
-            dirs = [(app, os.path.join(WAVE, off, r["case"]))]
+            part1 = os.path.splitext(f)[0]
+            dirs = [(app, os.path.join(WAVE, part1 if app in AS_RELEASED else off, r["case"]))]
             if app == "interIsoGoam":
                 dirs.append((FINAL, os.path.join(WAVE, fin, r["case"])))
             for s, d in dirs:
@@ -115,7 +119,8 @@ def analyse(c):
 
 
 def table(rows):
-    L = ["fluxinator (Part 2) vs Part 1 solvers with ddtCorr off; progressive wave, 30 s. Script: finalSolver.py",
+    L = ["fluxinator (Part 2) vs interFoam as released (ddtCorr on) and interIsoFoam and interIsoGoam with ddtCorr off;",
+         "progressive wave, 30 s. Script: finalSolver.py",
          "dH: wave height error after 15 periods [%]; dc: mean celerity error [%]; Umax: median domain max|U|/u_crest;",
          "Uair: median max|U| in the air (alpha < 0.01)/u_crest; emax: crest-column speed error / exact crest-surface",
          "speed, 28-30 s [%]; r0: u/u_exact, top full water cell under the crest, 28-30 s; ulow: mean (u - u_exact)/u_crest",
@@ -169,7 +174,8 @@ def fig_overview(rows):
     axs[0, 0].set_yscale("symlog", linthresh=2)
     axs[0, 0].set_yticks([-30, -10, -2, 0, 2, 10, 30])
     axs[0, 0].set_yticklabels(["-30", "-10", "-2", "0", "2", "10", "30"])
-    h = [plt.Line2D([], [], color=COLOUR[s], marker=MARKER[s], label="fluxinator" if s == FINAL else s + ", ddtCorr off")
+    h = [plt.Line2D([], [], color=COLOUR[s], marker=MARKER[s],
+                    label="fluxinator" if s == FINAL else s if s in AS_RELEASED else s + ", ddtCorr off")
          for s in SOLVERS]
     fig.legend(handles=h, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.0))
     fig.tight_layout(rect=(0, 0, 1, 0.955))

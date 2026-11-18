@@ -1,17 +1,33 @@
-Timing of interFoam, interIsoFoam, interIsoGoam (ddtCorr off) and fluxinator at max Co 0.1
-on 95x20, 190x40 and 380x80, three repeats, to t = 6 s, without the wave gauge (made when the
-gauge was interfaceHeight, which rebuilds a mesh search tree every step, about half of the step
-time; the gauge is now surfacePosition, whose cost is negligible).
-Set-ups: solvers_maxCo_ddtCorrOff 0006-0008 (95x20), 0018-0020 (190x40), 0030-0032 (380x80) and
-finalSolver_maxCo 0008, 0020, 0032, with endTime 6 and functions.surfacePosition1.enabled false in
-system/controlDict.run (makeCases.sh).
-./runAll.sh: each run pinned to one core (CORES, by default the first core of each 4-core NUMA
-node), nothing else on those NUMA nodes. The runs of 2026-11-17 used CORES="0 4 8 12 20 28"
-(OpenFOAM v2512). makeCases.sh moves the gravity model of the stored Part I set-ups from
-constant/gravityProperties to system/fvSchemes. Repeat final_95x20_r2 was 22 % slower than the
-other two (the machine was then also used interactively); it was rerun alone on core 8 and the
-first run kept as final_95x20_r2.outlier. All repeats then agree within 2.2 %.
-python3 analyse.py writes ../data/timing_maxCo0.1.csv (time per step over 2 <= t <= 6 s).
-Part II Figure fig:selCost combines it with the step counts of the full 30 s runs.
-Superseded, kept for the record: ../timing_maxCo0.1 (pinned with taskset, 30-40 % spread) and
-../timing_maxCo0.1_t6 (unpinned, with the gauge, 12 runs at a time).
+Timing of interFoam as released (ddtCorr on, interFoamDefault), interFoam, interIsoFoam and
+interIsoGoam with ddtCorr off, and fluxinator (final) at max Co 0.1 on 95x20, 190x40 and 380x80,
+three repeats, to t = 6 s, without the wave gauge (made when the gauge was interfaceHeight, which
+rebuilds a mesh search tree every step, about half of the step time; the gauge is now
+surfacePosition, whose cost is negligible).
+Set-ups: solvers_maxCo 0006, 0018, 0030 (interFoamDefault), solvers_maxCo_ddtCorrOff 0006-0008
+(95x20), 0018-0020 (190x40), 0030-0032 (380x80) and finalSolver_maxCo 0008, 0020, 0032, with
+endTime 6 and functions.surfacePosition1.enabled false in system/controlDict.run (makeCases.sh).
+makeCases.sh moves the gravity model of the stored Part I set-ups from constant/gravityProperties
+to system/fvSchemes.
+
+./runPaired.sh (the paper data, 2026-11-18): paired rounds. In each round the five solvers of one
+mesh run at the same time, each pinned with taskset to the first core of its own 4-core NUMA node,
+so that the state of the machine affects all five alike; three rounds per mesh, the nodes rotated
+from round to round (log.rounds). Code: fluxinator main 5000582, built with OpenFOAM v2512; it
+reproduces the stored runs bit for bit. CPU governor performance and boost off (2.4 GHz,
+log.cpuSettings). monitor.sh logged the load, the clock frequencies and other processes every 10 s
+(log.monitor): the timed cores ran at 2.4 GHz in 98 % of the samples (never below 2.0 GHz); the
+desktop (gnome-shell, VS Code) used about 5 % of a core, with two short gnome-shell peaks (25 %
+at 08:00, 82 % in one sample at 08:19, both in the 380x80 rounds). Repeats agree within 3.2 %, and
+the cost relative to interFoamDefault of the same round within 3.9 %.
+python3 analyse.py writes ../data/timing_maxCo0.1.csv (time per step over 2 <= t <= 6 s; the
+repeat number is the round). Part II Figure fig:selCost combines it with the step counts of the
+full 30 s runs, as ratios per round.
+
+Earlier campaigns, kept for the record (not in the paper):
+- previous_20261117: ./runAll.sh, runs dealt to CORES="0 4 8 12 20 28" one after the other,
+  governor schedutil with boost; repeats within 2.2 % after rerunning one outlier.
+- run_20261118_unpaired: the same with all eight nodes and interFoamDefault added; up to 9 %
+  spread, nine outliers rerun (*.outlier), still up to 7.7 %.
+- run_20261118_aborted: the first paired attempt, stopped to switch to the performance governor.
+- ../timing_maxCo0.1 (pinned with taskset, 30-40 % spread) and ../timing_maxCo0.1_t6 (unpinned,
+  with the gauge, 12 runs at a time).
