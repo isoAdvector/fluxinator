@@ -15,7 +15,7 @@ then
     cd "$dest" || exit 1    # the wmake commands below build the copy
 fi
 
-wmake "$@" libso src/geometricVoF
+wmake "$@" libso src/fluxinatorVoF
 wmake "$@" libso src/gravityModels
 wmake "$@" libso src/interfaceSchemes
 wmake "$@" libso src/functionObjects/convectiveMomentumFlux

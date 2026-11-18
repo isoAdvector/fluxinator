@@ -50,7 +50,7 @@ namespace fluxinatorVoF
 
 void Foam::fluxinatorVoF::plicRDF::interpolateNormal()
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     scalar dt = mesh_.time().deltaTValue();
 
     leastSquareGrad<scalar> lsGrad("polyDegree1",mesh_.geometricD());
@@ -185,7 +185,7 @@ void Foam::fluxinatorVoF::plicRDF::interpolateNormal()
 
 void Foam::fluxinatorVoF::plicRDF::gradSurf(const volScalarField& phi)
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     leastSquareGrad<scalar> lsGrad("polyDegree1", mesh_.geometricD());
     zoneDistribute& exchangeFields = zoneDistribute::New(mesh_);
 
@@ -241,7 +241,7 @@ void Foam::fluxinatorVoF::plicRDF::gradSurf(const volScalarField& phi)
 
 void Foam::fluxinatorVoF::plicRDF::setInitNormals(bool interpolate)
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     zoneDistribute& exchangeFields = zoneDistribute::New(mesh_);
 
     interfaceLabels_.clear();
@@ -276,7 +276,7 @@ void Foam::fluxinatorVoF::plicRDF::calcResidual
     List<normalRes>& normalResidual
 )
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     zoneDistribute& exchangeFields = zoneDistribute::New(mesh_);
     exchangeFields.setUpCommforZone(interfaceCell_,false);
 
@@ -415,7 +415,7 @@ Foam::fluxinatorVoF::plicRDF::plicRDF
 
 void Foam::fluxinatorVoF::plicRDF::reconstruct(bool forceUpdate)
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     zoneDistribute& exchangeFields = zoneDistribute::New(mesh_);
     const bool uptodate = alreadyReconstructed(forceUpdate);
 

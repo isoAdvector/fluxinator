@@ -9,7 +9,7 @@ nLayers_maxCo must have been created with parmScanner (without -exec); their out
 log.Allrun, so parmScanner -exec Allrun skips them afterwards. The ddtCorrOff studies are
 built and run from these cases by ../common/runStoredDdtCorrOff.sh. A finished run leaves
 .runPinned.done in its case and is skipped when the script is started again.
-Steps per run, for the order, are taken from the archived runs of the same case number.
+Steps per run, for the order, are taken from data/<study>.csv of the same case number.
 Needs the OpenFOAM v2512 environment. Usage: python3 runPinned.py [--dry-run]"""
 import csv
 import glob
@@ -19,9 +19,8 @@ import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ARCHIVE = os.path.join(HERE, "..", "..", "..", "geometricGravity_archive", "rerun_20261111", "run",
-                       "progressiveWave")
-DICTATOR = os.path.expanduser("~/Projects/interFlow/dictator/dictator")
+# dictator (github.com/isoAdvector/dictator), by default checked out next to this repository
+DICTATOR = os.environ.get("DICTATOR", os.path.join(HERE, "..", "..", "..", "dictator", "dictator"))
 PAIRS = ["0-7", "8-15", "16-23", "24-31"]
 SERIAL_PAIR = 3
 MS_PER_STEP = {"95": 12, "190": 45, "380": 200, "760": 230}   # rough, for the order only

@@ -48,7 +48,7 @@ namespace fluxinatorVoF
 
 void Foam::fluxinatorVoF::gradAlpha::gradSurf(const volScalarField& phi)
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     leastSquareGrad<scalar> lsGrad("polyDegree1",mesh_.geometricD());
 
     zoneDistribute& exchangeFields = zoneDistribute::New(mesh_);
@@ -123,7 +123,7 @@ Foam::fluxinatorVoF::gradAlpha::gradAlpha
 
 void Foam::fluxinatorVoF::gradAlpha::reconstruct(bool forceUpdate)
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     const bool uptodate = alreadyReconstructed(forceUpdate);
 
     if (uptodate && !forceUpdate)

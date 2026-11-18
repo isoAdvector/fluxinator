@@ -242,7 +242,7 @@ void Foam::fluxinatorVoF::isoAdvector::extendMarkedCells
 
 void Foam::fluxinatorVoF::isoAdvector::timeIntegratedFlux()
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     // Get time step
     const scalar dt = mesh_.time().deltaTValue();
 
@@ -626,7 +626,7 @@ void Foam::fluxinatorVoF::isoAdvector::checkIfOnProcPatch(const label facei)
 
 void Foam::fluxinatorVoF::isoAdvector::applyBruteForceBounding()
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     bool alpha1Changed = false;
 
     const scalar snapAlphaTol = dict_.getOrDefault<scalar>("snapTol", 0);

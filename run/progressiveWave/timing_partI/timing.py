@@ -40,7 +40,8 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "..", "solvers_maxCo")
 DATA = os.path.join(HERE, "..", "data")
-DICTATOR = os.path.expanduser("~/Projects/interFlow/dictator/dictator")
+# dictator (github.com/isoAdvector/dictator), by default checked out next to this repository
+DICTATOR = os.environ.get("DICTATOR", os.path.join(HERE, "..", "..", "..", "..", "dictator", "dictator"))
 END = {"95": 30, "190": 4, "380": 2, "760": {"0.5": 2, "0.2": 2, "0.1": 1, "0.05": 1}}
 T_START = 0.25
 SOLVERS = ["interFoam", "interIsoFoam", "interIsoGoam"]

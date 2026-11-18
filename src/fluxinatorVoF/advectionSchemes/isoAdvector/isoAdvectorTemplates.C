@@ -118,7 +118,7 @@ void Foam::fluxinatorVoF::isoAdvector::limitFluxes
     const SuType& Su
 )
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     DebugInFunction << endl;
 
     auto alpha1Limits = gMinMax(alpha1_);
@@ -271,7 +271,7 @@ void Foam::fluxinatorVoF::isoAdvector::boundFlux
     const SuType& Su
 )
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     DebugInFunction << endl;
     const scalar rDeltaT = 1.0/mesh_.time().deltaTValue();
 
@@ -429,7 +429,7 @@ void Foam::fluxinatorVoF::isoAdvector::boundFlux
 template<class SpType, class SuType>
 void Foam::fluxinatorVoF::isoAdvector::advect(const SpType& Sp, const SuType& Su)
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     DebugInFunction << endl;
 
     if (mesh_.topoChanging())

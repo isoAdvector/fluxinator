@@ -81,7 +81,7 @@ with function objects (for example `convectiveMomentumFlux` in
 
 | Directory | Contents |
 |---|---|
-| `src/geometricVoF/` | isoAdvector and interface reconstruction: a modified copy of OpenFOAM's geometricVoF, in namespace `Foam::fluxinatorVoF` so that both can be loaded together (library `fluxinatorVoF`; sampled surface `reconstructedInterface`) |
+| `src/fluxinatorVoF/` | isoAdvector and interface reconstruction: a modified copy of OpenFOAM's geometricVoF, in namespace `Foam::fluxinatorVoF` so that both can be loaded together (library `fluxinatorVoF`; sampled surface `reconstructedInterface`) |
 | `src/gravityModels/` | gravity models: `basic` (as in OpenFOAM), `geometric` (Part I) and `constantHeight` (the exact height of a flat interface) |
 | `src/interfaceSchemes/` | the interfaceUpwind and laxWendroff interpolation schemes (Part II); fluxinator links the library, other solvers need `libs (interfaceSchemes);` in controlDict |
 | `src/functionObjects/` | the function object `convectiveMomentumFlux`, the face momentum flux of the convection term (Part II); `libs (interfaceFunctionObjects);` |

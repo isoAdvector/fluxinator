@@ -9,7 +9,7 @@ do
     [ -d "$dir/src" ] || continue
     (
     cd "$dir" || exit 1
-    wclean libso src/geometricVoF
+    wclean libso src/fluxinatorVoF
     wclean libso src/gravityModels
     wclean libso src/interfaceSchemes
     wclean libso src/functionObjects/convectiveMomentumFlux

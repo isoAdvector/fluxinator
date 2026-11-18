@@ -2,7 +2,7 @@
 
 | Directory | Library | Content |
 |---|---|---|
-| `geometricVoF` | `fluxinatorVoF` | isoAdvector and interface reconstruction used by fluxinator and interIsoGoam |
+| `fluxinatorVoF` | `fluxinatorVoF` | isoAdvector and interface reconstruction used by fluxinator and interIsoGoam, a modified copy of OpenFOAM's `geometricVoF` |
 | `gravityModels` | `gravityModels` | gravity models `basic`, `geometric` and `constantHeight` (Part I) |
 | `interfaceSchemes` | `interfaceSchemes` | interpolation schemes `interfaceUpwind` and `laxWendroff` (Part II) |
 | `functionObjects` | `interfaceFunctionObjects` | function object `convectiveMomentumFlux` (Part II) |

@@ -76,7 +76,7 @@ Foam::fluxinatorVoF::isoAlpha::isoAlpha
 
 void Foam::fluxinatorVoF::isoAlpha::reconstruct(bool forceUpdate)
 {
-    addProfilingInFunction(geometricVoF);
+    addProfilingInFunction(fluxinatorVoF);
     const bool uptodate = alreadyReconstructed(forceUpdate);
 
     if (uptodate && !forceUpdate)
