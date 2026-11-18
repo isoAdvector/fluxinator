@@ -1,16 +1,19 @@
 # fluxinator\*
 
-Developed and maintained by Johan Roenby, [STROMNING](https://stromning.com).
+fluxinator is an incompressible interfacial flow solver for OpenFOAM based on the
+isoAdvector geometric Volume-of-Fluid method. It is essentially the interIsoFoam solver,
+but with numerics that take the sharp jump in density at the fluid interface into account.
 
 Code and test cases for the paper series *Consistent interfacial flow numerics*:
 
 - J. Roenby, K. Missios, K. Møller, S. Aliyar and H. Scheufler (2026). Consistent
   interfacial flow numerics – Part I: The gravity force term. arXiv link to follow.
 - J. Roenby (2026). Consistent interfacial flow numerics – Part II: The momentum
-  convection term. In preparation.
+  convection term. arXiv link to follow.
 
 Please cite the papers when you use the code.
 
+The code is actively developed and maintained by Johan Roenby, [STROMNING](https://stromning.com).
 STROMNING offers consulting, custom development, training and support for interfacial
 and multiphase flow simulation with OpenFOAM. Contact: johan@stromning.com.
 

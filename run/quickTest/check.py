@@ -45,6 +45,6 @@ if os.path.isdir(os.path.join(HERE, "wave")):
         u = internal(os.path.join(t, "U"), "vector")[:, 0]
         water = internal(os.path.join(t, "alpha.water"), "scalar") > 0.5
         print(f"wave: t = {os.path.basename(t)} s, largest horizontal water velocity in a cell = {u[water].max():.3f} m/s "
-              "(expected 0.426 m/s; exact crest velocity 0.445 m/s)")
+              "(expected 0.429 m/s; exact crest velocity 0.445 m/s)")
     else:
         print("wave: did not finish, see wave/log.*")
