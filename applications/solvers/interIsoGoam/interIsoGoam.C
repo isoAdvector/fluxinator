@@ -44,6 +44,18 @@ Description
     and fluxinator give identical results. The settings are listed in
     ../fluxinator/fluxinator.C.
 
+    References:
+    \verbatim
+        Roenby, J., Missios, K., Møller, K., Aliyar, S. and Scheufler, H. (2026).
+        Consistent interfacial flow numerics - Part I: The gravity force term.
+        arXiv:2611.24841, https://arxiv.org/abs/2611.24841
+
+        Roenby, J. (2026).
+        Consistent interfacial flow numerics - Part II: The momentum
+        convection term.
+        arXiv:2611.24866, https://arxiv.org/abs/2611.24866
+    \endverbatim
+
 \*---------------------------------------------------------------------------*/
 
 #define INTERISOGOAM

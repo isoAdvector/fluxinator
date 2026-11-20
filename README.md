@@ -7,9 +7,10 @@ but with numerics that take the sharp jump in density at the fluid interface int
 Code and test cases for the paper series *Consistent interfacial flow numerics*:
 
 - J. Roenby, K. Missios, K. Møller, S. Aliyar and H. Scheufler (2026). Consistent
-  interfacial flow numerics – Part I: The gravity force term. arXiv link to follow.
+  interfacial flow numerics – Part I: The gravity force term.
+  [arXiv:2611.24841](https://arxiv.org/abs/2611.24841)
 - J. Roenby (2026). Consistent interfacial flow numerics – Part II: The momentum
-  convection term. arXiv link to follow.
+  convection term. [arXiv:2611.24866](https://arxiv.org/abs/2611.24866)
 
 Please cite the papers when you use the code.
 
